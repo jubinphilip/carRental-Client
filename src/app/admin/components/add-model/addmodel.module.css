@@ -1,0 +1,43 @@
+.mainContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(245, 247, 248);
+
+}
+.container{
+    width: 60%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.modelform
+{
+
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    gap:10px;
+}
+.inputbox{
+    padding: 10px;
+    border-radius: 5px;
+}
+.submitdata{
+    background-color:#f17d7d;
+    border: 1px solid black;
+    height: 30px;
+    border-radius: 5px;
+    width: 100px;
+    color: white;
+    font-weight: bold;
+}
+.submitdata:hover{
+    background-color: #F55757;
+}

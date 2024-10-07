@@ -1,0 +1,69 @@
+.maincontainer{
+width: 100%;
+}
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 2%;
+}
+.logo
+{
+    color: #F55757;
+    font-size: 3rem;
+}
+.navItems{
+    display: flex;
+    gap: 4vw;
+}
+.navitem{
+    text-decoration: none;
+    color: rgb(117, 114, 109);
+    font-weight: 400;
+}
+.profile
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+.profileicon
+{
+    height: 30px;
+    width: 30px;
+}
+.profileicon:hover{
+    cursor: pointer;
+}
+.mobilenavItems{
+    display: none;
+}
+.burgermenu{
+    display: none;
+}
+@media (max-width: 768px) {
+    .navItems{
+        display: none;
+    }
+    .mobilenavItems
+   {
+    display: block;
+    position: relative;
+    gap: 10px;
+    z-index: 10;
+
+   }
+   .burgermenu{
+    display: block;
+   }
+   .close{
+    right: 0;
+
+   }
+   .close:hover{
+    cursor: pointer;
+   }
+}

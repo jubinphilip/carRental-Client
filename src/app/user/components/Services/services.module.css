@@ -1,0 +1,104 @@
+.maincontainer {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    overflow: hidden; /* Prevent overflow */
+}
+
+/* Apply blurred background with ::before */
+.maincontainer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/serviceback.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(8px); /* Blur background */
+    z-index: -2; /* Keep behind everything */
+    transform: scale(1.1); /* Slight scale to prevent edge cut */
+}
+
+/* Apply white mask overlay */
+.maincontainer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white mask */
+    z-index: -1; /* Place above blurred background but behind content */
+}
+
+
+.container {
+    position: relative;
+    z-index: 1; 
+    padding: 20px;
+    color: #333; 
+}
+.servicehead{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.head1
+{
+    color: #F55757;
+    font-size: 1.5rem;
+}
+.mainhead
+{
+    color:#737373;
+    font-size: 2rem;
+    margin: 10px;
+}
+.description
+{
+    color: #737373;
+    font-size: 1rem;
+}
+.servicebody{
+    display: flex;
+    min-height: 400px;
+    gap: 20px;
+    margin-top: 15px;
+}
+.card1{
+    background-image: url('/assets/keybg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.card2{
+    background-image: url('/assets/agentbg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    max-width: fit-content;
+}
+.card3{
+    background-image: url('/assets/tripbg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.card1,.card2,.card3{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.cardhead{
+    color: white;
+}
+.cardtext{
+    color: white;
+    text-align: center;
+}
+@media (max-width: 768px) {
+    .servicebody{
+       flex-direction: column;
+    }
+}

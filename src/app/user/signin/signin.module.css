@@ -1,0 +1,56 @@
+.mainContainer{
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 100px;
+}
+.form {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.adminoptions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.adminLogin{
+    color: rgb(117, 114, 109);
+    background-color: transparent;
+    border: none;
+    font-size: medium;
+}
+.adminLogin:hover{
+    cursor: pointer;
+    color: rgb(59, 57, 53);
+}
+.oroption
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(117, 114, 109);
+}
+.image{
+    width: 70%;
+    display: flex;
+    margin-right: 0;
+}
+.carImage{
+    height: 60vh;
+}
