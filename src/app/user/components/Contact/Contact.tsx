@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './contact.module.css'
+import Link from 'next/link'
 function Contact() {
   return (
     <div className={styles.maincontainer}>
@@ -16,10 +17,19 @@ function Contact() {
           <p className={styles.content}><img src='/assets/u_location-point.png' alt="" />Kochi India</p>
         </div>
         <div className={styles.social}>
-        <img src="/assets/fb.png" alt="" />
-        <img src="/assets/inssta.png" alt="" />
-        <img src="/assets/twitter.png" alt="" />
-        <img src="/assets/in.png" alt="" />
+        <Link href='https://www.facebook.com'>
+    <img src="/assets/fb.png" alt="Facebook" />
+</Link>
+<Link href='https://www.instagram.com'>
+    <img src="/assets/inssta.png" alt="Instagram" />
+</Link>
+<Link href='https://www.x.com'>
+    <img src="/assets/twitter.png" alt="Twitter" />
+</Link>
+<Link href='https://www.linkedin.com'>
+    <img src="/assets/in.png" alt="LinkedIn" />
+</Link>
+
         </div>
             </div>
             <div className={styles.map}>
