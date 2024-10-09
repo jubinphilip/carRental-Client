@@ -42,7 +42,7 @@
     color: #2e7d32;
   }
   .downloadButton {
-    background-color: #007bff;
+    background-color: rgb(81, 80, 80);
     color: white;
     border: none;
     border-radius: 5px;
@@ -51,14 +51,24 @@
     cursor: pointer;
     margin-top: 5px;
     transition: background-color 0.3s ease;
+    display: flex;
+    gap: 10px;
   }
-  
+  .headContainer
+  {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+.buttonContainer
+{
+  display: flex;
+  gap: 10px;
+}
   .downloadButton:hover {
-    background-color: #0056b3;
+    background-color: rgb(43, 42, 42);
+    cursor: pointer;
   }
   
-  .downloadButton:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
+
   

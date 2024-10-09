@@ -66,3 +66,44 @@ export const ADD_BOOKING=gql`
   }
   }
 `
+
+export const EDIT_USER=gql`
+mutation EditUSer($file: Upload,$input:EditInput!)
+{
+  editUser(file: $file,input:$input)
+  {
+    id
+    success
+    message
+  }
+}`
+
+export const EDIT_PASSWORD=gql`
+mutation EditUSerPassword($input:EditPassword!)
+{
+  editUserPassword(input:$input)
+  {
+    id
+    success
+    message
+  }
+}`
+
+
+export const REQUEST_OTP = gql`
+  mutation requestOTP($phone: String!) {
+    requestOtp(phone: $phone) {
+      success
+      message
+    }
+  }
+`;
+
+export const VERIFY_OTP = gql`
+  mutation verifyOtp($phone: String!, $otp: String!) {
+    verifyOtp(phone: $phone, otp: $otp) {
+      success
+      message
+    }
+  }
+`;

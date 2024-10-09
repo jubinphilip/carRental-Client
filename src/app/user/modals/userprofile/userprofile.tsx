@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import client from '@/app/services/apollo-client';
-import { GET_USER } from '../../queries/user-queries';
+import { GET_USER,EDIT_USER  } from '../../queries/user-queries';
 import { IoClose } from "react-icons/io5";
 import styles from './UserProfile.module.css';
+import ChangePassWord from '../changePassword/change-Password';
 
 interface UserProps {
   modalstate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,8 +14,10 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
   const [edit, setEdit] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
+    const[editUser]=useMutation(EDIT_USER,{client})
+    const[editPassword,setEditPassword]=useState(false)
   const [formData, setFormData] = useState({
+    userid:'' ,
     username: '',
     email: '',
     phone: '',
@@ -51,11 +54,19 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     // Implement the submit logic here
     console.log('Submitting form data:', formData);
     console.log('Submitting image:', image);
     setEdit(false);
+    try
+    {
+      const{data:response}=await editUser({variables:{file:image,input:formData}})
+      console.log(response.addUser);  
+    }catch(error)
+    { 
+        console.log(error)
+    }
   };
 
   const userid = sessionStorage.getItem('userid');
@@ -66,6 +77,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
     onCompleted: (data) => {
       if (data?.getUser) {
         setFormData({
+          userid:userid?userid:'',
           username: data.getUser.username,
           email: data.getUser.email,
           phone: data.getUser.phone,
@@ -84,8 +96,10 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
   const user = data?.getUser;
 
   return (
+
     <div className={styles.overlay}>
       <div className={styles.modal}>
+        {editPassword && <ChangePassWord userid={userid} modalstate={setEditPassword}/>}
         <button onClick={handleClose} className={styles.closeButton}>
           <IoClose size={24} />
         </button>
@@ -102,7 +116,8 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
             </div>
             {edit && (
               <input 
-                type="file" 
+                type="file"
+                accept=".jpg,.jpeg,.png" 
                 onChange={handleFileChange} 
               />
             )}
@@ -207,7 +222,10 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
                 )}
               </div>
               {edit ? (
+                <div className={styles.buttonContainer}>
+                <button onClick={()=>setEditPassword(true)}>Change Password</button>
                 <button onClick={handleSubmit}>Submit</button>
+                </div>
               ) : (
                 <button onClick={handleEditClick}>Edit</button>
               )}

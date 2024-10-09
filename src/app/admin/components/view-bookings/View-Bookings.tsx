@@ -5,7 +5,11 @@ import client from '@/app/services/apollo-client';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx'; 
+import { DatePicker } from 'antd';
 import styles from './view-bookings.module.css';
+import moment, { Moment } from 'moment'; 
+import { FaFilePdf } from "react-icons/fa6";
+import { SiMicrosoftexcel } from "react-icons/si";
 
 interface Manufacturer {
   model: string;
@@ -49,34 +53,35 @@ interface GetBookingsData {
 function ViewBookings() {
   const { loading, error, data } = useQuery<GetBookingsData>(GET_BOOKINGS, { client });
   const [bookingsData, setBookingsData] = useState<Booking[]>([]);
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState<Moment | null>(null);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
     if (data && data.getBookings) {
       setBookingsData(data.getBookings);
+      setFilteredBookings(data.getBookings); 
     }
   }, [data]);
 
   useEffect(() => {
-    if (date && bookingsData.length > 0) {
+    if (date) {
       const filtered = bookingsData.filter((booking) => {
-        const selectedDate = new Date(date);
+        const selectedDate = date.toDate(); 
         const startDate = new Date(booking.startdate);
         const endDate = new Date(booking.enddate);
         return selectedDate >= startDate && selectedDate <= endDate;
       });
       setFilteredBookings(filtered);
     } else {
-      setFilteredBookings(bookingsData);
+      setFilteredBookings(bookingsData); 
     }
   }, [date, bookingsData]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
+  const handleDate = (date: Moment | null) => {
+    setDate(date); 
   };
 
   const downloadPDF = () => {
@@ -139,12 +144,22 @@ function ViewBookings() {
 
   return (
     <div className={styles.container}>
+        
       <h1 className={styles.title}>Bookings</h1>
       
       <div>
-        <input type="date" name="search" onChange={handleDate} value={date} />
+   
       </div>
-      
+      <div className={styles.headContainer}>
+      <DatePicker 
+        onChange={handleDate} 
+        value={date} 
+      />
+      <div className={styles.buttonContainer}>
+      <button className={styles.downloadButton} onClick={downloadPDF}><FaFilePdf/><span>Download PDF</span></button>
+      <button className={styles.downloadButton} onClick={downloadExcel}><SiMicrosoftexcel/><span>Download Excel</span></button>
+      </div>
+      </div>
       <table className={styles.table}>
         <thead>
           <tr>
@@ -187,9 +202,9 @@ function ViewBookings() {
           ))}
         </tbody>
       </table>
-      <button className={styles.downloadButton} onClick={downloadPDF}>Download PDF</button>
-      <button className={styles.downloadButton} onClick={downloadExcel}>Download Excel</button>
+    
     </div>
   );
 }
+
 export default ViewBookings;
