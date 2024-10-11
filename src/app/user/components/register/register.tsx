@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { Add_User,REQUEST_OTP } from '../../queries/user-queries'
-import client from '@/app/services/apollo-client'
+import client from '@/services/apollo-client'
 import { ToastContainer,toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './register.module.css'

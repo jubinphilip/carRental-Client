@@ -3,7 +3,7 @@ import React,{useEffect, useState} from 'react'
 import styles from './popular.module.css'
 import { MdCarRental } from "react-icons/md";
 import { useQuery } from '@apollo/client';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import { GET_RENT_VEHICLES } from '@/app/queries/queries';
 import { useRouter } from 'next/navigation';
 

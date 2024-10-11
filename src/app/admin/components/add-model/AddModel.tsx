@@ -5,7 +5,8 @@ import { ADD_MANUFACTURER,UPLOAD_EXCEL } from '../../queries/admin-queries';
 import { useMutation } from '@apollo/client';
 import {toast,ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
+import { useRouter } from 'next/navigation';
 interface RecordType {
   manufacturer: string;
   model: string;
@@ -15,6 +16,7 @@ function Addmodel() {
   const[addManufacturer]=useMutation(ADD_MANUFACTURER,{client});
   const [uploadExcel] = useMutation(UPLOAD_EXCEL, { client });
   const [excelSheet, setExcelSheet] = useState<File | null>(null);
+  const router=useRouter()
   const [record, setRecord] = useState<RecordType>({manufacturer: '',model: '',year:''});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setRecord((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -44,6 +46,13 @@ function Addmodel() {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const token=await localStorage.getItem('token')
+  if(!token)
+  {
+    toast.error('Please login to proceed')
+    router.push('/user/signin') 
+    return
+  }
     e.preventDefault();
     console.log(record)
     try{

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_BOOKINGS } from '../../queries/admin-queries';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx'; 
@@ -156,9 +156,15 @@ function ViewBookings() {
         value={date} 
       />
       <div className={styles.buttonContainer}>
-      <button className={styles.downloadButton} onClick={downloadPDF}><FaFilePdf/><span>Download PDF</span></button>
-      <button className={styles.downloadButton} onClick={downloadExcel}><SiMicrosoftexcel/><span>Download Excel</span></button>
-      </div>
+      <button className={styles.downloadButton} onClick={downloadPDF}>
+        <FaFilePdf />
+        <span>Download PDF</span>
+      </button>
+      <button className={styles.downloadButton} onClick={downloadExcel}>
+        <SiMicrosoftexcel />
+        <span>Download Excel</span>
+      </button>
+    </div>
       </div>
       <table className={styles.table}>
         <thead>

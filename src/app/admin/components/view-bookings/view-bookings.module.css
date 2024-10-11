@@ -41,19 +41,60 @@
     font-weight: bold;
     color: #2e7d32;
   }
+  .buttonContainer {
+    display: flex;
+    gap: 10px;
+  }
+  
   .downloadButton {
     background-color: rgb(81, 80, 80);
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 8px 16px;
+    font-size: 14px;
     cursor: pointer;
     margin-top: 5px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
+    position: relative;
+    overflow: hidden;
   }
+  
+  .downloadButton span,
+  .downloadButton svg {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .downloadButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(/assets/download.png);
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: rgb(8, 158, 233);
+  }
+  
+  .downloadButton:hover::after {
+    opacity: 1;
+  }
+  
+  .downloadButton:hover span,
+  .downloadButton:hover svg {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
   .headContainer
   {
     width: 100%;

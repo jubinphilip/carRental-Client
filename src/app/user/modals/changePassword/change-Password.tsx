@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
 import styles from './change-password.module.css';
 import { useMutation } from '@apollo/client';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import { EDIT_PASSWORD } from '../../queries/user-queries';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

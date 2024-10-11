@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import { GET_USER,EDIT_USER  } from '../../queries/user-queries';
 import { IoClose } from "react-icons/io5";
 import styles from './UserProfile.module.css';

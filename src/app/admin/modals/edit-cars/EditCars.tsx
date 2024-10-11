@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { EDIT_VEHICLE, GET_CAR_DATA, GET_MANUFACTURERS } from '../../queries/admin-queries';
 import { useQuery, useMutation } from '@apollo/client';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import { IoClose } from "react-icons/io5";
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

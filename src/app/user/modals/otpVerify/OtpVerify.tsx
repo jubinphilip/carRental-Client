@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, ChangeEvent, FormEvent } from 'reac
 import styles from './otp-verify.module.css'
 import { VERIFY_OTP } from '../../queries/user-queries';
 import { useMutation } from '@apollo/client';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 
 interface OtpVerifyProps {
   onClose: () => void;

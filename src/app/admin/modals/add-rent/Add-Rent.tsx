@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
 import styles from './addrent.module.css';
 import { useMutation } from '@apollo/client';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import { ADD_RENT } from '../../queries/admin-queries';
 import {toast,ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -38,6 +38,10 @@ const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
        if(response.addRent.status==='Success')
        {
         toast.success("Car added for Rent ")
+        setTimeout(()=>
+        {
+          handleClose()
+        },1000)
        }
        else
        {

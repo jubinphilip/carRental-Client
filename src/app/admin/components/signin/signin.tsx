@@ -1,7 +1,7 @@
 
 "use client"
 import React, { useState } from 'react'
-import client from '@/app/services/apollo-client'
+import client from '@/services/apollo-client'
 import { Admin_Login } from '../../queries/admin-queries'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
@@ -33,6 +33,7 @@ function Signin() {
             console.log("Admin Loginned",response.data)
             router.push('/')
             sessionStorage.setItem('token',response.data.adminLogin.token)
+            localStorage.setItem('token',response.data.adminLogin.token)
             sessionStorage.setItem('user',response.data.adminLogin.__typename)
             window.dispatchEvent(new Event('storage'));
         }

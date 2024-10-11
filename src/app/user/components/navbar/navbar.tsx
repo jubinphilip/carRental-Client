@@ -52,7 +52,7 @@ function Navbar() {
                 {showProfile && <UserProfile modalstate={setShowProfile}/>}
                 <div className={styles.navItems}>
                     <Link className={styles.navitem} href="/"> <p>home</p></Link>
-                    <Link className={styles.navitem} href="/"> <p>car</p></Link>
+                    {!user && <Link className={styles.navitem} href="/user/bookings"> <p>bookings</p></Link>}
                     {user && <Link className={styles.navitem} href="/admin/dashboard"> <p>Dashboard</p></Link> }
                     {isAuthorized ? 
                        <div className={styles.profile}> {!user && <FaUserCircle className={styles.profileicon} onClick={handleProfileClick}/>}<Button onClick={handleLogout} type="primary" danger>Logout</Button> </div>

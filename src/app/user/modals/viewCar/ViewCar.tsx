@@ -2,7 +2,7 @@ import React from 'react';
 import { IoClose } from "react-icons/io5";
 import { useQuery } from '@apollo/client';
 import { GET_CAR_INFO } from '../../queries/user-queries';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import styles from './ViewCar.module.css';
 import { useRouter } from 'next/navigation';
 interface ViewCarProps

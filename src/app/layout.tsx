@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import './globals.css'
 import Navbar from "./user/components/navbar/navbar";
 import Footer from "./user/components/Footer/Footer";
+import {AppContextProvider } from "@/context/appContext";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -10,9 +11,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <AppContextProvider>
         <Navbar/>
         {children}
         <Footer/>
+        </AppContextProvider>
       </body>
     </html>
   );

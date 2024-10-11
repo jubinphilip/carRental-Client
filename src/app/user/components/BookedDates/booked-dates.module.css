@@ -1,0 +1,66 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.calendarWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.calendar {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  font-size: 0.9em;
+}
+
+.calendar :global(.react-calendar__tile) {
+  padding: 0.75em 0.5em;
+}
+
+.calendar :global(.react-calendar__month-view__days__day) {
+  color: #333;
+}
+
+.calendar :global(.react-calendar__navigation button) {
+  font-weight: bold;
+}
+
+.calendarTile {
+  color: #333;
+  font-weight: bold;
+}
+
+.calendarTile abbr {
+  text-decoration: none;
+}
+
+.bookedDate {
+    background-color: #e67f7f;
+  color: white;
+  border-radius: 30%;
+  border: 1px solid white;
+}
+
+.bookedDate:hover {
+  background-color: #cc0000;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.bookedDateLegend {
+  width: 20px;
+  height: 20px;
+  background-color: #e47c7c;
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 50%;
+}

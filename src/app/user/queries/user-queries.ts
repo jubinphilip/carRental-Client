@@ -5,6 +5,7 @@ export const Add_User = gql`
     addUser(file: $file,input: $input) {
       id
       email
+     
     }
   }
 `;
@@ -28,6 +29,8 @@ export const LOGIN_USER = gql`
       id
       email
       token 
+       fileurl
+       username
     }
   }
 `;
@@ -104,6 +107,32 @@ export const VERIFY_OTP = gql`
     verifyOtp(phone: $phone, otp: $otp) {
       success
       message
+    }
+  }
+`;
+
+export const GET_BOOKED_DATES = gql`
+  query GetBookedDates($carId: ID!, $quantity: String!) {
+    bookedDates(carId: $carId, quantity: $quantity) {
+      dates
+    }
+  }
+`;
+
+export const CREATE_ORDER = gql`
+  mutation createOrder($amount: Float!, $currency: String!) {
+    createOrder(amount: $amount, currency: $currency) {
+      id
+      currency
+      amount
+    }
+  }
+`;
+
+export const VERIFY_PAYMENT = gql`
+  mutation verifyPayment($paymentId: String!, $orderId: String!) {
+    verifyPayment(paymentId: $paymentId, orderId: $orderId) {
+      signature
     }
   }
 `;

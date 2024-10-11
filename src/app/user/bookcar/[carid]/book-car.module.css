@@ -19,11 +19,18 @@
     overflow: hidden;
   
 }
-.mainImageContainer{
+.mainImageContainer {
     height: 60%;
-    width: 90%;
+    width: 96%;
     display: flex;
-   
+    overflow: hidden;
+    
+}
+.subImageContainer
+{
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
 }
 .mainImage{
     width: 100%;
@@ -36,12 +43,90 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
+   padding: 5px;
+   background-color: rgb(248, 249, 250);
 
 }
-.subImage{
+.subImage {
     width: 150px;
-    height:120px;
+    height: 120px;
+    transition: transform 0.3s ease; 
+    border-radius: 10px;
 }
+
+.subImage:hover {
+    transform: scale(1.1); 
+}
+
 .textContainer{
     width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.priceContainer
+{
+    margin-top: 10px;
+}
+
+.cost
+{
+    font-size: small;
+    font-weight: bold;
+}
+.totalcost
+{
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.formContainer
+{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.selectLocation
+{
+    display: flex;
+    width: 60%;
+    justify-content: space-between;
+    gap: 20px;
+}
+.selectDate
+{
+    display: flex;
+    width: 60%;
+    justify-content: space-between;
+    gap: 20px;
+}
+.locationInput
+{
+    width: 280px;
+    padding: 10px;
+    border-radius: 5px;
+}
+.datePicker
+{
+    width: 257px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.bookButton
+{
+    width: 150px;
+    height: 30px;
+    margin-top: 5px;
+    background-color:  #F55757;
+    color: white;
+    border-radius: 5px;
+}
+.bookButton:hover
+{
+    background-color: #fd4a4a;
+    cursor: pointer;
 }

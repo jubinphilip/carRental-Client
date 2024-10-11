@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import styles from './addvehicle.module.css';
 import { GET_MANUFACTURERS, ADD_VEHICLE } from '../../queries/admin-queries';
 import { useQuery, useMutation } from '@apollo/client';
-import client from '@/app/services/apollo-client';
+import client from '@/services/apollo-client';
 import { toast, ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Manufacturer {
@@ -17,12 +18,11 @@ interface Manufacturer {
 function AddVehicle() {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [image, setImage] = useState<File | null>(null);
-
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
   const [secondaryImages, setSecondaryImages] = useState<File[]>([]);
   const [primaryImagePreview, setPrimaryImagePreview] = useState<string | null>(null);
   const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<string[]>([]);
-  
+  const router=useRouter()
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [addvehicle] = useMutation(ADD_VEHICLE, { client });
   const [brand, setBrand] = useState('');
@@ -86,6 +86,15 @@ function AddVehicle() {
 
 
   const handleSubmit = async (e: React.FormEvent) => {
+    const token=await localStorage.getItem('token')
+    if(!token)
+    {
+    
+     toast.error('Please login to proceed')
+      router.push('/user/signin')
+      return 
+    
+    }
     e.preventDefault();
     console.log("Record Data: ", record, primaryImage, secondaryImages);
     try {

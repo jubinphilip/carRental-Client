@@ -1,13 +1,16 @@
 
 "use client"
-import React, { useState } from 'react'
-import client from '@/app/services/apollo-client'
+import React, { use, useState } from 'react'
+import client from '@/services/apollo-client'
 import { LOGIN_USER } from '../queries/user-queries'
+import { useAppContext} from '@/context/appContext'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
 import styles from './signin.module.css'
 import { Input,Button } from 'antd';
 function Signin() {
+    
+    const{setUser}=useAppContext()
     const [record,setRecord]=useState({email: '', password: '' })
     const[loginUser,{data,loading,error}]=useMutation(LOGIN_USER,{client})
     const router=useRouter()
@@ -29,8 +32,18 @@ function Signin() {
             if (response.data) {
                 console.log("User Logged In", response.data);
                 sessionStorage.setItem('token',response.data.loginUser.token)
+                sessionStorage.setItem('username',response.data?.loginUser.email)
+                localStorage.setItem('token',response.data.loginUser.token)
                 sessionStorage.setItem('userid',response.data.loginUser.id)
                 window.dispatchEvent(new Event('storage'));
+                const userData={
+                    userid:response.data.loginUser.id,
+                    email:response.data.loginUser.email,
+                    token:response.data.loginUser.token,
+                    fileurl:response.data.loginUser.fileurl,
+                    username:response.data.loginUser.username
+                }
+                setUser(userData)
                 router.push('/');
             }
         } catch (error) {

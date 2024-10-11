@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import styles from './dashboard.module.css'
 import { RiAdminFill } from "react-icons/ri";
 import { IoMdAdd } from "react-icons/io";
@@ -10,11 +10,20 @@ import ViewVehicles from '../components/view-vehicles/ViewVehicles';
 import { FaAngleDoubleLeft,FaAngleDoubleRight } from "react-icons/fa";
 import ViewBookings from '../components/view-bookings/View-Bookings';
 import { FaHome } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 import Home from '../components/home/user-home';
 
 function Dashboard() {
   const [content,setContent]=useState('home')
   const [sideBar,setSidebar]=useState(true)
+  const router=useRouter()
+  useEffect(() => {
+   
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/user/signin');
+    }
+  },[]);
   return (
     <div  className={styles.mainContainer}>
       {!sideBar && <p className={styles.openiconcontainer}><FaAngleDoubleRight className={styles.openicon} onClick={()=>setSidebar(true)}/></p>}
