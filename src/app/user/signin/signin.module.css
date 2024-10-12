@@ -12,6 +12,12 @@
     align-items: center;
     gap: 100px;
 }
+.loginHead
+{
+    text-align: center;
+    font-weight: 600;
+    color: rgb(117, 114, 109);
+}
 .form {
     width: 30%;
     display: flex;

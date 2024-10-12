@@ -58,6 +58,7 @@ function Signin() {
     <div className={styles.mainContainer}>
         <div className={styles.container}>
         <form  className={styles.form} onSubmit={handleSubmit}>
+            <h1 className={styles.loginHead}>Login Here</h1>
         <Input type="text" name="email" placeholder='Enter your email' onChange={handleChange}  />
         <Input type="password" name="password" placeholder='enter your Password' onChange={handleChange}  />
         <Button type="primary" htmlType='submit' >Signin</Button>

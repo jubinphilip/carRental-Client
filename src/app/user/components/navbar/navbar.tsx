@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { Button } from 'antd'
 import { useRouter } from 'next/navigation'
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { useAppContext } from '@/context/appContext';
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FaUserCircle } from "react-icons/fa";
 import UserProfile from '../../modals/userprofile/userprofile'
 
 function Navbar() {
@@ -14,8 +14,10 @@ function Navbar() {
     const[user,setUser]=useState('')
     const[showProfile,setShowProfile]=useState(false)
     const [menu,setMenu]=useState(false)
+    const { user: contextUser } = useAppContext();
     const router = useRouter()
-
+    const fileurl = contextUser?.fileurl;
+    console.log(fileurl)
     useEffect(() => {
         checkAuthStatus()
         window.addEventListener('storage', checkAuthStatus)
@@ -55,7 +57,8 @@ function Navbar() {
                     {!user && <Link className={styles.navitem} href="/user/bookings"> <p>bookings</p></Link>}
                     {user && <Link className={styles.navitem} href="/admin/dashboard"> <p>Dashboard</p></Link> }
                     {isAuthorized ? 
-                       <div className={styles.profile}> {!user && <FaUserCircle className={styles.profileicon} onClick={handleProfileClick}/>}<Button onClick={handleLogout} type="primary" danger>Logout</Button> </div>
+                    
+                       <div className={styles.profile}> {!user && <img src={fileurl} className={styles.profileicon} onClick={handleProfileClick}/>}<Button onClick={handleLogout} type="primary" danger>Logout</Button> </div>
                         : 
                         <Link className={styles.navitem} href="/user/signin"> <p>Sign In</p></Link>
                     }

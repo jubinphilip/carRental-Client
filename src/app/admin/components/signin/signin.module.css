@@ -22,7 +22,12 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
-
+.loginHead
+{
+    text-align: center;
+    font-weight: 600;
+    color: rgb(117, 114, 109);
+}
 
 .image{
     width: 70%;

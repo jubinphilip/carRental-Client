@@ -82,6 +82,7 @@ const handleOtp=async()=>
       )}
     </div>
             <form onSubmit={handleSubmit} className={styles.form}>
+              <h1 className={styles.registerHead}>Register Here</h1>
               <div >
                 <Input type="text" name="username" placeholder="Enter your name" onChange={handleChange} />
                 <Input type="email" name="email" placeholder="Enter your email" onChange={handleChange} />

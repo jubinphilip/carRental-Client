@@ -47,6 +47,7 @@ function Signin() {
     <div className={styles.mainContainer}>
 <div className={styles.container}>
         <form className={styles.form} onSubmit={handleSubmit}>
+            <h1 className={styles.loginHead}>Login As Admin</h1>
         <Input type="text" name="username" placeholder='Enter admin name' onChange={handleChange} id="" />
         <Input type="password" name="password" placeholder='Enter password' onChange={handleChange} id="" />
         <Button type="primary" htmlType='submit' >Signin</Button>
