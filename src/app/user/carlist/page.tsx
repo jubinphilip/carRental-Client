@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import React, { useEffect, useState } from 'react';
 import { GET_RENT_VEHICLES } from '@/app/queries/queries';
 import { useQuery } from '@apollo/client';
@@ -28,80 +28,46 @@ const Types = [
 ];
 
 function CarList() {
-  const{dateRange}=useAppContext()
-  const { data, error, loading: graphQLLoading } = useQuery(GET_RENT_VEHICLES, { variables: { dateRange:dateRange }, client });
+  const { dateRange } = useAppContext();
+  const { data, error, loading: graphQLLoading } = useQuery(GET_RENT_VEHICLES, {
+    variables: { dateRange: dateRange ? dateRange : undefined },
+    client,
+  });
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedType, setSelectedType] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [showCar, setShowCar] = useState(false);
   const [carId, setCarId] = useState('');
-  const [loading, setLoading] = useState(true); // renamed to avoid confusion with GraphQL loading
+  const [loading, setLoading] = useState(true);
+  const [priceRange, setPriceRange] = useState<string[]>([]);
 
-  const [priceRange, setPriceRange] = useState<string[]>([]); // Price filter state
-
-  // Set loading state initially and after data fetch
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 5000); 
+    const timer = setTimeout(() => setLoading(false), 5000);
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(()=>
-  {
-    console.log("Dates",dateRange)
-  },[dateRange])
+  useEffect(() => {
+    console.log("Dates", dateRange);
+  }, [dateRange]);
 
   useEffect(() => {
     if (data && data.rentVehicles) {
-      const formattedCars = data.rentVehicles.map((rental: any) => ({
-        id: rental.id,
-        manufacturer: rental.Vehicle.Manufacturer.manufacturer,
-        model: rental.Vehicle.Manufacturer.model,
-        year: rental.Vehicle.Manufacturer.year,
-        price: rental.price,
-        type: rental.Vehicle.type,
-        image: rental.Vehicle.fileurl,
-      }));
-      setCars(formattedCars);
-    
+      const validIds = data.rentVehicles.map((rental: any) => rental.id);
+      handleSearch(validIds);
     }
-  }, [data]);
+  }, [data, selectedType, searchQuery, priceRange]);
 
-  const filterCars = () => {
-    return cars.filter((car) => {
-      const priceNumber = parseFloat(car.price);
-      if (priceRange.length === 0) return true;
-
-      return priceRange.some((range) => {
-        switch (range) {
-          case '1000-2000':
-            return priceNumber >= 1000 && priceNumber < 2000;
-          case '2000-3000':
-            return priceNumber >= 2000 && priceNumber < 3000;
-          case '3000-5000':
-            return priceNumber >= 3000 && priceNumber < 5000;
-          case '5000+':
-            return priceNumber >= 5000;
-          default:
-            return false;
-        }
-      });
-    });
-  };
-
-  useEffect(() => {
-    handleSearch();
-  }, [selectedType, searchQuery, priceRange]);
-
-  const handleSearch = async () => {
+  const handleSearch = async (validIds: string[]) => {
     try {
       const searchParams: any = {
         q: searchQuery,
         query_by: 'manufacturer,model,year,type',
         per_page: 100,
+        filter_by: `id:=[${validIds.join(',')}]`,
       };
 
       if (selectedType) {
-        searchParams.filter_by = `type:=${selectedType}`;
+        searchParams.filter_by += ` && type:=${selectedType}`;
       }
 
       const searchResults = await typesenseClient.collections('cars').documents().search(searchParams);
@@ -139,19 +105,38 @@ function CarList() {
     setPriceRange((prev) => (checked ? [...prev, value] : prev.filter((range) => range !== value)));
   };
 
+  const filterCars = () => {
+    return cars.filter((car) => {
+      const priceNumber = parseFloat(car.price);
+      if (priceRange.length === 0) return true;
+
+      return priceRange.some((range) => {
+        switch (range) {
+          case '1000-2000':
+            return priceNumber >= 1000 && priceNumber < 2000;
+          case '2000-3000':
+            return priceNumber >= 2000 && priceNumber < 3000;
+          case '3000-5000':
+            return priceNumber >= 3000 && priceNumber < 5000;
+          case '5000+':
+            return priceNumber >= 5000;
+          default:
+            return false;
+        }
+      });
+    });
+  };
+
   if (error) {
     console.error(error);
     return <div>Error occurred: {error.message}</div>;
   }
 
-
   if (loading || graphQLLoading) return <Loader />;
 
   return (
-  
     <div className={styles.mainContainer}>
-       <ChooseDate/>
-
+      <ChooseDate />
       <div className={styles.container}>
         <h1 className={styles.mainhead}>Drive Your Adventure</h1>
         <p className={styles.maindesc}>
@@ -166,41 +151,20 @@ function CarList() {
             value={searchQuery}
             onChange={handleSearchInputChange}
           />
-          <button className={styles.searchButton} onClick={handleSearch}>
-            <img className={styles.lens} src="/assets/lens.png" alt="Search" />
-          </button>
         </div>
-        {/* Price Filter Section */}
         <div className={styles.priceFilter}>
           <h3 className={styles.pricefilterhead}>Filter by Price</h3>
           <div className={styles.priceSelectors}>
-            <div>
-              <label>
-                <input type="checkbox" value="1000-2000" onChange={handlePriceRangeChange} />
-                1000 - 2000
-              </label>
-            </div>
-            <div>
-              <label>
-                <input type="checkbox" value="2000-3000" onChange={handlePriceRangeChange} />
-                2000 - 3000
-              </label>
-            </div>
-            <div>
-              <label>
-                <input type="checkbox" value="3000-5000" onChange={handlePriceRangeChange} />
-                3000 - 5000
-              </label>
-            </div>
-            <div>
-              <label>
-                <input type="checkbox" value="5000+" onChange={handlePriceRangeChange} />
-                5000+
-              </label>
-            </div>
+            {['1000-2000', '2000-3000', '3000-5000', '5000+'].map((range) => (
+              <div key={range}>
+                <label>
+                  <input type="checkbox" value={range} onChange={handlePriceRangeChange} />
+                  {range}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
-        {/* Type Filter Section */}
         <div className={styles.typeCards}>
           {Types.map((type) => (
             <div
@@ -215,8 +179,8 @@ function CarList() {
         </div>
         {showCar && <ViewCar carid={carId} modalstate={setShowCar} />}
         <div className={styles.carsContainer}>
-          {filterCars().map((car, index) => (
-            <div className={`${styles.carcard} ${styles.cardHover}`} key={index} onClick={() => handleCardClick(car.id)}>
+          {filterCars().map((car) => (
+            <div className={`${styles.carcard} ${styles.cardHover}`} key={car.id} onClick={() => handleCardClick(car.id)}>
               <img className={styles.carImage} src={car.image} alt={`${car.manufacturer} ${car.model}`} />
               <div className={styles.descriptionContainer}>
                 <h3 className={styles.carName}>

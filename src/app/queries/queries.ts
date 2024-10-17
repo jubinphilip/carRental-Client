@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_RENT_VEHICLES = gql`
-  query GetRentVehicles {
-    rentVehicles {
+  query GetRentVehicles($dateRange:[String]) {
+    rentVehicles(dateRange:$dateRange) {
       id
       quantity
       price

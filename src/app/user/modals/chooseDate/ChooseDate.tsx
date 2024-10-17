@@ -8,10 +8,11 @@ const { RangePicker } = DatePicker;
 const ChooseDateModal: React.FC = () => {
     const { dateRange, setDateRange } = useAppContext();
     const [visible, setVisible] = useState(true); 
-    const [dates, setDates] = useState<[Dayjs | null, Dayjs | null] | null>(dateRange);
+    const [dates, setDates] = useState<[Dayjs | null, Dayjs | null] | null>(dateRange || [null, null]);
+
 
     const handleSubmit = () => {
-        if (dates) {
+        if (dates && dates[0] && dates[1]) {
             setDateRange(dates); 
         }
         setVisible(false); 
@@ -21,20 +22,26 @@ const ChooseDateModal: React.FC = () => {
         setDates(dates); 
     };
 
+    const handleCancel = () => {
+        setVisible(false); 
+        // Resetting the dates state to avoid setting a default date
+        setDates(dateRange || [null, null]); // Keep it as it was before the modal opened
+    };
+
     useEffect(() => {
-        setDates(dateRange);
+        setDates(dateRange || [null, null]);
     }, [dateRange]);
 
     return (
         <Modal
-            title="Select Date Range"
+            title="Select Date "
             visible={visible}
-            onCancel={() => setVisible(false)} 
+            onCancel={handleCancel}
             footer={[
                 <Button key="submit" type="primary" onClick={handleSubmit}>
                     Submit
                 </Button>,
-                <Button key="cancel" onClick={() => setVisible(false)}>
+                <Button key="cancel" onClick={handleCancel}>
                     Cancel
                 </Button>
             ]}
@@ -49,4 +56,4 @@ const ChooseDateModal: React.FC = () => {
     );
 };
 
-export default ChooseDateModal;
+export default ChooseDateModal; 
