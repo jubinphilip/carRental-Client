@@ -47,7 +47,8 @@ const OtpVerify: React.FC<OtpVerifyProps> = ({ onClose, phone,verified}) => {
     const otpString = otp.join('');
     if (otpString.length === 6) {
         const { data: response } = await verifyOtp({variables: { otp: otpString, phone: phone }  });
-         if(response.verifyOtp.success)
+        console.log(response)
+         if(response.verifyOtp.status)
          {
             console.log("OTP Verified")
             verified(true)

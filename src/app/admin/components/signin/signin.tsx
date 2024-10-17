@@ -10,12 +10,15 @@ import styles from './signin.module.css'
 
 function Signin() {
     const [record,setRecord]=useState({ username: '', password: '' })
-    const[adminLogin,{data,loading,error}]=useMutation(Admin_Login,{client})
+    const [error,setError]=useState('')
+    const[showError,setShowError]=useState(false)
+    const[adminLogin]=useMutation(Admin_Login,{client})
     const router=useRouter()
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
             setRecord((prev)=>({...prev,[e.target.name]:e.target.value}))
     }
     const handleSubmit:React.FormEventHandler<HTMLFormElement>=async(e)=>{
+        
         e.preventDefault()
         console.log(record)
         try
@@ -28,15 +31,20 @@ function Signin() {
             }
             }
         })
-        if(response.data)
-        {   
-            console.log("Admin Loginned",response.data)
-            router.push('/')
-            sessionStorage.setItem('token',response.data.adminLogin.token)
-            localStorage.setItem('token',response.data.adminLogin.token)
-            sessionStorage.setItem('user',response.data.adminLogin.__typename)
+        if (response.data.adminLogin.status===true) {
+            console.log("Admin Logged in", response.data);
+            router.push('/');
+            document.cookie = `token=${response.data.adminLogin.token}; path=/; max-age=86400; Secure; SameSite=Strict`;
+            sessionStorage.setItem('user', response.data.adminLogin.__typename);
             window.dispatchEvent(new Event('storage'));
         }
+        else
+        {
+            console.log(response.data.adminLogin.message)
+            setError(response.data.adminLogin.message)
+            setShowError(true)
+        }
+        
     }
     catch(error)
     {
@@ -50,6 +58,7 @@ function Signin() {
             <h1 className={styles.loginHead}>Login As Admin</h1>
         <Input type="text" name="username" placeholder='Enter admin name' onChange={handleChange} id="" />
         <Input type="password" name="password" placeholder='Enter password' onChange={handleChange} id="" />
+        {showError && <span className={styles.error}>{error}</span>}
         <Button type="primary" htmlType='submit' >Signin</Button>
         </form>
         <div className={styles.image}>

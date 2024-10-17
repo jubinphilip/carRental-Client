@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from './book-car.module.css';
-import { useParams } from 'next/navigation';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_CAR_INFO, ADD_BOOKING, CREATE_ORDER, VERIFY_PAYMENT } from '../../queries/user-queries';
 import client from '@/services/apollo-client';
@@ -10,7 +9,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BookedDates from '../../components/BookedDates/BookedDates';
 import { useAppContext } from '@/context/appContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import getCookie from '@/utils/get-token';
+import Loader from '@/components/PreLoader';
 
 interface RazorpayWindow extends Window {
   Razorpay: any;
@@ -73,7 +74,7 @@ function BookCar() {
   });
 
   useEffect(() => {
-    setToken(localStorage.getItem('token'));
+    setToken(getCookie('usertoken'));
     if (data && data.getCarInfo?.Vehicle?.fileurl) {
       setMainImage(data.getCarInfo.Vehicle.fileurl);
     }
@@ -100,7 +101,7 @@ function BookCar() {
     setRecord(prev => ({ ...prev, quantity }));
   }, [record.startdate, record.enddate, data?.getCarInfo?.price, quantity]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
   if (error) return <p>Error: {error.message}</p>;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -121,6 +122,7 @@ function BookCar() {
       if (response.bookCar.status === 'Success') {
         const newBookingId = response.bookCar.id;  
         setBookingId(newBookingId);  
+     
         console.log('Booking ID set:', newBookingId);
   
         await handlePayment(newBookingId);  

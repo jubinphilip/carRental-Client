@@ -7,8 +7,6 @@ import client from '@/services/apollo-client';
 import ViewCar from '../modals/viewCar/ViewCar';
 import typesenseClient from '@/services/typesense-config';
 import Loader from '@/components/PreLoader';
-import { useAppContext } from '@/context/appContext';
-import ChooseDate from '../modals/chooseDate/ChooseDate';
 
 interface Car {
   id: string;
@@ -28,8 +26,7 @@ const Types = [
 ];
 
 function CarList() {
-  const{dateRange}=useAppContext()
-  const { data, error, loading: graphQLLoading } = useQuery(GET_RENT_VEHICLES, { variables: { dateRange:dateRange }, client });
+  const { data, error, loading: graphQLLoading } = useQuery(GET_RENT_VEHICLES, { client });
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedType, setSelectedType] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,14 +38,9 @@ function CarList() {
 
   // Set loading state initially and after data fetch
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 5000); 
+    const timer = setTimeout(() => setLoading(false), 5000); // Show loader for 2 seconds
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(()=>
-  {
-    console.log("Dates",dateRange)
-  },[dateRange])
 
   useEffect(() => {
     if (data && data.rentVehicles) {
@@ -62,7 +54,6 @@ function CarList() {
         image: rental.Vehicle.fileurl,
       }));
       setCars(formattedCars);
-    
     }
   }, [data]);
 
@@ -144,14 +135,11 @@ function CarList() {
     return <div>Error occurred: {error.message}</div>;
   }
 
-
+  // Conditionally render the loader if loading from GraphQL or custom state
   if (loading || graphQLLoading) return <Loader />;
 
   return (
-  
     <div className={styles.mainContainer}>
-       <ChooseDate/>
-
       <div className={styles.container}>
         <h1 className={styles.mainhead}>Drive Your Adventure</h1>
         <p className={styles.maindesc}>

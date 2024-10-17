@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_BOOKINGS } from '../../queries/admin-queries';
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_BOOKINGS,UPDATE_RETURN_STATUS } from '../../queries/admin-queries';
 import client from '@/services/apollo-client';
 import jsPDF from 'jspdf';
+import { TiTick } from "react-icons/ti";
+import { FaWindowClose } from "react-icons/fa";
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx'; 
 import { DatePicker } from 'antd';
 import styles from './view-bookings.module.css';
 import moment, { Moment } from 'moment'; 
+import Loader from '@/components/PreLoader';
 import { FaFilePdf } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
+
 
 interface Manufacturer {
   model: string;
@@ -42,6 +46,7 @@ interface Booking {
   amount: number;
   startlocation: string;
   droplocation: string;
+  status:String;
   User: User;
   RentedVehicle: RentedVehicle;
 }
@@ -52,6 +57,7 @@ interface GetBookingsData {
 
 function ViewBookings() {
   const { loading, error, data } = useQuery<GetBookingsData>(GET_BOOKINGS, { client });
+  const [updateReturnVehicle, { data: updateData}] = useMutation(UPDATE_RETURN_STATUS, { client });
   const [bookingsData, setBookingsData] = useState<Booking[]>([]);
   const [date, setDate] = useState<Moment | null>(null);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
@@ -60,6 +66,7 @@ function ViewBookings() {
     if (data && data.getBookings) {
       setBookingsData(data.getBookings);
       setFilteredBookings(data.getBookings); 
+      console.log(data)
     }
   }, [data]);
 
@@ -77,9 +84,10 @@ function ViewBookings() {
     }
   }, [date, bookingsData]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
   if (error) return <p>Error: {error.message}</p>;
-
+  const today = new Date(); 
+  const curdate = today.toISOString().split('T')[0];
   const handleDate = (date: Moment | null) => {
     setDate(date); 
   };
@@ -142,6 +150,24 @@ function ViewBookings() {
     XLSX.writeFile(workbook, 'bookings.xlsx'); 
   };
 
+  const handleReturnStatus = async (id: string, status: string,carid:string) => {
+    console.log(id, status);
+    const input = {
+        id: id,
+        status: status,
+        carid:carid
+    };
+    try {
+        const { data: response } = await updateReturnVehicle({
+            variables: { input: input },
+            refetchQueries: [{ query: GET_BOOKINGS }]
+        });
+        console.log('Update response:', response);
+    } catch (err) {
+        console.error('Error updating return status:', err);
+    }
+};
+
   return (
     <div className={styles.container}>
         
@@ -181,6 +207,7 @@ function ViewBookings() {
             <th className={styles.tableHeader}>Start Location</th>
             <th className={styles.tableHeader}>Drop Location</th>
             <th className={styles.tableHeader}>Amount</th>
+            <th className={styles.tableHeader}>Return Status</th>
           </tr>
         </thead>
         <tbody>
@@ -204,11 +231,32 @@ function ViewBookings() {
               <td className={styles.tableCell}>{info.startlocation}</td>
               <td className={styles.tableCell}>{info.droplocation}</td>
               <td className={`${styles.tableCell} ${styles.amount}`}>{info.amount}</td>
+              <td className={styles.tableCell}>
+              <div>
+    {info.enddate === curdate && info.status === null ? (
+        <div>
+            <TiTick 
+                onClick={() => handleReturnStatus(info.id, 'returned', info.RentedVehicle?.id)} 
+                className={styles.returnedButton} 
+            />
+            <FaWindowClose 
+                onClick={() => handleReturnStatus(info.id, 'not returned', info.RentedVehicle?.id)} 
+                className={styles.notreturnedButton} 
+            />
+        </div>
+    ) : (
+        <span>{info?.status}</span> 
+    )}
+</div>
+
+
+</td>
+
             </tr>
           ))}
         </tbody>
       </table>
-    
+    <button className={styles.salesButton}>Show Sales</button>
     </div>
   );
 }

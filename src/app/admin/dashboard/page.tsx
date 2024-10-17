@@ -12,14 +12,14 @@ import ViewBookings from '../components/view-bookings/View-Bookings';
 import { FaHome } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import Home from '../components/home/user-home';
+import getCookie from '@/utils/get-token';
 
 function Dashboard() {
   const [content,setContent]=useState('home')
   const [sideBar,setSidebar]=useState(true)
   const router=useRouter()
   useEffect(() => {
-   
-    const token = localStorage.getItem('token');
+    const token = getCookie('token')
     if (!token) {
       router.push('/user/signin');
     }

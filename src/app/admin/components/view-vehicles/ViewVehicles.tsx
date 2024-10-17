@@ -3,11 +3,12 @@ import { useMutation, useQuery } from '@apollo/client';
 import client from '@/services/apollo-client';
 import { GET_VEHICLES ,DELETE_VEHICLE} from '../../queries/admin-queries';
 import { ToastContainer,toast } from 'react-toastify';
+import { Modal } from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './viewvehicles.module.css';
 import EditCars from '../../modals/edit-cars/EditCars';
 import AddRent from '../../modals/add-rent/Add-Rent';
-
+import Loader from '@/components/PreLoader';
 
 function ViewVehicles() {
   const { loading: queryLoading, error: queryError, data: queryData, refetch } = useQuery(GET_VEHICLES, { client });
@@ -19,24 +20,31 @@ function ViewVehicles() {
   const[id,setId]=useState('')
 
   const handleDelete = (id: string) => {
-    deleteVehicle({ variables: { id } })
-      .then((response) => {
-        console.log('Delete response:', response.data);
-        console.log(response.data.deleteVehicle.status)
-        if(response.data.deleteVehicle.status==='Success')
-        {
-          toast.success("Vehicle Deleted")
+    Modal.confirm({
+      title: 'Confirm Deletion',
+      content: 'Are you sure you want to delete this vehicle?',
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk: async () => {
+        try {
+          const response = await deleteVehicle({ variables: { id } });
+          if (response.data.deleteVehicle.status === 'Success') {
+            toast.success("Vehicle Deleted");
+            refetch();
+          } else {
+            toast.error("Error Deleting Vehicle");
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          toast.error('Failed to delete vehicle');
         }
-        else
-        {
-          toast.error("Error Deleting Vehicle")
-        }
-        refetch(); 
-      })
-      .catch((err) => {
-        console.error('Error:', err);
-      });
+      },
+      onCancel() {
+        toast.info("Deletion Cancelled");
+      },
+    });
   };
+  
 
   const handleId=(id: string,type:string)=>
   {
@@ -51,7 +59,7 @@ function ViewVehicles() {
     }
   }, [queryData]);
 
-  if (queryLoading) return <p>Loading...</p>;
+  if (queryLoading) return <Loader/>;
   if (queryError) return <p>Error: {queryError.message}</p>;
 
 
@@ -82,7 +90,7 @@ function ViewVehicles() {
             <div className={styles.buttons}>
               <button className={`${styles.button} ${styles.editButton}`} onClick={() => handleId(vehicle.id, "edit")}>Edit</button>
               <button className={`${styles.button} ${styles.deleteButton}`} onClick={() => handleDelete(vehicle.id)}>Delete</button>
-              <button className={`${styles.button} ${styles.addButton}`} onClick={() => handleId(vehicle.id, "add")}>Add for rent</button>
+              <button className={`${styles.button} ${styles.addButton}`} onClick={() => handleId(vehicle.id, "add")}>Add or Edit rent Details</button>
             </div>
           </div>
         </div>

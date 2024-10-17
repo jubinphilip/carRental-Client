@@ -42,6 +42,7 @@
     list-style: none;
     color: rgb(117, 114, 109);
     font-size: small;
+    transition: min-width 0.3s ease;
 }
 .text1{
     color:rgb(117, 114, 109);
@@ -50,6 +51,7 @@
     color: red;
     cursor: pointer;
     font-size: medium;
+    
 }
 .support,.services,.company{
     display: flex;

@@ -1,5 +1,6 @@
 'use client';
 import { createContext, useContext, Dispatch, SetStateAction, useState, ReactNode, useEffect } from "react";
+import dayjs, { Dayjs } from 'dayjs';
 
 type UserType = {
     userid: string;  
@@ -14,12 +15,21 @@ type CarDataType = {
     userId: string;
 };
 
+interface DateRangeContextType {
+    dateRange: [Dayjs | null, Dayjs | null];
+    setDateRange: (dates: [Dayjs | null, Dayjs | null]) => void;
+}
+
+
 interface AppContextProps {
     user: UserType | null; 
     setUser: Dispatch<SetStateAction<UserType | null>>;
     carData: CarDataType | null; 
     setCarData: Dispatch<SetStateAction<CarDataType | null>>;
+    dateRange: [Dayjs | null, Dayjs | null];
+    setDateRange: Dispatch<SetStateAction<[Dayjs | null, Dayjs | null]>>; 
 }
+
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
@@ -35,6 +45,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         return storedCarData ? JSON.parse(storedCarData) : null;
     });
 
+    const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null]);
     // Save user to localStorage when it changes
     useEffect(() => {
         if (user) {
@@ -54,7 +65,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     }, [carData]);
 
     return (
-        <AppContext.Provider value={{ user, setUser, carData, setCarData }}>
+        <AppContext.Provider value={{ user, setUser, carData, setCarData, dateRange, setDateRange }}>
             {children}
         </AppContext.Provider>
     );

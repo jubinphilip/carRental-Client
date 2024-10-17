@@ -5,7 +5,6 @@
     padding: 20px;
   
   }
-  
   .rentalItem {
     display: flex;
     background-color: #ffffff;
@@ -13,7 +12,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
   }
-  
+  .homehead
+  {
+    color: rgb(117, 114, 109);
+  }
   .imageContainer {
     flex: 0 0 400px;
   }
@@ -75,7 +77,18 @@
     border-radius: 15px;
     font-size: 0.9em;
   }
-  
+  .iconContainer
+  {
+    display: flex;
+    gap: 20px;
+  }
+  .deleteIcon
+  {
+    color: red;
+    width: 25px;
+    height: 25px;
+  }
+
   @media (max-width: 768px) {
     .rentalItem {
       flex-direction: column;

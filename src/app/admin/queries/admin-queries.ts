@@ -3,8 +3,13 @@ import { gql } from '@apollo/client';
 export const Admin_Login = gql`
   mutation AdminLogin($input:AdminInput!) {
     adminLogin(input:$input) {
-      id
-      username
+      status
+      message
+      data
+      {
+        id
+        username  
+      }
       token
     }
   }
@@ -69,7 +74,6 @@ export const GET_VEHICLES = gql`
   export const DELETE_VEHICLE = gql`
   mutation deleteVehicle($id: ID!) {
     deleteVehicle(id: $id) {
-      id
       status
     }
   }
@@ -121,6 +125,7 @@ export const GET_BOOKINGS = gql`
       enddate
       startlocation
       droplocation
+      status
       RentedVehicle {
         id
         Vehicle {
@@ -142,6 +147,23 @@ export const GET_BOOKINGS = gql`
     }
   }
 `;
+
+export const DELETE_RENT_VEHICLE = gql`
+mutation deleteRentVehicle($id: ID!) {
+  deleteRentVehicles(id: $id) {
+    status
+    message
+  }
+}
+`;
+export const UPDATE_RETURN_STATUS=gql`
+mutation updateReturnVehicle($input:updateBooking!){
+  updateReturnVehicle(input:$input){
+  status
+  message
+  }
+}
+`
 
 
 

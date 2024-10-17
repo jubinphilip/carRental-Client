@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import styles from './navbar.module.css'
 import Link from 'next/link'
+import getCookie from '@/utils/get-token'
 import { Button } from 'antd'
 import { useRouter } from 'next/navigation'
+import { clearCookie } from '@/utils/clear-cookie'
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useAppContext } from '@/context/appContext';
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -19,22 +21,28 @@ function Navbar() {
     const fileurl = contextUser?.fileurl;
     console.log(fileurl)
     useEffect(() => {
-        checkAuthStatus()
-        window.addEventListener('storage', checkAuthStatus)
+        checkAuthStatus();
+        
+        window.addEventListener('storage', checkAuthStatus);
         return () => {
-            window.removeEventListener('storage', checkAuthStatus)
+            window.removeEventListener('storage', checkAuthStatus);
         }
-    }, [])
+    }, []);
+
     const checkAuthStatus = () => {
-        const token = sessionStorage.getItem('token')
-        const user=sessionStorage.getItem('user')
-        user?setUser(user):''
-        setIsAuthorized(!!token)
+        const token = getCookie('token'); 
+        const usertoken=getCookie('usertoken')
+        const user = sessionStorage.getItem('user');
+        setUser(user || '');
+        
+        token?setIsAuthorized(true):'';
+        usertoken?setIsAuthorized(true):'';
     }
 
     function handleLogout() {
         console.log("Logout enabled")
-        sessionStorage.removeItem('token')
+        clearCookie('token');
+        clearCookie('usertoken')
         sessionStorage.removeItem('user')
         sessionStorage.removeItem('userid')
         setIsAuthorized(false)

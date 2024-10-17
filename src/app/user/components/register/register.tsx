@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { Add_User,REQUEST_OTP } from '../../queries/user-queries'
 import client from '@/services/apollo-client'
+import { useRouter } from 'next/navigation'
 import { ToastContainer,toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './register.module.css'
@@ -14,10 +15,13 @@ function RegisterUser() {
     const[image,setImage]=useState<File | null>(null)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const[password,setPassword]=useState('')
+    const[errorMessage,setErrorMessage]=useState('')
+    const[error,setError]=useState(false)
     const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
     const[isVerified,setIsVerified]=useState(false)
-    const [addUser, { loading, error }] = useMutation(Add_User, { client });
+    const [addUser] = useMutation(Add_User, { client });
     const[requestOtp]=useMutation(REQUEST_OTP,{client})
+    const router=useRouter()
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null;
@@ -39,13 +43,25 @@ function RegisterUser() {
         console.log(data);
         if(data.password!=password)
         {
-          toast.error('Passwords do not match')
+          setError(true)
+          setErrorMessage('Passwords do not match')
+        
         }
         else
         {
         try {
             const { data: response } = await addUser({ variables: {  file: image, input: data } });
             console.log('User added:', response.addUser);
+            if(response.addUser.status===false)
+            {
+             setErrorMessage(response.addUser.message)
+             setError(true)
+            }
+            else
+            {
+              
+              router.push('/user/signin')
+            }
         } catch (err) {
             console.error('Error adding user:', err);
         }
@@ -59,9 +75,18 @@ const handleOtp=async()=>
   {
     try
     {
-    const{data:response}= await requestOtp({ variables: { phone:data.phone } });
-    setShowOtpModal(true);
-    console.log('OTP sent:', response);
+    const{data:response}= await requestOtp({ variables: { phone:data.phone,username:data.username,email:data.email } });
+    console.log(response.requestOtp.status)
+    if(response.requestOtp.status!=false)
+    {
+      setShowOtpModal(true);
+      console.log('OTP sent:', response);
+    }
+    else
+    {
+      setError(true)
+      setErrorMessage(response.requestOtp.message)
+    }
     }catch(error)
     {
       console.log(error)
@@ -83,23 +108,22 @@ const handleOtp=async()=>
     </div>
             <form onSubmit={handleSubmit} className={styles.form}>
               <h1 className={styles.registerHead}>Register Here</h1>
-              <div >
+              <div className={styles.formdiv}>
                 <Input type="text" name="username" placeholder="Enter your name" onChange={handleChange} />
-                <Input type="email" name="email" placeholder="Enter your email" onChange={handleChange} />
+                <Input type="text" name="email" placeholder="Enter your email" onChange={handleChange} />
                 <Input type="text" name="phone" placeholder="Enter your phone" onChange={handleChange} />
-               {!isVerified && <Button type="primary" htmlType='submit' onClick={handleOtp} >Verify</Button>}
+                {error && !isVerified && <span className={styles.error}>{errorMessage}</span>}<br/>
+               {!isVerified && <Button type="primary"  onClick={handleOtp} >Verify</Button>}
                 </div>
-                { isVerified && <div>
+                { isVerified && <div className={styles.formdiv}>
                 <Input type="text" name="city" placeholder="Enter your city" onChange={handleChange} />
                 <Input type="text" name="state" placeholder="Enter your state" onChange={handleChange} />
                 <Input type="text" name="country" placeholder="Enter your country" onChange={handleChange} />
                 <Input type="text" name="pincode" placeholder="Enter your pincode" onChange={handleChange} />
                 <Input type="password" name="password" placeholder="Enter your password" onChange={handleChange} />
                 <Input type="password" name="confirmPassword" placeholder="Confirm your password" onChange={handlePassword} />
-                <input 
-            type="file" 
-            onChange={handleFileChange} 
-          />
+                {error && <span className={styles.error}>{errorMessage}</span>}<br/>
+                <input type="file" onChange={handleFileChange} />
            {imagePreview && (
           <div>
             <img src={imagePreview} alt="Preview" style={{ width: '200px', height: 'auto' }} />

@@ -12,6 +12,8 @@ function Signin() {
     
     const{setUser}=useAppContext()
     const [record,setRecord]=useState({email: '', password: '' })
+    const[errorMessage,setErrorMessage]=useState('')
+    const[showerror,setShowError]=useState(false)
     const[loginUser,{data,loading,error}]=useMutation(LOGIN_USER,{client})
     const router=useRouter()
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -20,6 +22,7 @@ function Signin() {
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         console.log(record);
+        
         try {
             const response = await loginUser({
                 variables: {
@@ -29,11 +32,13 @@ function Signin() {
                     },
                 },
             });
-            if (response.data) {
+            console.log(response)
+            if (response.data.loginUser.status==='true') {
+                console.log(response.data)
                 console.log("User Logged In", response.data);
                 sessionStorage.setItem('token',response.data.loginUser.token)
                 sessionStorage.setItem('username',response.data?.loginUser.email)
-                localStorage.setItem('token',response.data.loginUser.token)
+                document.cookie = `usertoken=${response.data.loginUser.token}; path=/; max-age=86400; Secure; SameSite=Strict`;
                 sessionStorage.setItem('userid',response.data.loginUser.id)
                 window.dispatchEvent(new Event('storage'));
                 const userData={
@@ -45,6 +50,12 @@ function Signin() {
                 }
                 setUser(userData)
                 router.push('/');
+            }
+            else
+            {
+                console.log("hello")
+                setErrorMessage(response.data.loginUser.message)
+                setShowError(true)
             }
         } catch (error) {
             console.error("Login error:", error);
@@ -58,9 +69,10 @@ function Signin() {
     <div className={styles.mainContainer}>
         <div className={styles.container}>
         <form  className={styles.form} onSubmit={handleSubmit}>
-            <h1 className={styles.loginHead}>Login Here</h1>
+        <h1 className={styles.loginHead}>Login Here</h1>
         <Input type="text" name="email" placeholder='Enter your email' onChange={handleChange}  />
         <Input type="password" name="password" placeholder='enter your Password' onChange={handleChange}  />
+       {showerror &&  <span className={styles.error}>{errorMessage}</span>}
         <Button type="primary" htmlType='submit' >Signin</Button>
         <div className={styles.adminoptions}>
         <p className={styles.oroption}>or</p>

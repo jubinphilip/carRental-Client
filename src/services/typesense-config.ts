@@ -8,12 +8,12 @@ dotenv.config();
 const typesenseClient = new Typesense.Client({
     nodes: [
         {
-            host: '8k1gz5sr069ne4fbp-1.a1.typesense.net',
+            host: 's6bw42o5hptgefjnp-1.a1.typesense.net',
             port: 443,
             protocol: 'https',
         },
     ],
-    apiKey:'sCRexZhJfCNus3tO5TR00lsAxjyknTvF',
+    apiKey:'MhZtxNRPNH6Lplw7ejXd0AXEdPhXk9vj',
 
     connectionTimeoutSeconds: 2,
 });

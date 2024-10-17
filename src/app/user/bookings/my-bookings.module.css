@@ -1,0 +1,62 @@
+.mainContainer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .container {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .bookingCards {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .bookingCard {
+    min-width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 15%;
+    width: 90%;
+    transition: min-width 0.3s ease;
+  }
+  .bookingCard:hover
+  {
+    min-width: 92%;
+    cursor: pointer;
+    
+  }
+  
+  .disabledCard {
+    filter: grayscale(100%);
+    opacity: 0.7;
+    background-color: rgb(233, 229, 229);
+    border-radius: 5px;
+  }
+  
+  .cancelledBooking {
+    color: red ;
+    font-weight: bold;
+  }
+  
+  .cardImage {
+    height: 170px;
+    width: 170px;
+    margin-left: 10px;
+    border-radius: 10%;
+  }
+  
+  .detailsContainer {
+    margin-right: 10px;
+  }
+  

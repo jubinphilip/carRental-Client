@@ -7,14 +7,11 @@
 
 }
 .container{
-    width: 60%;
-    height: 60%;
+    width: 80%;
     display: flex;
     flex-direction: column;
-
     justify-content: center;
-    align-items: center;
-    justify-content: center;
+  
     gap: 20px;
 }
 .modelform
@@ -24,6 +21,11 @@
     flex-direction: column;
     width: 40%;
     gap:10px;
+}
+.excelupload
+{
+    font-size: medium;
+    font-weight: bold;
 }
 .inputbox{
     padding: 10px;
@@ -38,6 +40,70 @@
     color: white;
     font-weight: bold;
 }
+.showData
+{
+    background-color:rgb(42, 106, 225);
+    border: 1px solid black;
+    height: 30px;
+    border-radius: 5px;
+    width: 100px;
+    color: white;
+    font-weight: bold;
+}
 .submitdata:hover{
     background-color: #F55757;
 }
+.fileInputWrapper {
+    display: flex;
+    align-items: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .fileInput {
+    display: none;
+  }
+  
+  .fileInputLabel {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .fileInputLabel:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .fileName {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  .tableContainer {
+    margin: 20px;
+  
+  }
+  
+  .carTable {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .carTable th, .carTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .carTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .carTable tr:hover {
+    background-color: #f5f5f5;
+  }

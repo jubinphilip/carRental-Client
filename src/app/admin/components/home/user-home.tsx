@@ -1,24 +1,62 @@
+'use client'
 import React, { useEffect } from 'react'
 import styles from './home.module.css'
 import client from '@/services/apollo-client';
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {Modal} from 'antd'
 import { GET_RENT_VEHICLES } from '@/app/queries/queries'
+import { DELETE_RENT_VEHICLE } from '../../queries/admin-queries';
+import Loader from '@/components/PreLoader';
+import { MdAutoDelete } from "react-icons/md";
 function Home() {
   const { data, error, loading } = useQuery(GET_RENT_VEHICLES, {client})
+  const [deleteRentVehicles]=useMutation(DELETE_RENT_VEHICLE,{client})
   useEffect(()=>{
     if(data)
     {
       console.log("Fetched Vehicles:",data.rentVehicles)
     }
   },[data])
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p><Loader/></p>;
   if (error) {
     console.error("Error fetching data:", error); 
     return <p>Error: {error.message}</p>; 
   }
+  const handleDelete = (id: string) => {
+    Modal.confirm({
+      title: 'Confirm Deletion',
+      content: 'Are you sure you want to delete this vehicle?',
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk: async () => {
+        try {
+          const response = await deleteRentVehicles({ variables: { id } });
+          if (response.data.deleteVehicle.status === 'Success') {
+            toast.success("Vehicle Deleted");
+          } else {
+            toast.error("Error Deleting Vehicle");
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          toast.error('Failed to delete vehicle');
+        }
+      },
+      onCancel() {
+        toast.info("Deletion Cancelled");
+      },
+    });
+  };
+
+  const handleEdit=(id:string)=>
+  {
+    console.log(id)
+  }
   
   return (
     <div className={styles.rentalList}>
+      <h1 className={styles.homehead}>Rented Vehicles</h1>
       {data?.rentVehicles?.map((rental:any) => (
         <div key={rental.id} className={styles.rentalItem}>
           <div className={styles.imageContainer}>
@@ -35,7 +73,11 @@ function Home() {
             </div>
             <div className={styles.rentalInfo}>
               <span className={styles.price}>Price: ${rental.price} per day</span>
-              <span className={styles.quantity}>Available: {rental.quantity}</span>
+             
+              <span className={styles.quantity}>Available: {rental.quantity}<br/> </span>
+            </div>
+            <div  className={styles.iconContainer}>
+           < MdAutoDelete className={styles.deleteIcon}  onClick={()=>handleDelete(rental.id)}/>
             </div>
           </div>
         </div>

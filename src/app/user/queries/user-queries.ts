@@ -3,9 +3,13 @@ import { gql } from '@apollo/client';
 export const Add_User = gql`
   mutation AddUser($file: Upload!,$input: AddUserInput!) {
     addUser(file: $file,input: $input) {
-      id
-      email
-     
+      status
+      message
+      data
+      {
+        id
+        email
+      }
     }
   }
 `;
@@ -29,8 +33,10 @@ export const LOGIN_USER = gql`
       id
       email
       token 
-       fileurl
-       username
+      fileurl
+      username
+      status
+      message
     }
   }
 `;
@@ -94,9 +100,9 @@ mutation EditUSerPassword($input:EditPassword!)
 
 
 export const REQUEST_OTP = gql`
-  mutation requestOTP($phone: String!) {
-    requestOtp(phone: $phone) {
-      success
+  mutation requestOTP($phone: String!,$username:String!,$email:String!) {
+    requestOtp(phone: $phone,username:$username,email:$email) {
+      status
       message
     }
   }
@@ -105,7 +111,7 @@ export const REQUEST_OTP = gql`
 export const VERIFY_OTP = gql`
   mutation verifyOtp($phone: String!, $otp: String!) {
     verifyOtp(phone: $phone, otp: $otp) {
-      success
+      status
       message
     }
   }
@@ -133,6 +139,36 @@ export const VERIFY_PAYMENT = gql`
   mutation verifyPayment($paymentId: String!, $orderId: String!,$razorpay_signature:String!,$bookingId:String!) {
     verifyPayment(paymentId: $paymentId, orderId: $orderId,razorpay_signature:$razorpay_signature,bookingId:$bookingId) {
       signature
+    }
+  }
+`;
+
+export const GET_USER_BOOKINGS = gql`
+  query getUserBookings($id:ID!) {
+    getUserBookings(id:$id) {
+      id
+      startdate
+      amount
+      enddate
+      startlocation
+      payment_status
+      createdAt
+      droplocation
+      RentedVehicle {
+        id
+        price
+        Vehicle {
+          id
+          fileurl
+          type
+          transmission
+          fuel
+          Manufacturer {
+          manufacturer
+            model
+          }
+        }
+      }
     }
   }
 `;

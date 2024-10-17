@@ -11,7 +11,6 @@ interface AddRentProps {
   carid: string | null;
   addstate: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
   const [addRent] = useMutation(ADD_RENT, { client });
   const [record, setRecord] = useState({ vehicleid: carid, price: '', quantity: '' });
@@ -61,18 +60,8 @@ const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
         </button>
         <h2>Add Rent</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="price"
-            onChange={handleChange}
-            placeholder='Enter the price for a Car'
-          />
-          <input
-            type="text"
-            name="quantity"
-            onChange={handleChange}
-            placeholder='Enter the quantity'
-          />
+          <input type="text" name="price" onChange={handleChange} placeholder='Enter the price for a Car'/>
+          <input type="text" name="quantity" onChange={handleChange} placeholder='Enter the quantity'/>
           <button className={styles.submitButton} type="submit">Submit</button>
         </form>
       </div>
