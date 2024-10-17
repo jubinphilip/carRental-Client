@@ -64,8 +64,25 @@
     }
     .main{
         width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .links{
         flex-direction: column;
+    }
+    .text1{
+        text-align: center;
+    }
+    .links
+    {
+        width: 100%;
+        gap: 3vw;
+    }
+    .support,.services,.company
+    {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
     }
 }

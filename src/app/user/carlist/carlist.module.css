@@ -189,3 +189,27 @@ height: 100%;
 {
     cursor: pointer;
 }
+@media (max-width: 768px){
+    .mainhead,.maindesc
+    {
+        text-align: center;
+    }
+    .container
+    {
+        width: 90%;
+    }
+    .carsContainer
+    {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+    .searchbox
+        {
+            width: 80%;
+        }
+    .carcard
+    {
+        width: 80%;
+    }
+}

@@ -21,7 +21,6 @@ function Popular() {
     }})
     if (error) {
       return <p>Error: Something went wrong!(error.message)</p>;
-
     }
     if(loading)
     {

@@ -88,3 +88,19 @@
 .carRate{
     font-weight: bold;
 }
+@media (max-width: 768px){
+    .carsContainer
+    {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .carcard
+    {
+        width: 80%;
+    }
+    .textcontainer
+    {
+        text-align: center;
+    }
+}

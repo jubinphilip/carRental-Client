@@ -115,11 +115,12 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
               )}
             </div>
             {edit && (
-              <input 
-                type="file"
-                accept=".jpg,.jpeg,.png" 
-                onChange={handleFileChange} 
-              />
+             <div className={styles.imageInputWrapper}>
+             <label htmlFor="upload">
+               <img src="/assets/imageadd.png" className={styles.imageAdd} alt="" />
+             </label>
+             <input type="file" id='upload' accept=".jpg, .jpeg, .png, .webp, .avif" className={styles.primaryImageInput} onChange={handleFileChange} />
+           </div>
             )}
             <h2 className={styles.title}>Hi {user.username}!</h2>
             <div className={styles.grid}>

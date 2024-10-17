@@ -36,8 +36,11 @@ function Footer() {
                 <li className={styles.content}>Partner With Us</li>
                 <li className={styles.content}>Terms & Conditions</li>
             </div>  
+
             </div>
       </div>
+
+
     </div>
   )
 }

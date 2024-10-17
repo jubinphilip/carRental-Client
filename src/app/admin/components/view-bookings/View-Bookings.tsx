@@ -233,7 +233,7 @@ function ViewBookings() {
               <td className={`${styles.tableCell} ${styles.amount}`}>{info.amount}</td>
               <td className={styles.tableCell}>
               <div>
-    {info.enddate === curdate && info.status === null ? (
+    {info.enddate <= curdate && info.status === null ? (
         <div>
             <TiTick 
                 onClick={() => handleReturnStatus(info.id, 'returned', info.RentedVehicle?.id)} 
