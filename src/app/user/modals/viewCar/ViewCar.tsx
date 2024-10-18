@@ -5,6 +5,12 @@ import { GET_CAR_INFO } from '../../queries/user-queries';
 import client from '@/services/apollo-client';
 import styles from './ViewCar.module.css';
 import { useRouter } from 'next/navigation';
+import { BsFillFuelPumpFill } from "react-icons/bs";
+import { PiSeat } from "react-icons/pi";
+import { GiGearStick } from "react-icons/gi";
+
+
+
 interface ViewCarProps
  {   carid: string | null;   
   modalstate: React.Dispatch<React.SetStateAction<boolean>>; 
@@ -26,14 +32,14 @@ interface ViewCarProps
 
   const vehicle = data?.getCarInfo?.Vehicle;
   console.log(vehicle)
-
+  console.log(carid)
   if (!vehicle) return null;
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         <div className={styles.header}>
-          <h2 className={styles.title}>{vehicle.Manufacturer.model}</h2>
+          <h2 className={styles.title}> {vehicle.Manufacturer.manufacturer} {vehicle.Manufacturer.model}</h2>
           <button onClick={handleClose} className={styles.closeButton}>
             <IoClose  />
           </button>
@@ -57,12 +63,15 @@ interface ViewCarProps
     </div>
         
         <div className={styles.details}>
-          <p><strong>Manufacturer:</strong> {vehicle.Manufacturer.manufacturer}</p>
+          <div className={styles.firstContainer}>
           <p><strong>Year:</strong> {vehicle.Manufacturer.year}</p>
-          <p><strong>Price:</strong> {data?.getCarInfo?.price}</p>
-          <p><strong>Fuel Type:</strong> {vehicle.fuel}</p>
-          <p><strong>Seats:</strong> {vehicle.seats}</p>
-          <p><strong>Transmission:</strong> {vehicle.transmission}</p>
+          <p className={styles.price}><strong>Price:</strong> {data?.getCarInfo?.price}₹/<span>day</span></p>
+          </div>
+          <div className={styles.secondContainer}>
+          <p> <BsFillFuelPumpFill className={styles.icons}/> {vehicle.fuel}</p>
+          <p> <PiSeat className={styles.icons}/> {vehicle.seats}</p>
+          <p> <GiGearStick className={styles.icons}/>{vehicle.transmission}</p>
+          </div>
           <p><strong>Description:</strong> {vehicle.description}</p>
         </div>
         

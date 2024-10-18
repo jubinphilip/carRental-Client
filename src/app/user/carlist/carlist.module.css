@@ -104,10 +104,10 @@ height: 100%;
     width: 90%;
     justify-content: space-between;
     display: flex;
+    gap: 2px;
     flex-wrap: wrap;
     align-items: center;
     margin: 2rem;
-  
 }
 
 .carcard{
@@ -115,20 +115,31 @@ height: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 30%;
+    width: 300px;
     background-color: whitesmoke;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 3px;
 }
 .carcard:hover
 {
-    cursor: pointer;
-    background-color: rgb(221, 218, 218);
+
+        transform: scale(1.05); 
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+        cursor: pointer;
+}
+.carImageContainer{
+    width: 300px;
+    height: 200px; 
+    overflow: hidden;
+    position: relative;
 }
 .carImage{
     width: 95%;
     margin: 10px;
-    height: 250px;
-    object-fit: cover;
+    height: 200px;
+    object-fit: contain;
     border-radius: 10px;
 }
 .descriptionContainer
@@ -153,7 +164,8 @@ height: 100%;
 {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 .bookButton
 {
@@ -179,6 +191,7 @@ height: 100%;
     justify-content: center;
     align-items: center;
 }
+
 .dateTag
 {
     color: rgb(117, 114, 109);

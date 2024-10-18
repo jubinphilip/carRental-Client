@@ -19,7 +19,7 @@ function Navbar() {
     const { user: contextUser } = useAppContext();
     const router = useRouter()
     const fileurl = contextUser?.fileurl;
-    console.log(fileurl)
+    console.log("Fileurl is ",fileurl)
     useEffect(() => {
         checkAuthStatus();
         
@@ -77,9 +77,10 @@ function Navbar() {
                 </div>}
 
                {menu && <div className={styles.mobilenavItems}>
+             
                     <IoIosCloseCircleOutline className={styles.close} onClick={()=>setMenu(!menu)}/>
                     <Link className={styles.navitem} href="/"> <p>home</p></Link>
-                    <Link className={styles.navitem} href="/"> <p>car</p></Link>
+                    <Link className={styles.navitem} href="/"> <p>bookings</p></Link>
                     {user && <Link className={styles.navitem} href="/admin/dashboard"> <p>Dashboard</p></Link> }
                     {isAuthorized ? 
                         <Button onClick={handleLogout} type="primary" danger>Logout</Button> 
@@ -87,7 +88,9 @@ function Navbar() {
                         <Link className={styles.navitem} href="/user/signin"> <p>Sign In</p></Link>
                     }
                     {!isAuthorized && <Link className={styles.navitem} href="/user/register"> <p>Sign Up</p></Link>}
-                </div>}
+                </div>
+    
+                }
             </div>
 
             

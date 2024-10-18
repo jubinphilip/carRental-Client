@@ -11,7 +11,7 @@ import { DELETE_RENT_VEHICLE } from '../../queries/admin-queries';
 import Loader from '@/components/PreLoader';
 import { MdAutoDelete } from "react-icons/md";
 function Home() {
-  const { data, error, loading } = useQuery(GET_RENT_VEHICLES, {client})
+  const { data, error, loading,refetch } = useQuery(GET_RENT_VEHICLES, {client})
   const [deleteRentVehicles]=useMutation(DELETE_RENT_VEHICLE,{client})
   useEffect(()=>{
     if(data)
@@ -35,6 +35,7 @@ function Home() {
           const response = await deleteRentVehicles({ variables: { id } });
           if (response.data.deleteVehicle.status === 'Success') {
             toast.success("Vehicle Deleted");
+            refetch()
           } else {
             toast.error("Error Deleting Vehicle");
           }

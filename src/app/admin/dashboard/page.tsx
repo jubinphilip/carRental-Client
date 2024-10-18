@@ -24,6 +24,16 @@ function Dashboard() {
       router.push('/user/signin');
     }
   },[]);
+
+  const handleVehicleAdd=()=>
+  {
+    setContent('viewcars')
+  }
+
+  const handleVehicleRent=()=>
+    {
+      setContent('home');
+    }
   return (
     <div  className={styles.mainContainer}>
       {!sideBar && <p className={styles.openiconcontainer}><FaAngleDoubleRight className={styles.openicon} onClick={()=>setSidebar(true)}/></p>}
@@ -31,7 +41,7 @@ function Dashboard() {
         <p className={styles.closeiconcontainer}><FaAngleDoubleLeft className={styles.closeicon} onClick={()=>setSidebar(false)}/></p>
       <div className={styles.header}><RiAdminFill className={styles.headerLogo} /><h1 className={styles.headerText}>Admin</h1></div>
       <div className={styles.sidebarItems}>
-      <button className={styles.sidebarItem} onClick={()=>setContent('home')}><FaHome/>Home</button>
+        <button className={styles.sidebarItem} onClick={()=>setContent('home')}><FaHome/>Home</button>
         <button className={styles.sidebarItem} onClick={()=>setContent('addmodel')}><IoMdAdd/>Add Model</button>
         <button className={styles.sidebarItem} onClick={()=>setContent('addvehicle')}><IoMdAdd/>Add Vehicle</button>
         <button className={styles.sidebarItem} onClick={()=>setContent('viewbookings')}><FaCarOn/>View Bookings</button>
@@ -40,10 +50,10 @@ function Dashboard() {
       </div>}
       <div className={styles.mainItems}> 
         {content==='home' && <Home/>}
-      {content==='viewcars' && <ViewVehicles/>}
+      {content==='viewcars' && <ViewVehicles onSubmitRent={handleVehicleRent}/>}
       {content==='addmodel' && <Addmodel/>}
-      {content==='addvehicle' && <AddVehicle/>}
-      {content==='viewbookings' && <ViewBookings/>}
+      {content==='addvehicle' && <AddVehicle onVehicleAdd={handleVehicleAdd}/>}
+      {content==='viewbookings' && <ViewBookings />}
       </div>
     </div>
   )

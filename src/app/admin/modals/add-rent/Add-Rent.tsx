@@ -10,8 +10,9 @@ import 'react-toastify/dist/ReactToastify.css'
 interface AddRentProps {
   carid: string | null;
   addstate: React.Dispatch<React.SetStateAction<boolean>>;
+  onSubmitRent: () => void;
 }
-const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
+const AddRent: React.FC<AddRentProps> = ({ carid, addstate,onSubmitRent }) => {
   const [addRent] = useMutation(ADD_RENT, { client });
   const [record, setRecord] = useState({ vehicleid: carid, price: '', quantity: '' });
 
@@ -36,10 +37,11 @@ const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
 
        if(response.addRent.status==='Success')
        {
+        
         toast.success("Car added for Rent ")
         setTimeout(()=>
         {
-          handleClose()
+          onSubmitRent();
         },1000)
        }
        else

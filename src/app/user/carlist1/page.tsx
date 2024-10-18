@@ -4,7 +4,7 @@ import { GET_RENT_VEHICLES } from '@/app/queries/queries';
 import { useQuery } from '@apollo/client';
 import styles from './carlist.module.css';
 import client from '@/services/apollo-client';
-import ViewCar from '../modals/viewCar/ViewCar';
+import ViewCar from '../../../components/viewCar/ViewCar';
 import typesenseClient from '@/services/typesense-config';
 import Loader from '@/components/PreLoader';
 

@@ -4,7 +4,7 @@ import { GET_RENT_VEHICLES } from '@/app/queries/queries';
 import { useQuery } from '@apollo/client';
 import styles from './carlist.module.css';
 import client from '@/services/apollo-client';
-import ViewCar from '../modals/viewCar/ViewCar';
+import ViewCar from '@/app/user/modals/viewCar/ViewCar';
 import typesenseClient from '@/services/typesense-config';
 import Loader from '@/components/PreLoader';
 import { useAppContext } from '@/context/appContext';
@@ -52,6 +52,7 @@ function CarList() {
 
   useEffect(() => {
     if (data && data.rentVehicles) {
+      console.log(data.rentVehicles)
       const validIds = data.rentVehicles.map((rental: any) => rental.id);
       handleSearch(validIds);
     }
@@ -155,7 +156,7 @@ function CarList() {
         <div className={styles.priceFilter}>
           <h3 className={styles.pricefilterhead}>Filter by Price</h3>
           <div className={styles.priceSelectors}>
-            {['1000-2000', '2000-3000', '3000-5000', '5000+'].map((range) => (
+            {['1000 ₹-2000 ₹', '2000 ₹-3000 ₹', '3000 ₹-5000 ₹', '5000 ₹+'].map((range) => (
               <div key={range}>
                 <label>
                   <input type="checkbox" value={range} onChange={handlePriceRangeChange} />
@@ -181,7 +182,9 @@ function CarList() {
         <div className={styles.carsContainer}>
           {filterCars().map((car) => (
             <div className={`${styles.carcard} ${styles.cardHover}`} key={car.id} onClick={() => handleCardClick(car.id)}>
+              <div className={styles.carImageContainer}>
               <img className={styles.carImage} src={car.image} alt={`${car.manufacturer} ${car.model}`} />
+              </div>
               <div className={styles.descriptionContainer}>
                 <h3 className={styles.carName}>
                   {car.manufacturer} {car.model}
@@ -189,6 +192,7 @@ function CarList() {
                 <p className={styles.carType}>Type: {car.type}</p>
                 <p>Year: {car.year}</p>
                 <p className={styles.carRate}>Rate: ${car.price}/day</p>
+               
                 <div className={styles.buttonContainer}>
                   <button className={styles.bookButton}>Book Now</button>
                 </div>

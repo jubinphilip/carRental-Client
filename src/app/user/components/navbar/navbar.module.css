@@ -51,18 +51,32 @@ width: 100%;
 .burgermenu{
     display: none;
 }
+.burgermenu:hover
+{
+    cursor: pointer;
+}
 @media (max-width: 768px) {
     .navItems{
         display: none;
     }
+
+   
     .mobilenavItems
    {
-    display: block;
-    position: relative;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    gap: 20px;
+    right: 0;
+    height: 50%;
+    padding: 3rem;
+    background-color: white;
+    margin-top: 100px;
+    width: 30%;
     z-index: 10;
-
    }
+
    .burgermenu{
     display: block;
    }

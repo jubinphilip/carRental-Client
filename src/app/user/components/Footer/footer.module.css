@@ -70,15 +70,13 @@
     }
     .links{
         flex-direction: column;
+        width: 100%;
+        gap: 3vw;
     }
     .text1{
         text-align: center;
     }
-    .links
-    {
-        width: 100%;
-        gap: 3vw;
-    }
+   
     .support,.services,.company
     {
         text-align: center;

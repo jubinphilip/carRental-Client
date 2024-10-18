@@ -9,7 +9,9 @@ import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 import getCookie from '@/utils/get-token';
 import Loader from '@/components/PreLoader';
-
+interface AddVehicleProps{
+  onVehicleAdd:()=>void
+}
 interface Manufacturer {
   id: string;
   manufacturer: string;
@@ -17,7 +19,7 @@ interface Manufacturer {
   year: string;
 }
 
-function AddVehicle() {
+const AddVehicle: React.FC<AddVehicleProps> = ({ onVehicleAdd }) => {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [image, setImage] = useState<File | null>(null);
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
@@ -108,6 +110,7 @@ function AddVehicle() {
       console.log("Response", response);
       if (response.addVehicle.status === "Success") {
         toast.success("Vehicle Added");
+        onVehicleAdd();
       } else {
         toast.error("Error Adding Vehicle");
       }

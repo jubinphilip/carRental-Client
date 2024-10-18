@@ -46,15 +46,18 @@ function Popular() {
             We present popular cars that are rented by customers to maximize your comfort on long trips.</p>
             </div>
             <div className={styles.carsContainer}>
-            {data?.rentVehicles?.map((rental:any,index:any) => (
-        <div className={styles.carcard} key={index}>
-          <img className={styles.carImage} src={rental.Vehicle.fileurl} alt={rental.Vehicle.Manufacturer.manufacturer} />
-          <h3 className={styles.carName}>{rental.Vehicle.Manufacturer.manufacturer} {rental.Vehicle.Manufacturer.model}</h3>
-          <p>Type:{rental.Vehicle.type}</p>
-          <p className={styles.carRate}>Rate: ${rental.price}/day</p>
-          <button className={styles.rentbutton} onClick={()=>handleCarClick(rental.id)}><MdCarRental/>Rent Now</button>
-        </div>
-      ))}
+            {data?.rentVehicles?.slice(0, 4).map((rental: any, index: any) => (
+  <div className={styles.carcard} key={index}>
+    <div className={styles.carImageContainer}>
+      <img className={styles.carImage} src={rental.Vehicle.fileurl} alt={rental.Vehicle.Manufacturer.manufacturer} />
+    </div>
+    <h3 className={styles.carName}>{rental.Vehicle.Manufacturer.manufacturer} {rental.Vehicle.Manufacturer.model}</h3>
+    <p>Type: {rental.Vehicle.type}</p>
+    <p className={styles.carRate}>Rate: ${rental.price}/day</p>
+    <button className={styles.rentbutton} onClick={() => handleCarClick(rental.id)}><MdCarRental /> Rent Now</button>
+  </div>
+))}
+
     </div>
     <div className={styles.buttonContainer}>
         <button className={styles.button} onClick={handleClick}>Load More...</button>
