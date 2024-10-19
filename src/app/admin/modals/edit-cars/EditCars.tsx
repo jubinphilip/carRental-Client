@@ -7,6 +7,7 @@ import { IoClose } from "react-icons/io5";
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './editcars.module.css';
+import Loader from '@/components/PreLoader';
 
 interface EditCarsProps {
   carid: string | null;
@@ -110,7 +111,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
     }
   }, [data, queryData, carid]);
 
-  if (loading || queryLoading) return <p>Loading...</p>;
+  if (loading || queryLoading) return <p><Loader/></p>;
   if (error || queryError) return <p>Error: {error?.message || queryError?.message}</p>;
 
   const uniqueManufacturers = Array.from(new Set(manufacturers.map(m => m.manufacturer)));

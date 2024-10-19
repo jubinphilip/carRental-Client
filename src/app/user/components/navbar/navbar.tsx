@@ -63,7 +63,7 @@ function Navbar() {
                 <div className={styles.navItems}>
                     <Link className={styles.navitem} href="/"> <p>home</p></Link>
                     {!user && <Link className={styles.navitem} href="/user/bookings"> <p>bookings</p></Link>}
-                    {user && <Link className={styles.navitem} href="/admin/dashboard"> <p>Dashboard</p></Link> }
+                    {user && <Link className={styles.navitem} href="/admin/home"> <p>Dashboard</p></Link> }
                     {isAuthorized ? 
                     
                        <div className={styles.profile}> {!user && <img src={fileurl} className={styles.profileicon} onClick={handleProfileClick}/>}<Button onClick={handleLogout} type="primary" danger>Logout</Button> </div>
@@ -80,7 +80,7 @@ function Navbar() {
              
                     <IoIosCloseCircleOutline className={styles.close} onClick={()=>setMenu(!menu)}/>
                     <Link className={styles.navitem} href="/"> <p>home</p></Link>
-                    <Link className={styles.navitem} href="/"> <p>bookings</p></Link>
+                    {!user && <Link className={styles.navitem} href="/user/bookings"> <p>bookings</p></Link>}
                     {user && <Link className={styles.navitem} href="/admin/dashboard"> <p>Dashboard</p></Link> }
                     {isAuthorized ? 
                         <Button onClick={handleLogout} type="primary" danger>Logout</Button> 

@@ -1,6 +1,7 @@
+'use client'
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_BOOKINGS,UPDATE_RETURN_STATUS } from '../../queries/admin-queries';
+import { GET_BOOKINGS,UPDATE_RETURN_STATUS } from '../queries/admin-queries';
 import client from '@/services/apollo-client';
 import jsPDF from 'jspdf';
 import { TiTick } from "react-icons/ti";
@@ -70,6 +71,8 @@ function ViewBookings() {
     }
   }, [data]);
 
+  if(loading) return <Loader/>
+  
   useEffect(() => {
     if (date) {
       const filtered = bookingsData.filter((booking) => {
@@ -180,6 +183,7 @@ function ViewBookings() {
       <DatePicker 
         onChange={handleDate} 
         value={date} 
+        className={styles.datePicker}
       />
       <div className={styles.buttonContainer}>
       <button className={styles.downloadButton} onClick={downloadPDF}>

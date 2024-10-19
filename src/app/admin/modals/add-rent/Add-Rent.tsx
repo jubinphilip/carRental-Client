@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import styles from './addrent.module.css';
 import { useMutation } from '@apollo/client';
 import client from '@/services/apollo-client';
+import { useRouter } from 'next/router';
 import { ADD_RENT } from '../../queries/admin-queries';
 import {toast,ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -10,9 +11,8 @@ import 'react-toastify/dist/ReactToastify.css'
 interface AddRentProps {
   carid: string | null;
   addstate: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmitRent: () => void;
 }
-const AddRent: React.FC<AddRentProps> = ({ carid, addstate,onSubmitRent }) => {
+const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
   const [addRent] = useMutation(ADD_RENT, { client });
   const [record, setRecord] = useState({ vehicleid: carid, price: '', quantity: '' });
 
@@ -23,7 +23,7 @@ const AddRent: React.FC<AddRentProps> = ({ carid, addstate,onSubmitRent }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRecord((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
+const router=useRouter()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Record Data: ", record);
@@ -41,7 +41,7 @@ const AddRent: React.FC<AddRentProps> = ({ carid, addstate,onSubmitRent }) => {
         toast.success("Car added for Rent ")
         setTimeout(()=>
         {
-          onSubmitRent();
+          router.push('/admin/home')
         },1000)
        }
        else

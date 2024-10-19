@@ -1,13 +1,14 @@
 'use client';
 import React, { useState,useEffect } from 'react';
 import styles from './addmodel.module.css';
-import { ADD_MANUFACTURER,UPLOAD_EXCEL,GET_MANUFACTURERS } from '../../queries/admin-queries';
+import { ADD_MANUFACTURER,UPLOAD_EXCEL,GET_MANUFACTURERS } from '../queries/admin-queries';
 import { useMutation,useQuery } from '@apollo/client';
 import {toast,ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import client from '@/services/apollo-client';
 import { useRouter } from 'next/navigation';
 import getCookie from '@/utils/get-token';
+import Loader from '@/components/PreLoader';
 interface RecordType {
   manufacturer: string;
   model: string;
@@ -30,6 +31,7 @@ function Addmodel() {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const router=useRouter()
 
+  if(loading) return <Loader/>
   useEffect(() => {
     if (data ? data.getManufacturers:'') {
       setManufacturers(data.getManufacturers);
@@ -146,8 +148,8 @@ function Addmodel() {
     </div>
         <button  className={styles.submitdata} onClick={handleExcelUpload}>Upload</button>
         {!showModels  ? <button className={styles.showData} onClick={()=>setShowModels(true)}>Show Models</button>:
-      <div>
-       <h2>Available Models</h2>
+      <div className={styles.modelShowContainer}>
+       <h2 className={styles.tableHead}>Available Models</h2>
       <div className={styles.tableContainer}>
       <table className={styles.carTable}>
         <thead>

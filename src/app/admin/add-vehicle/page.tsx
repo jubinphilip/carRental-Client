@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import styles from './addvehicle.module.css';
-import { GET_MANUFACTURERS, ADD_VEHICLE } from '../../queries/admin-queries';
+import { GET_MANUFACTURERS, ADD_VEHICLE } from '../queries/admin-queries';
 import { useQuery, useMutation } from '@apollo/client';
 import client from '@/services/apollo-client';
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,9 +9,7 @@ import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 import getCookie from '@/utils/get-token';
 import Loader from '@/components/PreLoader';
-interface AddVehicleProps{
-  onVehicleAdd:()=>void
-}
+
 interface Manufacturer {
   id: string;
   manufacturer: string;
@@ -19,15 +17,13 @@ interface Manufacturer {
   year: string;
 }
 
-const AddVehicle: React.FC<AddVehicleProps> = ({ onVehicleAdd }) => {
+const AddVehicle= () => {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
-  const [image, setImage] = useState<File | null>(null);
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
   const [secondaryImages, setSecondaryImages] = useState<(File | null)[]>([null, null, null]);
   const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<(string | null)[]>([null, null, null]);
   const [primaryImagePreview, setPrimaryImagePreview] = useState<string | null>(null);
   const router = useRouter()
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [addvehicle] = useMutation(ADD_VEHICLE, { client });
   const [brand, setBrand] = useState('');
   const [record, setRecord] = useState({
@@ -44,7 +40,7 @@ const AddVehicle: React.FC<AddVehicleProps> = ({ onVehicleAdd }) => {
   const fuelOptions = ['Diesel', 'Petrol', 'Electric'];
   const transmissionOptions = ['Manual', 'Automatic'];
   const seatOptions = [2, 4, 5, 6, 7, 8];
-
+  if(loading) return <Loader/>
   useEffect(() => {
     if (data?.getManufacturers) {
       setManufacturers(data.getManufacturers);
@@ -110,7 +106,7 @@ const AddVehicle: React.FC<AddVehicleProps> = ({ onVehicleAdd }) => {
       console.log("Response", response);
       if (response.addVehicle.status === "Success") {
         toast.success("Vehicle Added");
-        onVehicleAdd();
+       router.push('/admin/view-vehicles')
       } else {
         toast.error("Error Adding Vehicle");
       }

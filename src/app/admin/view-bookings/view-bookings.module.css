@@ -1,7 +1,6 @@
 .container {
     padding: 20px;
-
-    overflow-x: auto; 
+    position: relative;
   }
   
   .title {
@@ -15,7 +14,7 @@
     width: 100%;
     overflow-x: auto;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 20px; 
   }
   
   .tableHeader {
@@ -161,4 +160,6 @@
     background-color: rgb(8, 158, 233);
   }
 
+  @media (max-width: 768px) {
+  }
   

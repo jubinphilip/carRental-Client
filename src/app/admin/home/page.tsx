@@ -7,7 +7,7 @@ import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {Modal} from 'antd'
 import { GET_RENT_VEHICLES } from '@/app/queries/queries'
-import { DELETE_RENT_VEHICLE } from '../../queries/admin-queries';
+import { DELETE_RENT_VEHICLE } from '../queries/admin-queries';
 import Loader from '@/components/PreLoader';
 import { MdAutoDelete } from "react-icons/md";
 function Home() {

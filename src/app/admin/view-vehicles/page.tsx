@@ -1,20 +1,19 @@
+'use client'
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import client from '@/services/apollo-client';
-import { GET_VEHICLES ,DELETE_VEHICLE} from '../../queries/admin-queries';
+import { GET_VEHICLES ,DELETE_VEHICLE} from '../queries/admin-queries';
 import { ToastContainer,toast } from 'react-toastify';
 import { Modal } from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './viewvehicles.module.css';
-import EditCars from '../../modals/edit-cars/EditCars';
-import AddRent from '../../modals/add-rent/Add-Rent';
+import EditCars from '../modals/edit-cars/EditCars';
+import AddRent from '../modals/add-rent/Add-Rent';
 import Loader from '@/components/PreLoader';
 
 
-interface ViewVehiclesProps {
-  onSubmitRent: () => void;  
-}
-const ViewVehicles: React.FC<ViewVehiclesProps> = ({ onSubmitRent }) => {
+
+const ViewVehicles = () => {
   const { loading: queryLoading, error: queryError, data: queryData, refetch } = useQuery(GET_VEHICLES, { client });
   const [deleteVehicle, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(DELETE_VEHICLE, { client });
   const [showEdit,setShowedit]=useState(false)
@@ -47,7 +46,7 @@ const ViewVehicles: React.FC<ViewVehiclesProps> = ({ onSubmitRent }) => {
       },
     });
   };
-  
+
 
   const handleId=(id: string,type:string)=>
   {
@@ -71,7 +70,7 @@ const ViewVehicles: React.FC<ViewVehiclesProps> = ({ onSubmitRent }) => {
       <ToastContainer/>
       <h1>Available Cars</h1>
       {showEdit && <EditCars  carid={id} editstate={setShowedit}/>}
-      {showAdd &&<AddRent carid={id} addstate={setShowAdd} onSubmitRent={onSubmitRent}/>}
+      {showAdd &&<AddRent carid={id} addstate={setShowAdd} />}
         <div className={styles.grid}>
       {queryData?.getCarsData?.map((vehicle:any) => (
         <div key={vehicle?.id} className={styles.card}>
@@ -91,10 +90,10 @@ const ViewVehicles: React.FC<ViewVehiclesProps> = ({ onSubmitRent }) => {
               <p>Year: {vehicle?.Manufacturer.year}</p>
             </div>
             <div className={styles.buttons}>
-              <button className={`${styles.button} ${styles.editButton}`} onClick={() => handleId(vehicle.id, "edit")}>Edit</button>
-              <button className={`${styles.button} ${styles.deleteButton}`} onClick={() => handleDelete(vehicle.id)}>Delete</button>
-              <button className={`${styles.button} ${styles.addButton}`} onClick={() => handleId(vehicle.id, "add")}>Add or Edit rent Details</button>
-            </div>
+  <button className={`${styles.button} ${styles.editButton}`} onClick={() => handleId(vehicle.id, "edit")}>Edit</button>
+  <button className={`${styles.button} ${styles.deleteButton}`} onClick={() => handleDelete(vehicle.id)}>Delete</button>
+  <button className={`${styles.button} ${styles.addButton}`} onClick={() => handleId(vehicle.id, "add")}>Add or Edit rent Details</button>
+</div>
           </div>
         </div>
       ))}
