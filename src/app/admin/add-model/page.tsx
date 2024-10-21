@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import client from '@/services/apollo-client';
 import { useRouter } from 'next/navigation';
 import getCookie from '@/utils/get-token';
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 interface RecordType {
   manufacturer: string;
   model: string;
@@ -21,17 +21,20 @@ interface Manufacturer {
   year: string;
 }
 function Addmodel() {
-
-  const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });
+//Query for getting manufacturers
+  const { loading, error, data ,refetch} = useQuery(GET_MANUFACTURERS, { client });
+  //Mutation for adding manufacturer
   const[addManufacturer]=useMutation(ADD_MANUFACTURER,{client});
+  //Mutation for adding excel data
   const [uploadExcel] = useMutation(UPLOAD_EXCEL, { client });
   const [fileName, setFileName] = useState('No file chosen');
   const[showModels,setShowModels]=useState(false)
   const [excelSheet, setExcelSheet] = useState<File | null>(null);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  const [errorMessage,setErrorMessage]=useState('')
+  const[showError,setShowError]=useState(false)
   const router=useRouter()
 
-  if(loading) return <Loader/>
   useEffect(() => {
     if (data ? data.getManufacturers:'') {
       setManufacturers(data.getManufacturers);
@@ -42,9 +45,10 @@ function Addmodel() {
   const [record, setRecord] = useState<RecordType>({manufacturer: '',model: '',year:''});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setRecord((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setShowError(false)
   };
 
-
+//Function fon handling excelfile change
   const handleExcelfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event && event.target && event.target.files) {
       const file = event.target.files[0];
@@ -55,6 +59,7 @@ function Addmodel() {
     }
   };
 
+  //Function for uploading excel
   const handleExcelUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Excel Data: ", excelSheet);
@@ -69,7 +74,10 @@ function Addmodel() {
       toast.error("Error uploading Excel file.");
     }
   }
+  if(loading)return<Loader/>
+  if(error) return<p>Error{error.message}</p>
 
+  //Adding manufacturer data
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   const token=await getCookie('token')
   if(!token)
@@ -81,16 +89,18 @@ function Addmodel() {
     e.preventDefault();
     console.log(record)
     try{
-      const {data:response}=await addManufacturer({variables:{input:record}})
-      console.log(response.addManufacturer.status)
-      if(response.addManufacturer.status==='Success')
+      const {data:response}=await addManufacturer({variables:{input:record}})//passing the records as  input
+      console.log(response.addManufacturer)
+      if(response.addManufacturer.status===true)
       {
-        toast.success("Manufacturer added",response.addManufacturer)
+        toast.success(response.addManufacturer.message)
+        refetch()
        setShowModels(true)
       }
       else
       {
-        toast.error("Error Adding")
+        setErrorMessage(response.addManufacturer.message)
+        setShowError(true)
       }
       
     }catch(error)
@@ -129,6 +139,7 @@ function Addmodel() {
             onChange={handleChange}
             className={styles.inputbox}
           />
+         {showError && <span className={styles.error}>{errorMessage}</span>}
           <button type='submit' className={styles.submitdata}>Add Data</button>
         </form>
         <p className={styles.excelupload}>Upload from excel sheet</p>
@@ -146,6 +157,7 @@ function Addmodel() {
       </label>
       <span className={styles.fileName}>{fileName}</span>
     </div>
+    {/* Displaying manufacturers */}
         <button  className={styles.submitdata} onClick={handleExcelUpload}>Upload</button>
         {!showModels  ? <button className={styles.showData} onClick={()=>setShowModels(true)}>Show Models</button>:
       <div className={styles.modelShowContainer}>

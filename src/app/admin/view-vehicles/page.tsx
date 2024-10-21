@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from './viewvehicles.module.css';
 import EditCars from '../modals/edit-cars/EditCars';
 import AddRent from '../modals/add-rent/Add-Rent';
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 
 
 
@@ -74,11 +74,13 @@ const ViewVehicles = () => {
         <div className={styles.grid}>
       {queryData?.getCarsData?.map((vehicle:any) => (
         <div key={vehicle?.id} className={styles.card}>
+          <div className={styles.imageContainer}>
           <img
             src={vehicle?.fileurl}
             alt={`${vehicle?.Manufacturer.manufacturer} ${vehicle?.Manufacturer.model}`}
             className={styles.image}
           />
+          </div>
           <div className={styles.content}>
             <h2 className={styles.title}>{vehicle?.Manufacturer.manufacturer} {vehicle?.Manufacturer.model}</h2>
             <p className={styles.description}>{vehicle?.description}</p>

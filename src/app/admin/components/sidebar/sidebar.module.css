@@ -1,8 +1,8 @@
-.mainContainer{
+.mainContainer {
     height: 100vh;
     display: flex;
-   
 }
+
 .sidebar {
     width: 20%;
     min-height: 100%;
@@ -11,89 +11,102 @@
     flex-direction: column;
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    
+    transition: transform 0.3s ease-in-out;
+    background-color: white;
 }
 
+.sidebar.closed {
+    transform: translateX(-100%);
+}
 
-.header{
+.header {
     display: flex;
     width: 100%;
     align-items: center;
     justify-content: center;
     gap: 20px;
 }
-.headerLogo{
+
+.headerLogo {
     width: 50px;
     height: 50px;
     margin-top: 30px;
 }
-.headerText{
+
+.headerText {
     margin-top: 30px;
 }
-.sidebarItems{
+
+.sidebarItems {
     margin-top: 50px;
     width: 70%;
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
-.sidebarItem{
+
+.sidebarItem {
     color: rgb(117, 114, 109);
     font-size: 1.2rem;
     font-weight: bold;
     display: flex;
     align-items: center;
     gap: 15px;
+    transition: all 0.3s ease;
 }
-.sidebarItem:hover{
+
+.sidebarItem:hover {
     cursor: pointer;
-   border-bottom: 1px solid rgb(117, 114, 109) ;
+    border-bottom: 1px solid rgb(117, 114, 109);
     font-size: 1.3rem;
 }
-.mainItems{
+
+.mainItems {
     flex: 1;
     width: 80%;
     background-repeat: no-repeat;
     background-size: cover;
     overflow-y: auto;
-    scroll-behavior: smooth; 
+    scroll-behavior: smooth;
 }
-.openicon{
+
+.openicon {
     margin-left: 10px;
     width: 30px;
     height: 30px;
 }
+
 .openiconcontainer {
     height: 100%;
     background-color: #f8f9fa;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     top: 0;
     left: 0;
-  }
-  .closeiconcontainer {
+}
+
+.closeiconcontainer {
     width: 100%;
     display: flex;
-  }
-  
-  .closeicon {
+}
+
+.closeicon {
     width: 30px;
     height: 30px;
     margin: 10px;
-    margin-left: auto; 
-  }
-  @media (max-width: 768px) {
-    .sidebar{
+    margin-left: auto;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
         position: fixed;
         z-index: 10;
         width: 70%;
-        background-color: white;
     }
-    .openiconcontainer
-    {
+
+    .openiconcontainer {
         background-color: transparent;
         box-shadow: none;
         height: fit-content;
         position: fixed;
     }
-   
-  }
+}

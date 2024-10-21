@@ -13,6 +13,7 @@
     width: 50%;
     height: 90vh;
     display: flex;
+
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -23,6 +24,7 @@
     height: 60%;
     width: 96%;
     display: flex;
+    object-fit: contain;
     overflow: hidden;
     border-radius: 5px;
     
@@ -35,6 +37,7 @@
 }
 .mainImage{
     width: 100%;
+    object-fit: contain;
     height: 100%;
     border-radius: 10px;
 }
@@ -94,12 +97,14 @@
 .selectLocation
 {
     display: flex;
+   
     width: 60%;
     justify-content: space-between;
     gap: 20px;
 }
 .selectDate
 {
+   
     display: flex;
     width: 60%;
     justify-content: space-between;
@@ -131,4 +136,36 @@
 {
     background-color: #fd4a4a;
     cursor: pointer;
+}
+@media (max-width: 1000px){
+    
+    .selectLocation, .selectDate
+    {
+        flex-wrap: wrap;
+    }
+}
+@media (max-width: 768px){
+    .container,.selectLocation,.selectDate
+    {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+    .imageContainer
+    {
+        width: 100%;
+        object-fit: contain;
+        height: 60vh;
+    }
+    .subImageContainer
+    {
+        width: 100%;
+    }
+    .subImage {
+        width: 75px;
+        height: 60px;
+        transition: transform 0.3s ease; 
+        border-radius: 10px;
+    }
 }

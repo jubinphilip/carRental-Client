@@ -18,6 +18,7 @@ function Signin() {
     const router=useRouter()
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
             setRecord((prev)=>({...prev,[e.target.name]:e.target.value}))
+            setShowError(false)
     }
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();

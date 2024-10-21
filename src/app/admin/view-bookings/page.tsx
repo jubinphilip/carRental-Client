@@ -11,7 +11,7 @@ import * as XLSX from 'xlsx';
 import { DatePicker } from 'antd';
 import styles from './view-bookings.module.css';
 import moment, { Moment } from 'moment'; 
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 import { FaFilePdf } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
 
@@ -71,8 +71,7 @@ function ViewBookings() {
     }
   }, [data]);
 
-  if(loading) return <Loader/>
-  
+
   useEffect(() => {
     if (date) {
       const filtered = bookingsData.filter((booking) => {

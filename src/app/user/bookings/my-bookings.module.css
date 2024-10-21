@@ -24,10 +24,12 @@
   .bookingCard {
     min-width: 90%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     height: 15%;
     width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transition: min-width 0.3s ease;
   }
   .bookingCard:hover
@@ -59,4 +61,13 @@
   .detailsContainer {
     margin-right: 10px;
   }
-  
+  @media (max-width: 768px){
+    .bookingCard {
+      padding: 20px;
+
+    }
+    .bookingCards
+    {
+      margin: 5px;
+    }
+  }

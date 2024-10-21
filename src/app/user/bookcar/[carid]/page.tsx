@@ -11,7 +11,7 @@ import BookedDates from '../../components/BookedDates/BookedDates';
 import { useAppContext } from '@/context/appContext';
 import { useRouter, useParams } from 'next/navigation';
 import getCookie from '@/utils/get-token';
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 
 interface RazorpayWindow extends Window {
   Razorpay: any;
@@ -189,7 +189,10 @@ function BookCar() {
       console.error('Order creation error:', error);
     }
   };
-  
+  if(data)
+  {
+    console.log(data)
+  }
 
   function calculateCost() {
     const startDate = new Date(record.startdate);
@@ -234,6 +237,14 @@ function BookCar() {
           </div>
         </div>
         <div className={styles.textContainer}>
+          <div className={styles.carInfo}>
+          <h3>{data?.getCarInfo?.Vehicle?.Manufacturer?.manufacturer} {data?.getCarInfo?.Vehicle?.Manufacturer?.model}</h3>
+          <p>{data?.getCarInfo?.Vehicle?.Manufacturer?.year}</p>
+          <p>{data?.getCarInfo?.Vehicle?.fuel}</p>
+          <p>{data?.getCarInfo?.Vehicle?.seats}</p>
+          <p>{data?.getCarInfo?.Vehicle?.type}</p>
+          <p>{data?.getCarInfo?.Vehicle?.transmission}</p>
+          </div>
           <div className={styles.formContainer}>
             <div className={styles.selectLocation}>
               <div>

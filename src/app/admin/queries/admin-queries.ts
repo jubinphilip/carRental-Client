@@ -19,6 +19,7 @@ export const ADD_MANUFACTURER = gql`
     addManufacturer(input: $input) {
       id
       status
+      message
     }  
   }
 `;

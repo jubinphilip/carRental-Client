@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 import getCookie from '@/utils/get-token';
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 
 interface Manufacturer {
   id: string;
@@ -40,7 +40,7 @@ const AddVehicle= () => {
   const fuelOptions = ['Diesel', 'Petrol', 'Electric'];
   const transmissionOptions = ['Manual', 'Automatic'];
   const seatOptions = [2, 4, 5, 6, 7, 8];
-  if(loading) return <Loader/>
+ 
   useEffect(() => {
     if (data?.getManufacturers) {
       setManufacturers(data.getManufacturers);

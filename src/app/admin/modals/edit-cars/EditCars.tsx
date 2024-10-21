@@ -7,7 +7,7 @@ import { IoClose } from "react-icons/io5";
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './editcars.module.css';
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 
 interface EditCarsProps {
   carid: string | null;

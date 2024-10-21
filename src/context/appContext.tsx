@@ -1,7 +1,9 @@
 'use client';
 import { createContext, useContext, Dispatch, SetStateAction, useState, ReactNode, useEffect } from "react";
 import dayjs, { Dayjs } from 'dayjs';
+//creating a context for storing the user information
 
+//UserType describes the type of user
 type UserType = {
     userid: string;  
     email: string;
@@ -10,11 +12,13 @@ type UserType = {
     fileurl: string;
 };
 
+//CarDatatype stores the carid and uerid
 type CarDataType = {
     carId: string;
     userId: string;
 };
 
+//For storing date selected by a user
 interface DateRangeContextType {
     dateRange: [Dayjs | null, Dayjs | null];
     setDateRange: (dates: [Dayjs | null, Dayjs | null]) => void;

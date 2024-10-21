@@ -6,7 +6,7 @@ import styles from './carlist.module.css';
 import client from '@/services/apollo-client';
 import ViewCar from '@/app/user/modals/viewCar/ViewCar';
 import typesenseClient from '@/services/typesense-config';
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 import { useAppContext } from '@/context/appContext';
 import ChooseDate from '../modals/chooseDate/ChooseDate';
 

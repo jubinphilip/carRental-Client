@@ -5,7 +5,7 @@ import { GET_USER_BOOKINGS } from '../queries/user-queries';
 import client from '@/services/apollo-client';
 import { useAppContext } from '@/context/appContext';
 import styles from './my-bookings.module.css';
-import Loader from '@/components/PreLoader';
+import Loader from '@/components/Preloader/PreLoader';
 
 interface Manufacturer {
   model: string;
