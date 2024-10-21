@@ -15,7 +15,7 @@ interface BookedDatesProps {
 
 const BookedDates: React.FC<BookedDatesProps> = ({ params }) => {
   const { carIdString, quantity } = params;
-
+//Query for retriving booked dates for a particular carid from database 
   const { data, loading, error } = useQuery(GET_BOOKED_DATES, {
     variables: { carId: carIdString, quantity: quantity },
     client,
@@ -25,7 +25,7 @@ const BookedDates: React.FC<BookedDatesProps> = ({ params }) => {
   if (error) return <p>Error: {error.message}</p>;
 
   const bookedDates = data.bookedDates.dates.map((date: string) => new Date(date));
-
+//Then these dates are passed to a calender and it books the date where car is not available
   const tileClassName = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
       const classes = [styles.calendarTile];

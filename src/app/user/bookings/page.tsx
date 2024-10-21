@@ -54,7 +54,7 @@ function MyBookings() {
   const { user } = useAppContext();
   const userid = user?.userid;
   console.log('User ID:', userid);
-
+//Getting the bookings by a particular user
   const { loading, error, data } = useQuery<GetBookingsData>(GET_USER_BOOKINGS, {
     variables: { id: userid },
     client,

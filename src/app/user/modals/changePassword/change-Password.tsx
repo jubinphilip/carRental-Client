@@ -28,6 +28,7 @@ const ChangePassWord: React.FC<UserProps> = ({ userid, modalstate }) => {
     setRecord((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+//Function passes the current password and new password to backend and it compares and if the currentpassword is verified then password is changed
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     

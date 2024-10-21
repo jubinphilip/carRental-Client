@@ -11,6 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/* Wrapping the application with Context  */}
         <AppContextProvider>
         <Navbar/>
         {children}

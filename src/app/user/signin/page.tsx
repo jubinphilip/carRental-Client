@@ -20,6 +20,7 @@ function Signin() {
             setRecord((prev)=>({...prev,[e.target.name]:e.target.value}))
             setShowError(false)
     }
+    //Function for submiting the user credentials
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         console.log(record);
@@ -34,14 +35,17 @@ function Signin() {
                 },
             });
             console.log(response)
-            if (response.data.loginUser.status==='true') {
+            if (response.data.loginUser.status==='true') 
+                //if response is true then essential details are stored into the context and is redirected
+                {
                 console.log(response.data)
                 console.log("User Logged In", response.data);
                 sessionStorage.setItem('token',response.data.loginUser.token)
                 sessionStorage.setItem('username',response.data?.loginUser.email)
-                document.cookie = `usertoken=${response.data.loginUser.token}; path=/; max-age=86400; Secure; SameSite=Strict`;
+                document.cookie = `usertoken=${response.data.loginUser.token}; path=/; max-age=86400; Secure; SameSite=Strict`;//setting token inside a cookie
                 sessionStorage.setItem('userid',response.data.loginUser.id)
-                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new Event('storage'));//when user logins an event  is triggered for dealing with some states in navbar
+                //storing user information in context
                 const userData={
                     userid:response.data.loginUser.id,
                     email:response.data.loginUser.email,

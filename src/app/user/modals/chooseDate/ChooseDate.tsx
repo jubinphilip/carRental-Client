@@ -9,7 +9,7 @@ const ChooseDateModal: React.FC = () => {
     const { dateRange, setDateRange } = useAppContext();
     const [visible, setVisible] = useState(true); 
     const [dates, setDates] = useState<[Dayjs | null, Dayjs | null] | null>(dateRange || [null, null]);
-
+//modal for selecting dates and the dates are stored in a context for later verification
 
     const handleSubmit = () => {
         if (dates && dates[0] && dates[1]) {
@@ -47,6 +47,7 @@ const ChooseDateModal: React.FC = () => {
             ]}
             centered 
         >
+            {/* rangepicker is used to select a range */}
             <RangePicker
                 value={dates}
                 onChange={handleChange} 

@@ -19,10 +19,11 @@ function RegisterUser() {
     const[error,setError]=useState(false)
     const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
     const[isVerified,setIsVerified]=useState(false)
-    const [addUser] = useMutation(Add_User, { client });
-    const[requestOtp]=useMutation(REQUEST_OTP,{client})
+    const [addUser] = useMutation(Add_User, { client });//Mutation for adding user
+    const[requestOtp]=useMutation(REQUEST_OTP,{client})//Mutation for sending otp for verification after sending otp the otpverify modal is displayed
     const router=useRouter()
 
+    //Function handle FileChange
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null;
         setImage(file); 
@@ -41,6 +42,7 @@ function RegisterUser() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(data);
+        //Checks whether the password and confirmpassword fields are same
         if(data.password!=password)
         {
           setError(true)
@@ -59,7 +61,7 @@ function RegisterUser() {
             }
             else
             {
-              
+              //after successfull registration it automatically redirects to signin
               router.push('/user/signin')
             }
         } catch (err) {
@@ -75,15 +77,18 @@ const handleOtp=async()=>
   {
     try
     {
+    //Requesting OTP
     const{data:response}= await requestOtp({ variables: { phone:data.phone,username:data.username,email:data.email } });
     console.log(response.requestOtp.status)
     if(response.requestOtp.status!=false)
     {
+      //if the response is true the the modal for inserting otp is displayed
       setShowOtpModal(true);
       console.log('OTP sent:', response);
     }
     else
     {
+      //else error is displayed
       setError(true)
       setErrorMessage(response.requestOtp.message)
     }
@@ -97,12 +102,12 @@ const handleOtp=async()=>
             <div className={styles.container}>
               <ToastContainer/>
               <div>
-
+{/* conditionally displaying the otpmodal */}
       {showOtpModal && (
         <OtpVerify
           onClose={() => setShowOtpModal(false) }
           phone={data.phone}
-          verified={setIsVerified}
+          verified={setIsVerified}//pass a state if otp is verified then isVerified is set to true 
         />
       )}
     </div>
@@ -115,6 +120,7 @@ const handleOtp=async()=>
                 {error && !isVerified && <span className={styles.error}>{errorMessage}</span>}<br/>
                {!isVerified && <Button type="primary"  onClick={handleOtp} >Verify</Button>}
                 </div>
+                {/* after verification the fields for adding the rest data are displayed */}
                 { isVerified && <div className={styles.formdiv}>
                 <Input type="text" name="city" placeholder="Enter your city" onChange={handleChange} />
                 <Input type="text" name="state" placeholder="Enter your state" onChange={handleChange} />
@@ -124,6 +130,7 @@ const handleOtp=async()=>
                 <Input type="password" name="confirmPassword" placeholder="Confirm your password" onChange={handlePassword} />
                 {error && <span className={styles.error}>{errorMessage}</span>}<br/>
                 <input type="file" onChange={handleFileChange} />
+                {/* Shoews the preview of image inserted */}
            {imagePreview && (
           <div>
             <img src={imagePreview} alt="Preview" style={{ width: '200px', height: 'auto' }} />

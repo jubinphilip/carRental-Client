@@ -20,12 +20,6 @@ interface Car {
   image: string;
 }
 
-const Types = [
-  { id: 1, image: '/assets/suv.png', tag: 'SUV' },
-  { id: 2, image: '/assets/sedan.png', tag: 'Sedan' },
-  { id: 3, image: '/assets/hatchback.png', tag: 'Hatchback' },
-  { id: 4, image: '/assets/muv.png', tag: 'MUV' },
-];
 
 function CarList() {
   const { dateRange } = useAppContext();
@@ -40,6 +34,13 @@ function CarList() {
   const [carId, setCarId] = useState('');
   const [loading, setLoading] = useState(true);
   const [priceRange, setPriceRange] = useState<string[]>([]);
+  const Types = [
+    { id: 1, image: '/assets/suv.png', tag: 'SUV' },
+    { id: 2, image: '/assets/sedan.png', tag: 'Sedan' },
+    { id: 3, image: '/assets/hatchback.png', tag: 'Hatchback' },
+    { id: 4, image: '/assets/muv.png', tag: 'MUV' },
+  ];
+  
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 5000);
@@ -58,6 +59,7 @@ function CarList() {
     }
   }, [data, selectedType, searchQuery, priceRange]);
 
+  //Function for serching vehicle in typesense
   const handleSearch = async (validIds: string[]) => {
     try {
       const searchParams: any = {
@@ -70,7 +72,7 @@ function CarList() {
       if (selectedType) {
         searchParams.filter_by += ` && type:=${selectedType}`;
       }
-
+//Seraching data from typesense cloud
       const searchResults = await typesenseClient.collections('cars').documents().search(searchParams);
 
       if (searchResults && Array.isArray(searchResults.hits)) {
@@ -87,25 +89,30 @@ function CarList() {
     }
   };
 
+  //Function for selecting type of vehicle
   const handleTypeCardClick = (tag: string) => {
     setSelectedType((prevType) => (prevType === tag ? '' : tag));
     setSearchQuery('');
   };
 
+  //Function for searching vehicle bt maufaturer model or year
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
+  //Function for handling click on a car 
   const handleCardClick = (id: string) => {
     setCarId(id);
     setShowCar(true);
   };
 
+  //Function for Setting the price range of  a car
   const handlePriceRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     setPriceRange((prev) => (checked ? [...prev, value] : prev.filter((range) => range !== value)));
   };
 
+  //Function for filtering cars with all filterations
   const filterCars = () => {
     return cars.filter((car) => {
       const priceNumber = parseFloat(car.price);

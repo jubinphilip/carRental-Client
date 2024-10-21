@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import styles from './book-car.module.css';
 import { useQuery, useMutation } from '@apollo/client';
@@ -12,13 +11,10 @@ import { useAppContext } from '@/context/appContext';
 import { useRouter, useParams } from 'next/navigation';
 import getCookie from '@/utils/get-token';
 import Loader from '@/components/Preloader/PreLoader';
-
 interface RazorpayWindow extends Window {
   Razorpay: any;
 }
-
 declare const window: RazorpayWindow;
-
 interface RazorpayOptions {
   key: string;
   amount: number;
@@ -38,13 +34,11 @@ interface RazorpayOptions {
     [key: string]: string;
   };
 }
-
 interface RazorpayResponse {
   razorpay_payment_id: string;
   razorpay_order_id: string;
   razorpay_signature: string;
 }
-
 function BookCar() {
   const locations = ['Kakkanad', 'Edappally', 'Kaloor', 'Palarivattom', 'Aluva'];
   const { carid } = useParams();
@@ -61,7 +55,6 @@ function BookCar() {
   const { user } = useAppContext();
   const router = useRouter();
   const quantity = data?.getCarInfo?.quantity;
-
   const [record, setRecord] = useState({
     userid: userid,
     carid: carid,
@@ -72,14 +65,13 @@ function BookCar() {
     droplocation: locations[0],
     amount: 0
   });
-
   useEffect(() => {
     setToken(getCookie('usertoken'));
     if (data && data.getCarInfo?.Vehicle?.fileurl) {
       setMainImage(data.getCarInfo.Vehicle.fileurl);
     }
   }, [data]);
-
+//USeeffect hook is used to load the payment interface
   useEffect(() => {
     try {
       const script = document.createElement('script');
@@ -94,7 +86,7 @@ function BookCar() {
 
   useEffect(() => {
     if (record.startdate && record.enddate) {
-      const cost = calculateCost();
+      const cost = calculateCost();//after selecting the date the cost is calculated automatically
       setTotalCost(cost);
       setRecord(prev => ({ ...prev, amount: cost }));
     }
@@ -107,7 +99,7 @@ function BookCar() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setRecord(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
+//Function for submitting the data
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!token) {
@@ -133,18 +125,17 @@ function BookCar() {
       console.error('Error booking car:', err);
     }
   };
-  
+  //Function for handling the payment
   const handlePayment = async (bookingId: string) => {  
     const amount = record.amount;
     const currency = 'INR';
   
     try {
+      //mutation for creating an order
       const { data: orderData } = await createOrder({
         variables: { amount, currency },
       });
-  
       const { id: orderId } = orderData.createOrder;
-  
       const options: RazorpayOptions = {
         key: 'rzp_test_XcdzS9WNbteswG',
         amount: amount * 100,
@@ -156,6 +147,7 @@ function BookCar() {
           try {
             const {  razorpay_signature } = response;
             console.log("Booking ID Before Verification:", razorpay_signature);
+            //Function for verifying the payment
             const { data: verifyData } = await verifyPayment({
               variables: {
                 paymentId: response.razorpay_payment_id,
@@ -182,7 +174,6 @@ function BookCar() {
           orderId: orderId,
         },
       };
-  
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
@@ -193,7 +184,7 @@ function BookCar() {
   {
     console.log(data)
   }
-
+  //Function for Calculating the cost
   function calculateCost() {
     const startDate = new Date(record.startdate);
     const endDate = new Date(record.enddate);
@@ -201,7 +192,6 @@ function BookCar() {
     const days = timeDifference / (1000 * 60 * 60 * 24);
     return days * (data?.getCarInfo?.price || 0);
   }
-
   return (
     <div className={styles.mainContainer}>
       <ToastContainer />
@@ -219,13 +209,14 @@ function BookCar() {
                 onClick={() => setMainImage(data?.getCarInfo?.Vehicle?.fileurl)}
               />
             </div>
+            {/* MApping through the images */}
             {Array.isArray(data?.getCarInfo?.Vehicle?.secondaryImageUrls) &&
             data.getCarInfo.Vehicle.secondaryImageUrls.length > 0 ? (
               data.getCarInfo.Vehicle.secondaryImageUrls.map((url: string, index: number) => (
                 <div className={styles.subImageContainer} key={index}>
                   <img
                     src={url}
-                    onClick={() => setMainImage(url)}
+                    onClick={() => setMainImage(url)}//onClicking the subimage comes at place of mainimage
                     alt={`Secondary image ${index + 1}`}
                     className={styles.subImage}
                   />
@@ -290,5 +281,4 @@ function BookCar() {
     </div>
   );
 }
-
 export default BookCar;

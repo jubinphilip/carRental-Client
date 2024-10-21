@@ -46,6 +46,7 @@ function Popular() {
             We present popular cars that are rented by customers to maximize your comfort on long trips.</p>
             </div>
             <div className={styles.carsContainer}>
+              {/* Shwoing the 1st 4 vehicles from Rented vehicles in the home Page */}
             {data?.rentVehicles?.slice(0, 4).map((rental: any, index: any) => (
   <div className={styles.carcard} key={index}>
     <div className={styles.carImageContainer}>
