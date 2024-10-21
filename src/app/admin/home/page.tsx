@@ -11,8 +11,8 @@ import { DELETE_RENT_VEHICLE } from '../queries/admin-queries';
 import Loader from '@/components/Preloader/PreLoader';
 import { MdAutoDelete } from "react-icons/md";
 function Home() {
-  const { data, error, loading,refetch } = useQuery(GET_RENT_VEHICLES, {client})
-  const [deleteRentVehicles]=useMutation(DELETE_RENT_VEHICLE,{client})
+  const { data, error, loading,refetch } = useQuery(GET_RENT_VEHICLES, {client})//Query for getting all rented vehicles
+  const [deleteRentVehicles]=useMutation(DELETE_RENT_VEHICLE,{client})//Mutation for deleting vehicles
   useEffect(()=>{
     if(data)
     {
@@ -24,6 +24,8 @@ function Home() {
     console.error("Error fetching data:", error); 
     return <p>Error: {error.message}</p>; 
   }
+
+  //function for deleting a vehicle from rented vehicles list
   const handleDelete = (id: string) => {
     Modal.confirm({
       title: 'Confirm Deletion',
@@ -50,13 +52,11 @@ function Home() {
     });
   };
 
-  const handleEdit=(id:string)=>
-  {
-    console.log(id)
-  }
+
   
   return (
     <div className={styles.rentalList}>
+      <ToastContainer/>
       <h1 className={styles.homehead}>Rented Vehicles</h1>
       {data?.rentVehicles?.map((rental:any) => (
         <div key={rental.id} className={styles.rentalItem}>

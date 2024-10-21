@@ -12,6 +12,8 @@ interface AddRentProps {
   carid: string | null;
   addstate: React.Dispatch<React.SetStateAction<boolean>>;
 }
+//Adds a vehicles for Rent Vehicle details like quantity and price/day are updated from here also quantity and price can be also edited
+
 const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
   const [addRent] = useMutation(ADD_RENT, { client });
   const [record, setRecord] = useState({ vehicleid: carid, price: '', quantity: '' });
@@ -33,6 +35,7 @@ const router=useRouter()
           input: record
         }
       });
+      //if vehicleid is already existing in rentedvehicles database then quantity and price are edited
       console.log("Response", response);
 
        if(response.addRent.status==='Success')

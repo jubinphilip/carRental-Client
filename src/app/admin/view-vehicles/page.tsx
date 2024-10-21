@@ -14,13 +14,14 @@ import Loader from '@/components/Preloader/PreLoader';
 
 
 const ViewVehicles = () => {
-  const { loading: queryLoading, error: queryError, data: queryData, refetch } = useQuery(GET_VEHICLES, { client });
-  const [deleteVehicle, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(DELETE_VEHICLE, { client });
-  const [showEdit,setShowedit]=useState(false)
+  const { loading: queryLoading, error: queryError, data: queryData, refetch } = useQuery(GET_VEHICLES, { client });//Query for retrieving all vehicles
+  const [deleteVehicle, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(DELETE_VEHICLE, { client });//Mutation for deleting vehicles
+  const [showEdit,setShowedit]=useState(false)//state for managing the editcar modal
   
   const[showAdd,setShowAdd]=useState(false)
   const[id,setId]=useState('')
 
+  //Function for managing car deletion
   const handleDelete = (id: string) => {
     Modal.confirm({
       title: 'Confirm Deletion',
@@ -47,7 +48,7 @@ const ViewVehicles = () => {
     });
   };
 
-
+//Function for handling vehicle Edit
   const handleId=(id: string,type:string)=>
   {
     setId(id)

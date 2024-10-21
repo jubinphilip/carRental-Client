@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from './editcars.module.css';
 import Loader from '@/components/Preloader/PreLoader';
 
+//The vehicle details such as primary image and basic information can be ddited form this modal
 interface EditCarsProps {
   carid: string | null;
   editstate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,10 +38,11 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [brand, setBrand] = useState('');
 
-  const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });
-  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });
-  const [editVehicle] = useMutation(EDIT_VEHICLE, { client });
+  const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });//Getting all manufacturers
+  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });//Getting the details of the particula car
+  const [editVehicle] = useMutation(EDIT_VEHICLE, { client });//Mutaion for editing vehicle data
 
+  //Arrays of types fuel ransmission and seatoptions
   const types = ['HatchBack', 'Sedan', 'MUV', 'Compact SUV', 'SUV', 'Luxury'];
   const fuel = ['Diesel', 'Petrol', 'Electric'];
   const transmission = ['Manual', 'Automatic'];
@@ -54,7 +56,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
       setRecord((prevRecord) => ({ ...prevRecord, [name]: value }));
     }
   };
-
+//Function for handling the vehicle image edit
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setImage(file);
@@ -65,7 +67,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
       setImagePreview(null);
     }
   };
-
+//Submitting the changed Record
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Record Data: ", record, image);

@@ -57,8 +57,8 @@ interface GetBookingsData {
 }
 
 function ViewBookings() {
-  const { loading, error, data } = useQuery<GetBookingsData>(GET_BOOKINGS, { client });
-  const [updateReturnVehicle, { data: updateData}] = useMutation(UPDATE_RETURN_STATUS, { client });
+  const { loading, error, data } = useQuery<GetBookingsData>(GET_BOOKINGS, { client });//Query for Getting Booking Records from Database
+  const [updateReturnVehicle, { data: updateData}] = useMutation(UPDATE_RETURN_STATUS, { client });//Updates Return status of each vehicle
   const [bookingsData, setBookingsData] = useState<Booking[]>([]);
   const [date, setDate] = useState<Moment | null>(null);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
@@ -71,7 +71,7 @@ function ViewBookings() {
     }
   }, [data]);
 
-
+//Filters the bookings with date
   useEffect(() => {
     if (date) {
       const filtered = bookingsData.filter((booking) => {
@@ -93,7 +93,7 @@ function ViewBookings() {
   const handleDate = (date: Moment | null) => {
     setDate(date); 
   };
-
+//Function for downloading the  booking data as a table
   const downloadPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(12);
@@ -131,6 +131,8 @@ function ViewBookings() {
     doc.save('bookings.pdf');
   };
 
+  //Function for downlaoding booking records as excelsheet
+
   const downloadExcel = () => {
     const workbook = XLSX.utils.book_new(); 
     const worksheet = XLSX.utils.json_to_sheet(filteredBookings.map((info) => ({
@@ -152,6 +154,7 @@ function ViewBookings() {
     XLSX.writeFile(workbook, 'bookings.xlsx'); 
   };
 
+//Function for handling the return status
   const handleReturnStatus = async (id: string, status: string,carid:string) => {
     console.log(id, status);
     const input = {
@@ -236,6 +239,7 @@ function ViewBookings() {
               <td className={`${styles.tableCell} ${styles.amount}`}>{info.amount}</td>
               <td className={styles.tableCell}>
               <div>
+                {/* shows the option for updating return status conditionally the option shows only  if the return date is less than or equal to current date */}
     {info.enddate <= curdate && info.status === null ? (
         <div>
             <TiTick 

@@ -21,9 +21,10 @@ const AddVehicle= () => {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
   const [secondaryImages, setSecondaryImages] = useState<(File | null)[]>([null, null, null]);
-  const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<(string | null)[]>([null, null, null]);
+  const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<(string | null)[]>([null, null, null]);//array for storing preview of secondary images
   const [primaryImagePreview, setPrimaryImagePreview] = useState<string | null>(null);
   const router = useRouter()
+  //mutation for adding new vehicle to the database
   const [addvehicle] = useMutation(ADD_VEHICLE, { client });
   const [brand, setBrand] = useState('');
   const [record, setRecord] = useState({
@@ -35,19 +36,25 @@ const AddVehicle= () => {
     seats: ''
   });
 
+  //Query for retreving manufacturers data from database
   const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });
+  //Array for storing types
   const types = ['HatchBack', 'Sedan', 'MUV', 'Compact SUV', 'SUV', 'Luxury'];
+  //Array stores Fuel options
   const fuelOptions = ['Diesel', 'Petrol', 'Electric'];
+  //Array for storing transmissionoptions
   const transmissionOptions = ['Manual', 'Automatic'];
+  //Array for storing seats
   const seatOptions = [2, 4, 5, 6, 7, 8];
  
+  //The useEffect hook takes all manufacturer data from database
   useEffect(() => {
     if (data?.getManufacturers) {
       setManufacturers(data.getManufacturers);
       console.log(data.getManufacturers);
     }
   }, [data]);
-
+//Function for storing the manufcaturer
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'manufacturer') {
@@ -56,7 +63,7 @@ const AddVehicle= () => {
       setRecord((prevRecord) => ({ ...prevRecord, [name]: value }));
     }
   };
-
+//Function for storing primary image to a state
   const handlePrimaryImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setPrimaryImage(file);
@@ -67,7 +74,7 @@ const AddVehicle= () => {
       setPrimaryImagePreview(null);
     }
   };
-
+//Function for storing Secondary images to a state array
   const handleSecondaryImagesChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     const updatedImages = [...secondaryImages];
@@ -85,7 +92,7 @@ const AddVehicle= () => {
     setSecondaryImages(updatedImages);
     setSecondaryImagePreviews(updatedPreviews);
   };
-
+//Function for submitting the record to database
   const handleSubmit = async (e: React.FormEvent) => {
     const token = await getCookie('token')
     if (!token) {
@@ -115,10 +122,12 @@ const AddVehicle= () => {
     }
   };
 
-  if (loading) return <Loader/>;
+  if (loading) return <Loader/>;//if loading loader is displayed
   if (error) return <p>Error: {error.message}</p>;
 
+  //uniqueManufacturers is an array which stores unique manufacturers from database  
   const uniqueManufacturers = Array.from(new Set(manufacturers.map(m => m.manufacturer)));
+  //uniqueModels is an array which stores only models associated with the manufacturer
   const models = manufacturers.filter(m => m.manufacturer === brand);
 
   return (
@@ -128,7 +137,7 @@ const AddVehicle= () => {
         <h1 className={styles.head}>Add Car </h1>
         <form onSubmit={handleSubmit} className={styles.form}>
           <input type="text" name="description" placeholder="Enter vehicle description" onChange={handleChange} className={styles.inputbox} />
-
+{/* Mapping through the manufacurers data */}
           <select className={styles.inputbox} name="manufacturer" onChange={handleChange}>
             <option value="">Select Manufacturer</option>
             {uniqueManufacturers.map((manufacturer) => (
@@ -137,7 +146,7 @@ const AddVehicle= () => {
               </option>
             ))}
           </select>
-
+{/* Mapping through the Models data */}
           <select className={styles.inputbox} name="manufacturer_id" onChange={handleChange}>
             <option value="">Select Model</option>
             {models.map((model) => (
@@ -149,6 +158,7 @@ const AddVehicle= () => {
 
           <select name="type" value={record.type} onChange={handleChange} className={styles.inputbox}>
             <option value="">Select Type</option>
+            {/* mapping through types */}
             {types.map((type) => (
               <option key={type} value={type}>
                 {type}
@@ -158,6 +168,7 @@ const AddVehicle= () => {
 
           <p className={styles.inputhead}>Select Transmission</p>
           <div className={styles.radioContainer}>
+               {/* mapping through transmission types */}
             {transmissionOptions.map((transmission) => (
               <label key={transmission}>
                 <input
@@ -174,6 +185,7 @@ const AddVehicle= () => {
 
           <p className={styles.inputhead}>Select Fuel</p>
           <div className={styles.radioContainer}>
+               {/* mapping through fueloptions */}
             {fuelOptions.map((fuel) => (
               <label key={fuel}>
                 <input
@@ -190,6 +202,7 @@ const AddVehicle= () => {
 
           <select name="seats" value={record.seats} onChange={handleChange} className={styles.inputbox}>
             <option value="">Select Seats</option>
+               {/* mapping through Seatoptions */}
             {seatOptions.map((seats) => (
               <option key={seats} value={seats}>
                 {seats}
@@ -225,6 +238,7 @@ const AddVehicle= () => {
                   className={styles.secondaryImageInput}
                   onChange={handleSecondaryImagesChange(index)} 
                 />
+                {/* shows the preview of image */}
                 {secondaryImagePreviews[index] && (
                   <div>
                     <h4> Image {index + 1} Preview:</h4>
