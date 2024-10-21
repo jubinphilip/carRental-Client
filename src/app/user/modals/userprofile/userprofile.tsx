@@ -34,7 +34,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
   const handleEditClick = () => {
     setEdit(true);
   };
-
+//hndling image input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -42,7 +42,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
       [name]: value,
     }));
   };
-
+//Handling user profile image updation
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setImage(file); 
@@ -70,7 +70,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
   };
 
   const userid = sessionStorage.getItem('userid');
-  
+  //Query retrives the user info  and stores it to a state
   const { loading, error, data } = useQuery(GET_USER, {
     variables: { id: userid },
     client,
@@ -114,6 +114,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
                 </div>
               )}
             </div>
+          
             {edit && (
              <div className={styles.imageInputWrapper}>
              <label htmlFor="upload">
@@ -222,13 +223,14 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
                   <p>{user.pincode}</p>
                 )}
               </div>
+              {/* on Clicking edit the change password button will be visible and onClicking it user can change his password */}
               {edit ? (
                 <div className={styles.buttonContainer}>
-                <button onClick={()=>setEditPassword(true)}>Change Password</button>
+                <button onClick={()=>setEditPassword(true)}>Change Password</button> 
                 <button onClick={handleSubmit}>Submit</button>
                 </div>
               ) : (
-                <button onClick={handleEditClick}>Edit</button>
+                <button onClick={handleEditClick}>Edit</button> /*on Clicking edit all fields became editable  */ 
               )}
             </div>
           </div>

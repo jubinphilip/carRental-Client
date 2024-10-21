@@ -12,10 +12,9 @@ interface BookedDatesProps {
     quantity: string;
   };
 }
-
 const BookedDates: React.FC<BookedDatesProps> = ({ params }) => {
   const { carIdString, quantity } = params;
-//Query for retriving booked dates for a particular carid from database 
+//Query for retrieving booked dates for a particular carid from database 
   const { data, loading, error } = useQuery(GET_BOOKED_DATES, {
     variables: { carId: carIdString, quantity: quantity },
     client,
@@ -39,7 +38,6 @@ const BookedDates: React.FC<BookedDatesProps> = ({ params }) => {
       return classes.join(' ');
     }
   }
-
   return (
     <div className={styles.container}>
       <h1>Booked Dates </h1>
