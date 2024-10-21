@@ -53,9 +53,8 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
       setImagePreview(null); 
     }
   };
-
+//Function for editing user data
   const handleSubmit = async() => {
-    // Implement the submit logic here
     console.log('Submitting form data:', formData);
     console.log('Submitting image:', image);
     setEdit(false);
