@@ -263,7 +263,7 @@ function ViewBookings() {
           ))}
         </tbody>
       </table>
-    <button className={styles.salesButton}>Show Sales</button>
+   <a href="/admin/sales"><button className={styles.salesButton}>Show Sales</button></a> 
     </div>
   );
 }
