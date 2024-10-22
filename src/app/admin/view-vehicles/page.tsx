@@ -51,6 +51,7 @@ const ViewVehicles = () => {
 //Function for handling vehicle Edit
   const handleId=(id: string,type:string)=>
   {
+    console.log(id)
     setId(id)
     type==='edit'?  setShowedit(true): setShowAdd(true)
   }

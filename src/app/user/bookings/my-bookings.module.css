@@ -3,6 +3,7 @@
     width: 100%;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
   }
   
   .container {
@@ -61,6 +62,25 @@
   .detailsContainer {
     margin-right: 10px;
   }
+  .starRating {
+    cursor: pointer;
+    font-size: 15px; 
+  }
+  
+  .star {
+    margin: 0 2px; 
+  }
+  
+  .filled {
+    color: gold;
+  }
+  .ratingReview
+  {
+    margin-right: 10px;
+  }
+  
+ 
+  
   @media (max-width: 768px){
     .bookingCard {
       padding: 20px;

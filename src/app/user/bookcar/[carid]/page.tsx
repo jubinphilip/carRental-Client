@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import styles from './book-car.module.css';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_CAR_INFO, ADD_BOOKING, CREATE_ORDER, VERIFY_PAYMENT } from '../../queries/user-queries';
+import { GET_CAR_INFO, ADD_BOOKING, CREATE_ORDER, VERIFY_PAYMENT} from '../../queries/user-queries';
 import client from '@/services/apollo-client';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BookedDates from '../../components/BookedDates/BookedDates';
 import { useAppContext } from '@/context/appContext';
+import Reviews from '../../components/Reviews/Reviews';
 import { useRouter, useParams } from 'next/navigation';
 import getCookie from '@/utils/get-token';
 import Loader from '@/components/Preloader/PreLoader';
@@ -41,9 +42,10 @@ interface RazorpayResponse {
 }
 function BookCar() {
   const locations = ['Kakkanad', 'Edappally', 'Kaloor', 'Palarivattom', 'Aluva'];
-  const { carid } = useParams();
+  const { carid } = useParams();//carid is retrived from params
   const carIdString = Array.isArray(carid) ? carid[0] : carid;
   const { loading, error, data } = useQuery(GET_CAR_INFO, { variables: { id: carid }, client });
+
   const [bookCar] = useMutation(ADD_BOOKING, { client });
   const [createOrder] = useMutation(CREATE_ORDER, { client });
   const [verifyPayment] = useMutation(VERIFY_PAYMENT, { client });
@@ -53,6 +55,7 @@ function BookCar() {
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>('');
   const { user } = useAppContext();
+  const{dateRange}=useAppContext()
   const router = useRouter();
   const quantity = data?.getCarInfo?.quantity;
   const [record, setRecord] = useState({
@@ -65,7 +68,10 @@ function BookCar() {
     droplocation: locations[0],
     amount: 0
   });
+
+ 
   useEffect(() => {
+    console.log(dateRange?dateRange:'')
     setToken(getCookie('usertoken'));
     if (data && data.getCarInfo?.Vehicle?.fileurl) {
       setMainImage(data.getCarInfo.Vehicle.fileurl);
@@ -193,6 +199,7 @@ function BookCar() {
     return days * (data?.getCarInfo?.price || 0);
   }
   return (
+    <div>
     <div className={styles.mainContainer}>
       <ToastContainer />
       <div className={styles.container}>
@@ -226,6 +233,7 @@ function BookCar() {
               <p>No secondary images available.</p>
             )}
           </div>
+          <BookedDates params={{ carIdString, quantity }} />
         </div>
         <div className={styles.textContainer}>
           <div className={styles.carInfo}>
@@ -259,26 +267,43 @@ function BookCar() {
                 </select>
               </div>
             </div>
-            <div className={styles.selectDate}>
-              <div>
-                <p>From Date</p>
-                <input type="date" name="startdate" id="startDateTime" className={styles.datePicker} onChange={handleChange} value={record.startdate} />
-              </div>
-              <div>
-                <p>To Date</p>
-                <input type="date" name="enddate" id="endDateTime" onChange={handleChange} className={styles.datePicker} value={record.enddate} />
-              </div>
-            </div>
+            
+            <div>
+      {dateRange[0]!= null ? (
+        <>
+          <p>You Booked For</p>
+          <p>
+            {dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : 'Start date not selected'} to{' '}
+            {dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : 'End date not selected'}
+          </p>
+        </>
+      ):
+      <div className={styles.selectDate}>
+      <div>
+        <p>From Date</p>
+        <input type="date" name="startdate" id="startDateTime" className={styles.datePicker} onChange={handleChange} value={record.startdate} />
+      </div>
+      <div>
+        <p>To Date</p>
+        <input type="date" name="enddate" id="endDateTime" onChange={handleChange} className={styles.datePicker} value={record.enddate} />
+      </div>
+    </div>}
+    </div>
+
             <div className={styles.priceContainer}>
               <p className={styles.cost}>Price/day: ${data?.getCarInfo?.price}</p>
               {totalCost !== null && <p className={styles.totalcost}>Total Cost: ${totalCost.toFixed(2)}</p>}
             </div>
             <button onClick={handleSubmit} className={styles.bookButton}>Book Now</button>
           </div>
-          <BookedDates params={{ carIdString, quantity }} />
+        
         </div>
       </div>
+    
     </div>
+    <Reviews carid={carid}/>
+    </div>
+     
   );
 }
 export default BookCar;

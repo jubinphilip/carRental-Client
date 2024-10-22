@@ -1,12 +1,14 @@
-'use client';
+'use client'
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_USER_BOOKINGS } from '../queries/user-queries';
+import { GET_USER_BOOKINGS, ADD_REVIEW } from '../queries/user-queries';
 import client from '@/services/apollo-client';
+import { useMutation } from '@apollo/client';
 import { useAppContext } from '@/context/appContext';
 import styles from './my-bookings.module.css';
+import { FaRegStar, FaStar, FaPenAlt } from "react-icons/fa";
+import { Modal, Button, Input } from 'antd';
 import Loader from '@/components/Preloader/PreLoader';
-
 interface Manufacturer {
   model: string;
   manufacturer: string;
@@ -48,13 +50,19 @@ interface Booking {
 interface GetBookingsData {
   getUserBookings: Booking[];
 }
-
 function MyBookings() {
   const [bookingsData, setBookingsData] = useState<Booking[]>([]);
+  const [addReview] = useMutation(ADD_REVIEW, { client });
   const { user } = useAppContext();
+  const [ratings, setRatings] = useState<{ [key: string]: number }>({}); // Store ratings per car ID
+  const [carid, setCarid] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [review, setReview] = useState('');
+  const [submittedReview, setSubmittedReview] = useState('');
+
   const userid = user?.userid;
   console.log('User ID:', userid);
-//Getting the bookings by a particular user
+
   const { loading, error, data } = useQuery<GetBookingsData>(GET_USER_BOOKINGS, {
     variables: { id: userid },
     client,
@@ -65,7 +73,45 @@ function MyBookings() {
     }
   });
 
-  if (loading) return <p><Loader/></p>;
+  const handleRatingClick = (star: number, carid: string) => {
+    setRatings((prev) => ({
+      ...prev,
+      [carid]: star, // Update the rating for the specific car
+    }));
+    setCarid(carid);
+  };
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleOk = () => {
+    setSubmittedReview(review); // Set the review to display after clicking OK
+    setShowModal(false);   // Close the modal
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await addReview({
+        variables: {
+          input: {
+            userid: userid,
+            carid: carid,
+            rating: ratings[carid], // Use the specific car's rating
+            review: submittedReview,
+          },
+        },
+      });
+    } catch (error) {
+      console.log("Error generated", error);
+    }
+  };
+
+  if (loading) return <p><Loader /></p>;
   if (error) return <p>Error fetching bookings: {error.message}</p>;
 
   return (
@@ -80,9 +126,8 @@ function MyBookings() {
             {bookingsData.map((booking) => {
               const isDisabled = booking.payment_status === 'pending';
 
-              // Parse and format createdAt date
               const createdAtTimestamp = booking.createdAt;
-              const createdAt = new Date(Number(createdAtTimestamp)); // Ensure it's parsed correctly
+              const createdAt = new Date(Number(createdAtTimestamp));
               const formattedCreatedAt = !isNaN(createdAt.getTime())
                 ? createdAt.toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -103,7 +148,6 @@ function MyBookings() {
                     <h4>{booking.RentedVehicle.Vehicle.Manufacturer.manufacturer}</h4>
                     <p>{booking.RentedVehicle.Vehicle.Manufacturer.model}</p>
                     <p>Booked At: {formattedCreatedAt}</p>
-                    {/* Display the cancellation message */}
                     {isDisabled && (
                       <p className={styles.cancelledBooking}>This Booking Was Not Completed</p>
                     )}
@@ -118,11 +162,43 @@ function MyBookings() {
                     <p>Drop Location: {booking.droplocation}</p>
                     <p>Vehicle Type: {booking.RentedVehicle.Vehicle.type}</p>
                   </div>
+                  <div className={styles.ratingReview}>
+                    <div className={styles.starRating}>
+                      <h3>Rate The Car</h3>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span
+                          key={star}
+                          className={styles.star}
+                          onClick={() => handleRatingClick(star, booking.RentedVehicle.id)} 
+                        >
+                          {ratings[booking.RentedVehicle.id] >= star ? <FaStar className={styles.filled} /> : <FaRegStar />}
+                        </span>
+                      ))}
+                    </div>
+                    <div className={styles.writeReview}>
+                      <p onClick={handleShowModal}>write a review <FaPenAlt /></p>
+                      <p>{submittedReview}</p> 
+                    </div>
+                    <Button onClick={handleSubmit}>Add</Button>
+                  </div>
                 </div>
               );
             })}
           </div>
         )}
+        <Modal 
+          title="Write a Review" 
+          visible={showModal} 
+          onOk={handleOk} 
+          onCancel={handleCancel}
+        >
+          <Input.TextArea 
+            value={review}
+            onChange={(e) => setReview(e.target.value)} 
+            rows={4} 
+            placeholder="Write your review here"
+          />
+        </Modal>
       </div>
     </div>
   );

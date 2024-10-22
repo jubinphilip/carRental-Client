@@ -143,6 +143,34 @@ export const VERIFY_PAYMENT = gql`
   }
 `;
 
+export const ADD_REVIEW=gql`
+mutation addReview($input:ReviewInput!){
+addReview (input:$input){
+    status
+    message
+  }
+}`
+
+export const GET_REVIEW = gql`
+ query GetCarReviews($carId: ID!) {
+  getCarReviews(carId: $carId) {
+    averageRating
+    reviews {
+      id
+      rating
+      review
+      User {
+        id
+        username
+        createdAt
+      }
+    }
+  }
+}
+
+`;
+
+
 export const GET_USER_BOOKINGS = gql`
   query getUserBookings($id:ID!) {
     getUserBookings(id:$id) {

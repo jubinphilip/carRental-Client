@@ -113,27 +113,29 @@ function CarList() {
   };
 
   //Function for filtering cars with all filterations
-  const filterCars = () => {
-    return cars.filter((car) => {
-      const priceNumber = parseFloat(car.price);
-      if (priceRange.length === 0) return true;
+//Function for filtering cars with all filterations
+const filterCars = () => {
+  return cars.filter((car) => {
+    const priceNumber = parseFloat(car.price); // Parse price to number
+    if (priceRange.length === 0) return true; // No filters applied
 
-      return priceRange.some((range) => {
-        switch (range) {
-          case '1000-2000':
-            return priceNumber >= 1000 && priceNumber < 2000;
-          case '2000-3000':
-            return priceNumber >= 2000 && priceNumber < 3000;
-          case '3000-5000':
-            return priceNumber >= 3000 && priceNumber < 5000;
-          case '5000+':
-            return priceNumber >= 5000;
-          default:
-            return false;
-        }
-      });
+    return priceRange.some((range) => {
+      switch (range) {
+        case '1000-2000':
+          return priceNumber >= 1000 && priceNumber < 2000; // Filter for 1000-2000
+        case '2000-3000':
+          return priceNumber >= 2000 && priceNumber < 3000; // Filter for 2000-3000
+        case '3000-5000':
+          return priceNumber >= 3000 && priceNumber < 5000; // Filter for 3000-5000
+        case '5000+':
+          return priceNumber >= 5000; // Filter for 5000+
+        default:
+          return false; // If range doesn't match, exclude car
+      }
     });
-  };
+  });
+};
+
 
   if (error) {
     console.error(error);
@@ -154,7 +156,7 @@ function CarList() {
           <input
             type="text"
             name="search"
-            placeholder="Search for Cars"
+            placeholder="Search for Cars by Model Manufacturer or Year"
             className={styles.searchinput}
             value={searchQuery}
             onChange={handleSearchInputChange}

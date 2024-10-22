@@ -18,6 +18,7 @@ interface ViewCarProps
  
  const ViewCar: React.FC<ViewCarProps> = ({ carid, modalstate }) =>
  {
+  //Retreving  the data of specific car  from database
   const { loading, error, data } = useQuery(GET_CAR_INFO, { variables: { id: carid }, client });
   const router=useRouter()
   const handleClose = () => {

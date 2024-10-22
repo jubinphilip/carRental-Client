@@ -3,7 +3,7 @@ import { IoClose } from "react-icons/io5";
 import styles from './addrent.module.css';
 import { useMutation } from '@apollo/client';
 import client from '@/services/apollo-client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { ADD_RENT } from '../../queries/admin-queries';
 import {toast,ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'

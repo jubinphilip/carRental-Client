@@ -39,7 +39,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
   const [brand, setBrand] = useState('');
 
   const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });//Getting all manufacturers
-  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });//Getting the details of the particula car
+  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });//Getting the details of the particular car
   const [editVehicle] = useMutation(EDIT_VEHICLE, { client });//Mutaion for editing vehicle data
 
   //Arrays of types fuel ransmission and seatoptions

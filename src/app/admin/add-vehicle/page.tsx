@@ -216,13 +216,14 @@ const AddVehicle= () => {
               <img src="/assets/imageadd.png" className={styles.imageAdd} alt="" />
             </label>
             <input type="file" id='upload' accept=".jpg, .jpeg, .png, .webp, .avif" className={styles.primaryImageInput} onChange={handlePrimaryImageChange} />
-          </div>
-          {primaryImagePreview && (
+            {primaryImagePreview && (
             <div>
               <h4>Primary Image Preview:</h4>
               <img src={primaryImagePreview} alt="Primary Preview" style={{ width: '200px', height: 'auto' }} />
             </div>
           )}
+          </div>
+         
 
           <label>Secondary Images:</label>
           <div className={styles.secondaryImageContainer}>
