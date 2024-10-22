@@ -20,7 +20,6 @@ interface Car {
   image: string;
 }
 
-
 function CarList() {
   const { dateRange } = useAppContext();
   const { data, error, loading: graphQLLoading } = useQuery(GET_RENT_VEHICLES, {
@@ -34,13 +33,13 @@ function CarList() {
   const [carId, setCarId] = useState('');
   const [loading, setLoading] = useState(true);
   const [priceRange, setPriceRange] = useState<string[]>([]);
+
   const Types = [
     { id: 1, image: '/assets/suv.png', tag: 'SUV' },
     { id: 2, image: '/assets/sedan.png', tag: 'Sedan' },
     { id: 3, image: '/assets/hatchback.png', tag: 'Hatchback' },
     { id: 4, image: '/assets/muv.png', tag: 'MUV' },
   ];
-  
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 5000);
@@ -48,18 +47,14 @@ function CarList() {
   }, []);
 
   useEffect(() => {
-    console.log("Dates", dateRange);
-  }, [dateRange]);
-
-  useEffect(() => {
     if (data && data.rentVehicles) {
-      console.log(data.rentVehicles)
+      console.log(data.rentVehicles);
       const validIds = data.rentVehicles.map((rental: any) => rental.id);
       handleSearch(validIds);
     }
   }, [data, selectedType, searchQuery, priceRange]);
 
-  //Function for serching vehicle in typesense
+  // Function for searching vehicle in Typesense
   const handleSearch = async (validIds: string[]) => {
     try {
       const searchParams: any = {
@@ -72,7 +67,7 @@ function CarList() {
       if (selectedType) {
         searchParams.filter_by += ` && type:=${selectedType}`;
       }
-//Seraching data from typesense cloud
+
       const searchResults = await typesenseClient.collections('cars').documents().search(searchParams);
 
       if (searchResults && Array.isArray(searchResults.hits)) {
@@ -89,53 +84,52 @@ function CarList() {
     }
   };
 
-  //Function for selecting type of vehicle
+  // Function for selecting type of vehicle
   const handleTypeCardClick = (tag: string) => {
     setSelectedType((prevType) => (prevType === tag ? '' : tag));
     setSearchQuery('');
   };
 
-  //Function for searching vehicle bt maufaturer model or year
+  // Function for searching vehicle by manufacturer, model, or year
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  //Function for handling click on a car 
+  // Function for handling click on a car
   const handleCardClick = (id: string) => {
     setCarId(id);
     setShowCar(true);
   };
 
-  //Function for Setting the price range of  a car
+  // Function for setting the price range of a car
   const handlePriceRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    setPriceRange((prev) => (checked ? [...prev, value] : prev.filter((range) => range !== value)));
+    const numericValue = value.replace(' ₹', ''); // Remove the currency symbol for easier handling
+    setPriceRange((prev) => (checked ? [...prev, numericValue] : prev.filter((range) => range !== numericValue)));
   };
 
-  //Function for filtering cars with all filterations
-//Function for filtering cars with all filterations
-const filterCars = () => {
-  return cars.filter((car) => {
-    const priceNumber = parseFloat(car.price); // Parse price to number
-    if (priceRange.length === 0) return true; // No filters applied
+  // Function for filtering cars with all filter options
+  const filterCars = () => {
+    return cars.filter((car) => {
+      const priceNumber = parseFloat(car.price); // Parse price to number
+      if (priceRange.length === 0) return true; // No filters applied
 
-    return priceRange.some((range) => {
-      switch (range) {
-        case '1000-2000':
-          return priceNumber >= 1000 && priceNumber < 2000; // Filter for 1000-2000
-        case '2000-3000':
-          return priceNumber >= 2000 && priceNumber < 3000; // Filter for 2000-3000
-        case '3000-5000':
-          return priceNumber >= 3000 && priceNumber < 5000; // Filter for 3000-5000
-        case '5000+':
-          return priceNumber >= 5000; // Filter for 5000+
-        default:
-          return false; // If range doesn't match, exclude car
-      }
+      return priceRange.some((range) => {
+        switch (range) {
+          case '1000-2000':
+            return priceNumber >= 1000 && priceNumber < 2000; // Filter for 1000-2000
+          case '2000-3000':
+            return priceNumber >= 2000 && priceNumber < 3000; // Filter for 2000-3000
+          case '3000-5000':
+            return priceNumber >= 3000 && priceNumber < 5000; // Filter for 3000-5000
+          case '5000+':
+            return priceNumber >= 5000; // Filter for 5000+
+          default:
+            return false; // If range doesn't match, exclude car
+        }
+      });
     });
-  });
-};
-
+  };
 
   if (error) {
     console.error(error);
@@ -165,11 +159,11 @@ const filterCars = () => {
         <div className={styles.priceFilter}>
           <h3 className={styles.pricefilterhead}>Filter by Price</h3>
           <div className={styles.priceSelectors}>
-            {['1000 ₹-2000 ₹', '2000 ₹-3000 ₹', '3000 ₹-5000 ₹', '5000 ₹+'].map((range) => (
+            {['1000-2000', '2000-3000', '3000-5000', '5000+'].map((range) => (
               <div key={range}>
                 <label>
                   <input type="checkbox" value={range} onChange={handlePriceRangeChange} />
-                  {range}
+                  {range} ₹
                 </label>
               </div>
             ))}
@@ -192,7 +186,7 @@ const filterCars = () => {
           {filterCars().map((car) => (
             <div className={`${styles.carcard} ${styles.cardHover}`} key={car.id} onClick={() => handleCardClick(car.id)}>
               <div className={styles.carImageContainer}>
-              <img className={styles.carImage} src={car.image} alt={`${car.manufacturer} ${car.model}`} />
+                <img className={styles.carImage} src={car.image} alt={`${car.manufacturer} ${car.model}`} />
               </div>
               <div className={styles.descriptionContainer}>
                 <h3 className={styles.carName}>
@@ -200,8 +194,7 @@ const filterCars = () => {
                 </h3>
                 <p className={styles.carType}>Type: {car.type}</p>
                 <p>Year: {car.year}</p>
-                <p className={styles.carRate}>Rate: ${car.price}/day</p>
-               
+                <p className={styles.carRate}>Rate: ₹{car.price}/day</p>
                 <div className={styles.buttonContainer}>
                   <button className={styles.bookButton}>Book Now</button>
                 </div>
