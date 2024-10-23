@@ -1,12 +1,13 @@
 'use client';
 import React, { useState,useEffect } from 'react';
 import styles from './addmodel.module.css';
-import { ADD_MANUFACTURER,UPLOAD_EXCEL,GET_MANUFACTURERS } from '../queries/admin-queries';
+import { ADD_MANUFACTURER,UPLOAD_EXCEL,GET_MANUFACTURERS,DELETE_MANUFACTURER } from '../queries/admin-queries';
 import { useMutation,useQuery } from '@apollo/client';
 import {toast,ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import client from '@/services/apollo-client';
 import { useRouter } from 'next/navigation';
+import { AiTwotoneDelete } from "react-icons/ai";
 import getCookie from '@/utils/get-token';
 import Loader from '@/components/Preloader/PreLoader';
 interface RecordType {
@@ -25,6 +26,7 @@ function Addmodel() {
   const { loading, error, data ,refetch} = useQuery(GET_MANUFACTURERS, { client });
   //Mutation for adding manufacturer
   const[addManufacturer]=useMutation(ADD_MANUFACTURER,{client});
+  const[ deleteManufacturer]=useMutation(DELETE_MANUFACTURER,{client})
   //Mutation for adding excel data
   const [uploadExcel] = useMutation(UPLOAD_EXCEL, { client });
   const [fileName, setFileName] = useState('No file chosen');
@@ -109,8 +111,36 @@ function Addmodel() {
     {
       toast.error("Error adding user");
     }
-
   }
+  const handleDelete=async (id:string)=>
+  {
+    const token=await getCookie('token')
+    if(!token)
+    {
+      toast.error('Please login to proceed')
+      router.push('/user/signin') 
+      return
+    }
+    try
+    {
+    const { data: response } = await deleteManufacturer({ variables: { id } });
+    if(response.deleteManufacturer.status===true)
+    {
+      toast.success(response.deleteManufacturer.message)
+      refetch()
+    }
+    else
+    {
+      toast.success(response.deleteManufacturer.message)
+    }
+  }catch(error)
+  {
+    console.log("Error generated",error)
+    toast.error("Some error occured")
+  }
+  
+  }     
+
   return (
     <div className={styles.mainContainer}>
       <ToastContainer/>
@@ -172,6 +202,7 @@ function Addmodel() {
             <th>Manufacturer</th>
             <th>Model</th>
             <th>Year</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -181,6 +212,7 @@ function Addmodel() {
               <td>{manufacturer.manufacturer}</td>
               <td>{manufacturer.model}</td>
               <td>{manufacturer.year}</td>
+              <td><AiTwotoneDelete className={styles.deleteIcon} onClick={()=>handleDelete(manufacturer.id)}/></td>
             </tr>
           ))}
         </tbody>

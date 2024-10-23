@@ -79,6 +79,7 @@ function Signin() {
         <Input type="password" name="password" placeholder='enter your Password' onChange={handleChange}  />
        {showerror &&  <span className={styles.error}>{errorMessage}</span>}
         <Button type="primary" htmlType='submit' >Signin</Button>
+        <p className={styles.registerLink}>Don't have an Account?<a href="/user/register" className={styles.link}>Register</a></p>
         <div className={styles.adminoptions}>
         <p className={styles.oroption}>or</p>
         <button  className={styles.adminLogin} onClick={handleClick}>Sign in as Admin</button>

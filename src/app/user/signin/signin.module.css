@@ -85,6 +85,16 @@
     font-weight: 500;
     font-size: 12px;
 }
+.registerLink
+{
+    font-size: 12px;
+    text-align: center;
+}
+.link{
+    color: rgb(21, 21, 248);
+  
+    text-decoration: none;
+}
 
 @media (max-width: 768px) {
     .container {

@@ -20,6 +20,19 @@ export const ADD_MANUFACTURER = gql`
     }  
   }
 `;
+
+export const DELETE_MANUFACTURER=gql`
+  mutation DeleteManufacturer($id:ID!){
+  deleteManufacturer(id:$id)
+  {
+    status
+    statuscode
+    message
+  }
+  }
+
+`
+
 export const GET_MANUFACTURERS = gql`
   query GetManufacturers {
     getManufacturers {

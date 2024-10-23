@@ -45,7 +45,9 @@ width: 100%;
     width: 35px;
     border: 3px solid rgb(57, 242, 97);
 }
-
+.navitem:hover{
+    border-bottom: 2px solid rgb(117, 114, 109);
+}
 .mobilenavItems{
     display: none;
 }
