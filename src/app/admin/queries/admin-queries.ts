@@ -48,6 +48,7 @@ export const GET_MANUFACTURERS = gql`
   export const ADD_VEHICLE = gql`
   mutation AddVehicle($primaryFile: Upload!, $secondaryFiles: [Upload!]!, $input: Vehicledata!) {
     addVehicle(primaryFile: $primaryFile, secondaryFiles: $secondaryFiles, input: $input) {
+      statuscode 
       status
       message
     }
@@ -125,6 +126,7 @@ export const ADD_RENT = gql`
   mutation AddRent( $input: Rentdata!) {
     addRent( input: $input) {
       status
+      statuscode 
       message
     }
   }
