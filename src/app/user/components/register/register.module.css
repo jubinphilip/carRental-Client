@@ -19,6 +19,7 @@
     color: rgb(117, 114, 109);
 }
 .form {
+    width: 500px;
   min-width: 350px;
     display: flex;
     flex-direction: column;
@@ -47,6 +48,46 @@
     text-align: center;
     font-weight: 500;
     font-size: 12px;
+}
+.profileUpload
+{
+    color: rgb(117, 114, 109);
+    font-size: medium;
+    width: 100%;
+    text-align: center;
+}
+.imagePreviewContainer
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.imageInputWrapper{ 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+
+    padding: 5px;
+}
+.imageAdd
+{
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+}
+.primaryImageInput
+{
+    display: none;
+}
+.imagePreview
+{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
 }
 @media (max-width: 768px) {
     .image

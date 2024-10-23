@@ -114,13 +114,13 @@ const handleOtp=async()=>
     </div>
             <form onSubmit={handleSubmit} className={styles.form}>
               <h1 className={styles.registerHead}>Register Here</h1>
-              <div className={styles.formdiv}>
+              {!isVerified && <div className={styles.formdiv}>
                 <Input type="text" name="username" placeholder="Enter your name" onChange={handleChange} />
                 <Input type="text" name="email" placeholder="Enter your email" onChange={handleChange} />
                 <Input type="text" name="phone" placeholder="Enter your phone" onChange={handleChange} />
                 {error && !isVerified && <span className={styles.error}>{errorMessage}</span>}<br/>
-               {!isVerified && <Button type="primary"  onClick={handleOtp} >Verify</Button>}
-                </div>
+             <Button type="primary"  onClick={handleOtp} >Verify</Button>
+                </div>}
                 {/* after verification the fields for adding the rest data are displayed */}
                 { isVerified && <div className={styles.formdiv}>
                 <Input type="text" name="city" placeholder="Enter your city" onChange={handleChange} />
@@ -129,14 +129,19 @@ const handleOtp=async()=>
                 <Input type="text" name="pincode" placeholder="Enter your pincode" onChange={handleChange} />
                 <Input type="password" name="password" placeholder="Enter your password" onChange={handleChange} />
                 <Input type="password" name="confirmPassword" placeholder="Confirm your password" onChange={handlePassword} />
-                {error && <span className={styles.error}>{errorMessage}</span>}<br/>
-                <input type="file" onChange={handleFileChange} />
-                {/* Shoews the preview of image inserted */}
-           {imagePreview && (
-          <div>
-            <img src={imagePreview} alt="Preview" style={{ width: '200px', height: 'auto' }} />
+                {imagePreview && (
+          <div className={styles.imagePreviewContainer}>
+            <img src={imagePreview} alt="Preview" className={styles.imagePreview} />
           </div>
         )}
+                {error && <span className={styles.error}>{errorMessage}</span>}<br/>
+                <label className={styles.profileUpload}>Upload Profile Picture</label>
+                <div className={styles.imageInputWrapper}>
+            <label htmlFor="upload">
+              <img src="/assets/imageadd.png" className={styles.imageAdd} alt="" />
+            </label>
+            <input type="file" id='upload' accept=".jpg, .jpeg, .png, .webp, .avif" className={styles.primaryImageInput} onChange={handleFileChange} />
+            </div>          
                 <Button type="primary" htmlType='submit' >Signup</Button></div>}
             </form>
             <div className={styles.image}>
