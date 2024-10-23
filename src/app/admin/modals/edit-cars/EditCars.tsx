@@ -78,7 +78,6 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
           input: record 
         }
       });
-      console.log("Response", response);
       if(response.editVehicle.status===true)
       {
         toast.success(response.editVehicle.message)
@@ -104,6 +103,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
 
     if (queryData?.getCarData) {
       const carData = queryData.getCarData;
+      console.log(queryData)
       setRecord({
         id: carid,
         description: carData.description || '',

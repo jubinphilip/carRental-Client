@@ -98,6 +98,7 @@ export const GET_CAR_DATA = gql`
     getCarData(id: $id) {
       id
       fileurl
+      secondaryImageUrls  
       type
       transmission
       description
