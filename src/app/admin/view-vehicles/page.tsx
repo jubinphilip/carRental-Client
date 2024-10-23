@@ -10,6 +10,9 @@ import styles from './viewvehicles.module.css';
 import EditCars from '../modals/edit-cars/EditCars';
 import AddRent from '../modals/add-rent/Add-Rent';
 import Loader from '@/components/Preloader/PreLoader';
+import { GiGearStick } from "react-icons/gi";
+import { BsFuelPumpDieselFill } from "react-icons/bs";
+import { PiSeatFill } from "react-icons/pi";
 
 
 
@@ -92,11 +95,16 @@ const ViewVehicles = () => {
             <h2 className={styles.title}>{vehicle?.Manufacturer.manufacturer} {vehicle?.Manufacturer.model}</h2>
             <p className={styles.description}>{vehicle?.description}</p>
             <div className={styles.details}>
-              <p>Type: {vehicle?.type}</p>
-              <p>Transmission: {vehicle?.transmission}</p>
-              <p>Fuel: {vehicle?.fuel}</p>
-              <p>Seats: {vehicle?.seats}</p>
+              <div className={styles.feauturesfirst}>
+              <p>Type: {vehicle?.type}</p> 
               <p>Year: {vehicle?.Manufacturer.year}</p>
+              </div>
+              <div className={styles.feautures}>
+              <p className={styles.feauture}><BsFuelPumpDieselFill className={styles.icons}/>: {vehicle?.fuel}</p>
+              <p className={styles.feauture}><GiGearStick className={styles.icons}/>: {vehicle?.transmission}</p>
+              <p className={styles.feauture}>< PiSeatFill className={styles.icons}/>:{vehicle?.seats}</p>
+
+              </div>
             </div>
             <div className={styles.buttons}>
   <button className={`${styles.button} ${styles.editButton}`} onClick={() => handleId(vehicle.id, "edit")}>Edit</button>

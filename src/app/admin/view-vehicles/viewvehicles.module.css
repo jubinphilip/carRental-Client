@@ -28,6 +28,10 @@
   
   .content {
     padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
   
   .title {
@@ -38,8 +42,33 @@
   .description {
     color: #666;
     margin-bottom: 12px;
+    text-align: justify;
   }
-  
+  .feauturesfirst
+  {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .feauture
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icons
+  {
+    width: 20px;
+    height: 20px;
+    font-weight: bolder;
+  }
+  .feautures
+  {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+  }
   .details {
     font-size: 0.9rem;
     color: #444;

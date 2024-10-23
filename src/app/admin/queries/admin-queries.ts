@@ -117,6 +117,7 @@ export const GET_CAR_DATA = gql`
 export const EDIT_VEHICLE = gql`
   mutation EditVehicle($file: Upload!, $input: Vehicledata!) {
     editVehicle(file: $file, input: $input) {
+    
       status 
       message
     }
@@ -168,7 +169,7 @@ export const GET_BOOKINGS = gql`
 export const DELETE_RENT_VEHICLE = gql`
 mutation deleteRentVehicle($id: ID!) {
   deleteRentVehicles(id: $id) {
-  statuscode
+    statuscode
     status
     message
   }
@@ -177,6 +178,7 @@ mutation deleteRentVehicle($id: ID!) {
 export const UPDATE_RETURN_STATUS=gql`
 mutation updateReturnVehicle($input:updateBooking!){
   updateReturnVehicle(input:$input){
+  statuscode
   status
   message
   }

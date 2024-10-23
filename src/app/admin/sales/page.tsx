@@ -1,4 +1,3 @@
-// sales.tsx
 'use client'
 import React, { useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
@@ -12,7 +11,7 @@ interface Booking {
   id: string;
   startdate: string;
   enddate: string;
-  amount: number;
+  amount: string; // Keep it as string since the data from the API is a string
   RentedVehicle: {
     Vehicle: {
       type: string;
@@ -38,7 +37,7 @@ const Sales = () => {
     data.getBookings.forEach(booking => {
       const date = new Date(booking.startdate);
       const month = date.toLocaleString('default', { month: 'short' });
-      
+
       if (!monthlyData[month]) {
         monthlyData[month] = {
           month,
@@ -48,9 +47,12 @@ const Sales = () => {
         };
       }
 
-      monthlyData[month].revenue += booking.amount;
+      // Convert booking.amount to a number to ensure addition works correctly
+      const bookingAmount = Number(booking.amount);
+
+      monthlyData[month].revenue += bookingAmount;
       monthlyData[month].bookings += 1;
-      totalRev += booking.amount;
+      totalRev += bookingAmount; // Correctly summing as a number
       totalBookings += 1;
     });
 

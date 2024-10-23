@@ -14,6 +14,8 @@ import moment, { Moment } from 'moment';
 import Loader from '@/components/Preloader/PreLoader';
 import { FaFilePdf } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
+import { toast ,ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 interface Manufacturer {
@@ -90,6 +92,7 @@ function ViewBookings() {
   if (error) return <p>Error: {error.message}</p>;
   const today = new Date(); 
   const curdate = today.toISOString().split('T')[0];
+  
   const handleDate = (date: Moment | null) => {
     setDate(date); 
   };
@@ -167,7 +170,15 @@ function ViewBookings() {
             variables: { input: input },
             refetchQueries: [{ query: GET_BOOKINGS }]
         });
-        console.log('Update response:', response);
+        console.log(response.updateReturnVehicle.status)
+        if(response.updateReturnVehicle.status==true)
+        {
+          toast.success(response.updateReturnVehicle.message)
+        }
+        else
+        {
+          toast.error(response.updateReturnVehicle.message)
+        }
     } catch (err) {
         console.error('Error updating return status:', err);
     }
@@ -175,7 +186,7 @@ function ViewBookings() {
 
   return (
     <div className={styles.container}>
-        
+        <ToastContainer/>
       <h1 className={styles.title}>Bookings</h1>
       
       <div>
@@ -240,7 +251,7 @@ function ViewBookings() {
               <td className={styles.tableCell}>
               <div>
                 {/* shows the option for updating return status conditionally the option shows only  if the return date is less than or equal to current date */}
-    {info.enddate <= curdate && info.status === null ? (
+    {info.enddate <= curdate && info.status === 'Pending' ? (
         <div>
             <TiTick 
                 onClick={() => handleReturnStatus(info.id, 'returned', info.RentedVehicle?.id)} 
