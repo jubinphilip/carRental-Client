@@ -14,10 +14,7 @@ function Home() {
   const { data, error, loading,refetch } = useQuery(GET_RENT_VEHICLES, {client})//Query for getting all rented vehicles
   const [deleteRentVehicles]=useMutation(DELETE_RENT_VEHICLE,{client})//Mutation for deleting vehicles
   useEffect(()=>{
-    if(data)
-    {
-      console.log("Fetched Vehicles:",data.rentVehicles)
-    }
+    refetch()
   },[data])
   if (loading) return <p><Loader/></p>;
   if (error) {
@@ -35,11 +32,13 @@ function Home() {
       onOk: async () => {
         try {
           const response = await deleteRentVehicles({ variables: { id } });
-          if (response.data.deleteVehicle.status === 'Success') {
-            toast.success("Vehicle Deleted");
+          console.log(response.data)
+          if (response.data.deleteRentVehicles.status === true) {
+            
+            toast.success(response.data.deleteRentVehicles.message);
             refetch()
           } else {
-            toast.error("Error Deleting Vehicle");
+            toast.error(response.data.deleteRentVehicles.message);
           }
         } catch (error) {
           console.error('Error:', error);

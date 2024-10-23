@@ -111,11 +111,12 @@ const AddVehicle= () => {
         },
       });
       console.log("Response", response);
-      if (response.addVehicle.status === "Success") {
-        toast.success("Vehicle Added");
+
+      if (response.addVehicle.status === true) {
+        toast.success(response.addVehicle.message);
        router.push('/admin/view-vehicles')
       } else {
-        toast.error("Error Adding Vehicle");
+        toast.error(response.addVehicle.message);
       }
     } catch (error) {
       console.log("Error", error);
@@ -136,7 +137,6 @@ const AddVehicle= () => {
       <div className={styles.container}>
         <h1 className={styles.head}>Add Car </h1>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <input type="text" name="description" placeholder="Enter vehicle description" onChange={handleChange} className={styles.inputbox} />
 {/* Mapping through the manufacurers data */}
           <select className={styles.inputbox} name="manufacturer" onChange={handleChange}>
             <option value="">Select Manufacturer</option>
@@ -155,7 +155,7 @@ const AddVehicle= () => {
               </option>
             ))}
           </select>
-
+          <input type="text" name="description" placeholder="Enter vehicle description" onChange={handleChange} className={styles.inputbox} />
           <select name="type" value={record.type} onChange={handleChange} className={styles.inputbox}>
             <option value="">Select Type</option>
             {/* mapping through types */}

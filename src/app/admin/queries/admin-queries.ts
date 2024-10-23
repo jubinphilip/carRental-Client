@@ -3,13 +3,9 @@ import { gql } from '@apollo/client';
 export const Admin_Login = gql`
   mutation AdminLogin($input:AdminInput!) {
     adminLogin(input:$input) {
+      statuscode 
       status
       message
-      data
-      {
-        id
-        username  
-      }
       token
     }
   }
@@ -19,6 +15,7 @@ export const ADD_MANUFACTURER = gql`
     addManufacturer(input: $input) {
       id
       status
+      statuscode
       message
     }  
   }
@@ -38,8 +35,8 @@ export const GET_MANUFACTURERS = gql`
   export const ADD_VEHICLE = gql`
   mutation AddVehicle($primaryFile: Upload!, $secondaryFiles: [Upload!]!, $input: Vehicledata!) {
     addVehicle(primaryFile: $primaryFile, secondaryFiles: $secondaryFiles, input: $input) {
-      id
       status
+      message
     }
   }
 `;
@@ -68,6 +65,7 @@ export const GET_VEHICLES = gql`
   mutation UploadExcel($file: Upload!) {
     uploadExcel(file: $file) {
       status
+      statuscode
       message
     }
   }
@@ -75,7 +73,9 @@ export const GET_VEHICLES = gql`
   export const DELETE_VEHICLE = gql`
   mutation deleteVehicle($id: ID!) {
     deleteVehicle(id: $id) {
-      status
+    statuscode
+    message
+    status
     }
   }
 `;
@@ -102,8 +102,8 @@ export const GET_CAR_DATA = gql`
 export const EDIT_VEHICLE = gql`
   mutation EditVehicle($file: Upload!, $input: Vehicledata!) {
     editVehicle(file: $file, input: $input) {
-      id
-      status
+      status 
+      message
     }
   }
 `;
@@ -111,8 +111,8 @@ export const EDIT_VEHICLE = gql`
 export const ADD_RENT = gql`
   mutation AddRent( $input: Rentdata!) {
     addRent( input: $input) {
-      id
       status
+      message
     }
   }
 `;
@@ -152,6 +152,7 @@ export const GET_BOOKINGS = gql`
 export const DELETE_RENT_VEHICLE = gql`
 mutation deleteRentVehicle($id: ID!) {
   deleteRentVehicles(id: $id) {
+  statuscode
     status
     message
   }

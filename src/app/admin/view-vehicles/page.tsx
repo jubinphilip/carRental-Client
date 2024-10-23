@@ -17,9 +17,13 @@ const ViewVehicles = () => {
   const { loading: queryLoading, error: queryError, data: queryData, refetch } = useQuery(GET_VEHICLES, { client });//Query for retrieving all vehicles
   const [deleteVehicle, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(DELETE_VEHICLE, { client });//Mutation for deleting vehicles
   const [showEdit,setShowedit]=useState(false)//state for managing the editcar modal
-  
   const[showAdd,setShowAdd]=useState(false)
   const[id,setId]=useState('')
+
+  useEffect(()=>
+  {
+    refetch()
+  },[queryData])
 
   //Function for managing car deletion
   const handleDelete = (id: string) => {
@@ -31,11 +35,12 @@ const ViewVehicles = () => {
       onOk: async () => {
         try {
           const response = await deleteVehicle({ variables: { id } });
-          if (response.data.deleteVehicle.status === 'Success') {
-            toast.success("Vehicle Deleted");
+          console.log(response.data)
+          if (response.data.deleteVehicle.status === true) {
+            toast.success(response.data.deleteVehicle.message);
             refetch();
           } else {
-            toast.error("Error Deleting Vehicle");
+            toast.error(response.data.deleteVehicle.message);
           }
         } catch (error) {
           console.error('Error:', error);

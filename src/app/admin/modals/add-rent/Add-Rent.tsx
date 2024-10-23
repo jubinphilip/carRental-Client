@@ -38,10 +38,10 @@ const router=useRouter()
       //if vehicleid is already existing in rentedvehicles database then quantity and price are edited
       console.log("Response", response);
 
-       if(response.addRent.status==='Success')
+       if(response.addRent.status===true)
        {
         
-        toast.success("Car added for Rent ")
+        toast.success(response.addRent.message)
         setTimeout(()=>
         {
           router.push('/admin/home')
@@ -49,7 +49,7 @@ const router=useRouter()
        }
        else
        {
-        toast.error("Some Error Occured")
+        toast.error(response.addRent.message)
        }
     } catch (error) {
       console.log("Error", error);

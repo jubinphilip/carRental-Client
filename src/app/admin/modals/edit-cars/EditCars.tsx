@@ -79,13 +79,18 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
         }
       });
       console.log("Response", response);
-      if(response.editVehicle.status==='Success')
+      if(response.editVehicle.status===true)
       {
-        toast.success("Edit Updated")
+        toast.success(response.editVehicle.message)
+        setTimeout(()=>
+        {
+          handleClose()
+        },1000)
+     
       }
       else
       {
-        toast.error("Unable to edit")
+        toast.error(response.editVehicle.message)
       }
     } catch (error) {
       console.log("Error", error);

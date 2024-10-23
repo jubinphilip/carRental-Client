@@ -37,6 +37,7 @@ function RegisterUser() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        setError(false)
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

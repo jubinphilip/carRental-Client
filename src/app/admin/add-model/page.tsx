@@ -65,8 +65,10 @@ function Addmodel() {
     console.log("Excel Data: ", excelSheet);
     try {
       const { data: response } = await uploadExcel({ variables: { file: excelSheet } });
-      if (response.uploadExcel.status === 'Success') {
+      if (response.uploadExcel.status === true) {
         toast.success("Excel file processed successfully.");
+        refetch()
+        setShowModels(true)
       } else {
         toast.error("Error processing Excel file.");
       }
