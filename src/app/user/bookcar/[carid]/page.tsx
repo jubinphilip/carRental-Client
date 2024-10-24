@@ -139,7 +139,7 @@ function BookCar() {
   }
      try {
       const { data: response } = await bookCar({ variables: { input: record } });
-      if (response.bookCar.status === 'Success') {
+      if (response.bookCar.status === true) {
         const newBookingId = response.bookCar.id;  
         setBookingId(newBookingId);  
      
@@ -184,9 +184,15 @@ function BookCar() {
                 bookingId: bookingId,  
               },
             });
-            console.log('Payment verified successfully!', verifyData);
-            toast.success("Booking Success");
-            console.log('Booking ID:', bookingId);
+            console.log('Payment verified successfully!',verifyData);
+            if(verifyData?.verifyPayment.status===true)
+            {
+                toast.success(verifyData?.verifyPayment.message);
+            }
+            else
+            {
+              toast.error(verifyData?.verifyPayment.message)
+            }
           } catch (verifyError) {
             console.error('Payment verification failed', verifyError);
           }
