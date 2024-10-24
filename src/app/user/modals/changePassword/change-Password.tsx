@@ -44,7 +44,7 @@ const ChangePassWord: React.FC<UserProps> = ({ userid, modalstate }) => {
         }
       });
       
-      if (response.editUserPassword.success) {
+      if (response.editUserPassword.status===true) {
         toast.success("User Password Changed");
         modalstate(false);
       } else {

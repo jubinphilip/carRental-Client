@@ -37,6 +37,8 @@
     font-size: 12px ;
     color: red ;
     font-weight: bold ;
+    width: 100%;
+    text-align: center;
   }
   .closeButton:hover {
     color: #333;

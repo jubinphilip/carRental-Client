@@ -35,6 +35,27 @@ export const VERIFY_OTP = gql`
   }
 `;
 
+export const EDIT_USER=gql`
+mutation EditUSer($file: Upload,$input:EditInput!)
+{
+  editUser(file: $file,input:$input)
+  {
+    statuscode 
+    status
+    message
+  }
+}`
+
+export const EDIT_PASSWORD=gql`
+mutation EditUSerPassword($input:EditPassword!)
+{
+  editUserPassword(input:$input)
+  {
+    statuscode
+    status
+    message
+  }
+}`
 export const LOGIN_USER = gql`
   mutation LoginUser($input: LoginUserInput!) {
     loginUser(input: $input) {
@@ -102,27 +123,7 @@ export const ADD_BOOKING=gql`
   }
 `
 
-export const EDIT_USER=gql`
-mutation EditUSer($file: Upload,$input:EditInput!)
-{
-  editUser(file: $file,input:$input)
-  {
-    statuscode 
-    status
-    message
-  }
-}`
 
-export const EDIT_PASSWORD=gql`
-mutation EditUSerPassword($input:EditPassword!)
-{
-  editUserPassword(input:$input)
-  {
-    id
-    success
-    message
-  }
-}`
 
 
 

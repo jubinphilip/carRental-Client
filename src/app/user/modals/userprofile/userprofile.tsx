@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import client from '@/services/apollo-client';
-import { GET_USER,EDIT_USER  } from '../../queries/user-queries';
+import { GET_USER, EDIT_USER } from '../../queries/user-queries';
 import { IoClose } from "react-icons/io5";
 import styles from './UserProfile.module.css';
 import ChangePassWord from '../changePassword/change-Password';
 import { toast } from 'react-toastify';
+import { Loader } from 'lucide-react';
 
 interface UserProps {
   modalstate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,11 +16,12 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
   const [edit, setEdit] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const[editUser]=useMutation(EDIT_USER,{client})
-    const[errorMessage,setErrorMessage]=useState('')
-    const[editPassword,setEditPassword]=useState(false)
+  const [editUser] = useMutation(EDIT_USER, { client });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [editPassword, setEditPassword] = useState(false);
+  const [changedFields, setChangedFields] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
-    userid:'' ,
+    userid: '',
     username: '',
     email: '',
     phone: '',
@@ -35,61 +37,87 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
 
   const handleEditClick = () => {
     setEdit(true);
+    setChangedFields({}); // Reset changed fields when entering edit mode
   };
-//hndling image input change
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorMessage('');
     const { name, value } = e.target;
+    
+    // Update formData for display purposes
     setFormData(prevState => ({
       ...prevState,
       [name]: value,
     }));
-  };
-//Handling user profile image updation
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setImage(file); 
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl); 
+
+    // Track only changed fields by comparing with original data
+    if (value !== data?.getUser[name]) {
+      setChangedFields(prev => ({
+        ...prev,
+        [name]: value
+      }));
     } else {
-      setImagePreview(null); 
+      // Remove field if it's been changed back to original value
+      const updatedChanges = { ...changedFields };
+      delete updatedChanges[name];
+      setChangedFields(updatedChanges);
     }
   };
-//Function for editing user data
-const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
-  event.preventDefault();
 
-    console.log('Submitting form data:', formData);
-    console.log('Submitting image:', image);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setImage(file);
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setEdit(false);
-    try
-    {
-      const{data:response}=await editUser({variables:{file:image,input:formData}})
-      console.log(response); 
-      if(response.editUser.status===true)
-        {
-          toast.success(response.editUser.message)
-          refetch()
-        } 
-        else
-        {
-          setErrorMessage(response.editUser.message)
+
+    // Only submit if there are changes or a new image
+    if (Object.keys(changedFields).length === 0 && !image) {
+      toast.info('No changes to update');
+      return;
+    }
+
+    // Create submission object with only changed fields and userid
+    const submissionData = {
+      userid: formData.userid,
+      ...changedFields
+    };
+
+    try {
+      const { data: response } = await editUser({
+        variables: {
+          file: image,
+          input: submissionData
         }
-    }catch(error)
-    { 
-        console.log(error)
+      });
+
+      if (response.editUser.status === true) {
+        toast.success(response.editUser.message);
+        refetch();
+      } else {
+        setErrorMessage(response.editUser.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const userid = sessionStorage.getItem('userid');
-  //Query retrives the user info  and stores it to a state
-  const { loading, error, data,refetch } = useQuery(GET_USER, {
+  const { loading, error, data, refetch } = useQuery(GET_USER, {
     variables: { id: userid },
     client,
     onCompleted: (data) => {
       if (data?.getUser) {
         setFormData({
-          userid:userid?userid:'',
+          userid: userid ?? '',
           username: data.getUser.username,
           email: data.getUser.email,
           phone: data.getUser.phone,
@@ -102,13 +130,12 @@ const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
     }
   });
 
-  if (loading) return <div className={styles.loadingError}>Loading...</div>;
+  if (loading) return <Loader/>;
   if (error) return <div className={styles.loadingError}>Error: {error.message}</div>;
 
   const user = data?.getUser;
 
   return (
-
     <div className={styles.overlay}>
       <div className={styles.modal}>
         {editPassword && <ChangePassWord userid={userid} modalstate={setEditPassword}/>}
@@ -128,13 +155,20 @@ const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
             </div>
           
             {edit && (
-             <div className={styles.imageInputWrapper}>
-             <label htmlFor="upload">
-               <img src="/assets/imageadd.png" className={styles.imageAdd} alt="" />
-             </label>
-             <input type="file" id='upload' accept=".jpg, .jpeg, .png, .webp, .avif .svg .SVG" className={styles.primaryImageInput} onChange={handleFileChange} />
-           </div>
+              <div className={styles.imageInputWrapper}>
+                <label htmlFor="upload">
+                  <img src="/assets/imageadd.png" className={styles.imageAdd} alt="" />
+                </label>
+                <input 
+                  type="file" 
+                  id='upload' 
+                  accept=".jpg, .jpeg, .png, .webp, .avif .svg .SVG" 
+                  className={styles.primaryImageInput} 
+                  onChange={handleFileChange} 
+                />
+              </div>
             )}
+            
             <h2 className={styles.title}>Hi {user.username}!</h2>
             <div className={styles.grid}>
               <div className={styles.gridItem}>
@@ -235,15 +269,15 @@ const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
                   <p>{user.pincode}</p>
                 )}
               </div>
-              {/* on Clicking edit the change password button will be visible and onClicking it user can change his password */}
+              
               {errorMessage && <p className={styles.error}>{errorMessage}</p>}
               {edit ? (
                 <div className={styles.buttonContainer}>
-                <button onClick={()=>setEditPassword(true)}>Change Password</button> 
-                <button onClick={handleSubmit}>Submit</button>
+                  <button onClick={() => setEditPassword(true)}>Change Password</button>
+                  <button onClick={handleSubmit}>Submit</button>
                 </div>
               ) : (
-                <button onClick={handleEditClick}>Edit</button> /*on Clicking edit all fields became editable  */ 
+                <button onClick={handleEditClick}>Edit</button>
               )}
             </div>
           </div>
