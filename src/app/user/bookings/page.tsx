@@ -9,6 +9,9 @@ import styles from './my-bookings.module.css';
 import { FaRegStar, FaStar, FaPenAlt } from "react-icons/fa";
 import { Modal, Button, Input } from 'antd';
 import Loader from '@/components/Preloader/PreLoader';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
 interface Manufacturer {
   model: string;
   manufacturer: string;
@@ -59,6 +62,7 @@ function MyBookings() {
   const [showModal, setShowModal] = useState(false);
   const [review, setReview] = useState('');
   const [submittedReview, setSubmittedReview] = useState('');
+     const router=useRouter()
 
   const userid = user?.userid;
   console.log('User ID:', userid);
@@ -106,16 +110,30 @@ function MyBookings() {
           },
         },
       });
+      console.log(response.data)
+     if(response.data.addReview.status===true)
+     {
+        toast.success(response.data.addReview.message)
+     }
+     else
+     {
+        toast.error(response.data.addReview.message)
+     }
     } catch (error) {
       console.log("Error generated", error);
     }
   };
+  function handleClick(id:string)
+  {
+    router.push(`/user/bookcar/${id}`)
+  }
 
   if (loading) return <p><Loader /></p>;
   if (error) return <p>Error fetching bookings: {error.message}</p>;
 
   return (
     <div className={styles.mainContainer}>
+       <ToastContainer/>
       <div className={styles.container}>
         <h1 className={styles.bookingsHead}>My Bookings</h1>
 
@@ -139,12 +157,12 @@ function MyBookings() {
               return (
                 <div 
                   className={`${styles.bookingCard} ${isDisabled ? styles.disabledCard : ''}`} 
-                  key={booking.id}
-                >
-                  <div className={styles.imageContainer}>
+                  key={booking.id} >
+                 
+                  <div className={styles.imageContainer} onClick={()=>handleClick(booking.RentedVehicle.id)}>
                     <img className={styles.cardImage} src={booking.RentedVehicle.Vehicle.fileurl} alt="Vehicle" />
                   </div>
-                  <div className={styles.carname}>
+                  <div className={styles.carname} onClick={()=>handleClick(booking.RentedVehicle.id)}>
                     <h4>{booking.RentedVehicle.Vehicle.Manufacturer.manufacturer}</h4>
                     <p>{booking.RentedVehicle.Vehicle.Manufacturer.model}</p>
                     <p>Booked At: {formattedCreatedAt}</p>
@@ -152,11 +170,11 @@ function MyBookings() {
                       <p className={styles.cancelledBooking}>This Booking Was Not Completed</p>
                     )}
                   </div>
-                  <div className={styles.dateContainer}>
+                  <div className={styles.dateContainer} onClick={()=>handleClick(booking.RentedVehicle.id)}>
                     <p>Start Date: {booking.startdate}</p>
                     <p>End Date: {booking.enddate}</p>
                   </div>
-                  <div className={styles.detailsContainer}>
+                  <div className={styles.detailsContainer} onClick={()=>handleClick(booking.RentedVehicle.id)}>
                     <p>Amount: {booking.amount}₹</p>
                     <p>Start Location: {booking.startlocation}</p>
                     <p>Drop Location: {booking.droplocation}</p>
