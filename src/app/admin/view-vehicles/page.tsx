@@ -78,7 +78,7 @@ const ViewVehicles = () => {
   return (
     <div>
       <ToastContainer/>
-      <h1>Available Cars</h1>
+      <h1 style={{ color: "rgb(117, 114, 109)" }}>Available Cars</h1>
       {showEdit && <EditCars  carid={id} editstate={setShowedit}/>}
       {showAdd &&<AddRent carid={id} addstate={setShowAdd} />}
         <div className={styles.grid}>

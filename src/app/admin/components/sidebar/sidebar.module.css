@@ -75,7 +75,13 @@
     width: 30px;
     height: 30px;
 }
-
+.openicon:hover{
+    cursor: pointer;
+}
+.closeicon:hover
+{
+    cursor: pointer;
+}
 .openiconcontainer {
     height: 100%;
     background-color: #f8f9fa;

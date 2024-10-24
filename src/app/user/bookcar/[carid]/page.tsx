@@ -53,6 +53,7 @@ function BookCar() {
   const [mainImage, setMainImage] = useState<string | undefined>();
   const [totalCost, setTotalCost] = useState<number | null>(null);
   const [bookingId, setBookingId] = useState<string | null>(null);
+  const[dateError,setDateError]=useState('')
   const [token, setToken] = useState<string | null>('');
   const { user } = useAppContext();
   const{dateRange}=useAppContext()
@@ -107,6 +108,7 @@ function BookCar() {
   };
 //Function for submitting the data
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
+    console.log("Clicked")
     e.preventDefault();
     if (!token) {
       toast.error("You have to Login");
@@ -115,7 +117,27 @@ function BookCar() {
       }, 1000);
       return;
     }
-    try {
+    const currentDate = new Date();
+    const startDate = new Date(record.startdate);
+    const endDate = new Date(record.enddate);
+    if (!record.startdate || !record.enddate) {
+      setDateError("Choose start date and End date")
+      console.log("error")
+      return
+    }
+    else if (startDate < currentDate || endDate < currentDate) {
+     setDateError("Date must be greater than or equal to current date❗")
+     console.log("error")
+     return
+  }
+  else if(endDate < startDate)
+  {
+     setDateError("Are you going to end the trip before it starts😂😂")
+     console.log("error")
+     return
+
+  }
+     try {
       const { data: response } = await bookCar({ variables: { input: record } });
       if (response.bookCar.status === 'Success') {
         const newBookingId = response.bookCar.id;  
@@ -129,7 +151,7 @@ function BookCar() {
       }
     } catch (err) {
       console.error('Error booking car:', err);
-    }
+    } 
   };
   //Function for handling the payment
   const handlePayment = async (bookingId: string) => {  
@@ -287,6 +309,7 @@ function BookCar() {
         <p>To Date</p>
         <input type="date" name="enddate" id="endDateTime" onChange={handleChange} className={styles.datePicker} value={record.enddate} />
       </div>
+      {dateError && <p className={styles.error}>{dateError}</p>}
     </div>}
     </div>
 

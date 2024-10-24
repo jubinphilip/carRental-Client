@@ -130,6 +130,11 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
     editstate(false);
   };
 
+  const handleSecondaryImagesChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => 
+    {
+    console.log(index )
+  }
+
   return (
     <div className={styles.overlay}>
       <ToastContainer/>
@@ -251,6 +256,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
                  id={`uploadFile${index}`}
                  accept=".jpg, .jpeg, .png, .webp, .avif"
                  className={styles.secondaryImageInput} 
+                 onChange={handleSecondaryImagesChange(index)}
                />
                </div>
               </div>

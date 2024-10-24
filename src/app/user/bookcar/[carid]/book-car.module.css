@@ -196,7 +196,14 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
+.error
+{
+    width: 100%;
+    color: red !important;
+    font-size: 12px;
+    font-weight: bold;
 
+}
 .bookButton:hover {
     background: #4f46e5;
     transform: translateY(-2px);
