@@ -48,7 +48,11 @@ function RegisterUser() {
         {
           setError(true)
           setErrorMessage('Passwords do not match')
-        
+        }
+        else if(image===null)
+        {
+          setErrorMessage("Profile Photo needs to be Uploaded")
+          setError(true)
         }
         else
         {
@@ -85,6 +89,8 @@ const handleOtp=async()=>
     {
       //if the response is true the the modal for inserting otp is displayed
       setShowOtpModal(true);
+      setError(false)
+      toast.success(response.requestOtp.message)
       console.log('OTP sent:', response);
     }
     else
@@ -96,6 +102,7 @@ const handleOtp=async()=>
     }catch(error)
     {
       console.log(error)
+      toast.error("Some Error has Occured")
     }
   }
     return (

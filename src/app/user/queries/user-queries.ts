@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 export const Add_User = gql`
   mutation AddUser($file: Upload!,$input: AddUserInput!) {
     addUser(file: $file,input: $input) {
+      statuscode
       status
       message
       data
@@ -13,6 +14,43 @@ export const Add_User = gql`
     }
   }
 `;
+
+export const REQUEST_OTP = gql`
+  mutation requestOTP($phone: String!,$username:String!,$email:String!) {
+    requestOtp(phone: $phone,username:$username,email:$email) {
+      statuscode
+      status
+      message
+    }
+  }
+`;
+
+export const VERIFY_OTP = gql`
+  mutation verifyOtp($phone: String!, $otp: String!) {
+    verifyOtp(phone: $phone, otp: $otp) {
+      statuscode
+      status
+      message
+    }
+  }
+`;
+
+export const LOGIN_USER = gql`
+  mutation LoginUser($input: LoginUserInput!) {
+    loginUser(input: $input) {
+      statuscode
+      id
+      email
+      token 
+      fileurl
+      username
+      status
+      message
+    }
+  }
+`;
+
+
 export const GET_USER=gql`
 query GetUser($id: ID!) {
     getUser(id: $id){
@@ -27,19 +65,7 @@ query GetUser($id: ID!) {
       }
     }`
 
-export const LOGIN_USER = gql`
-  mutation LoginUser($input: LoginUserInput!) {
-    loginUser(input: $input) {
-      id
-      email
-      token 
-      fileurl
-      username
-      status
-      message
-    }
-  }
-`;
+
 
 export const GET_CAR_INFO = gql`
   query Getcarinfo($id: ID!) {
@@ -99,23 +125,6 @@ mutation EditUSerPassword($input:EditPassword!)
 }`
 
 
-export const REQUEST_OTP = gql`
-  mutation requestOTP($phone: String!,$username:String!,$email:String!) {
-    requestOtp(phone: $phone,username:$username,email:$email) {
-      status
-      message
-    }
-  }
-`;
-
-export const VERIFY_OTP = gql`
-  mutation verifyOtp($phone: String!, $otp: String!) {
-    verifyOtp(phone: $phone, otp: $otp) {
-      status
-      message
-    }
-  }
-`;
 
 export const GET_BOOKED_DATES = gql`
   query GetBookedDates($carId: ID!, $quantity: String!) {
