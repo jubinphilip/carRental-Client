@@ -5,6 +5,7 @@ import { GET_USER,EDIT_USER  } from '../../queries/user-queries';
 import { IoClose } from "react-icons/io5";
 import styles from './UserProfile.module.css';
 import ChangePassWord from '../changePassword/change-Password';
+import { toast } from 'react-toastify';
 
 interface UserProps {
   modalstate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +16,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
     const[editUser]=useMutation(EDIT_USER,{client})
+    const[errorMessage,setErrorMessage]=useState('')
     const[editPassword,setEditPassword]=useState(false)
   const [formData, setFormData] = useState({
     userid:'' ,
@@ -54,14 +56,25 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
     }
   };
 //Function for editing user data
-  const handleSubmit = async() => {
+const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
+  event.preventDefault();
+
     console.log('Submitting form data:', formData);
     console.log('Submitting image:', image);
     setEdit(false);
     try
     {
       const{data:response}=await editUser({variables:{file:image,input:formData}})
-      console.log(response.addUser);  
+      console.log(response); 
+      if(response.editUser.status===true)
+        {
+          toast.success(response.editUser.message)
+          refetch()
+        } 
+        else
+        {
+          setErrorMessage(response.editUser.message)
+        }
     }catch(error)
     { 
         console.log(error)
@@ -70,7 +83,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
 
   const userid = sessionStorage.getItem('userid');
   //Query retrives the user info  and stores it to a state
-  const { loading, error, data } = useQuery(GET_USER, {
+  const { loading, error, data,refetch } = useQuery(GET_USER, {
     variables: { id: userid },
     client,
     onCompleted: (data) => {
@@ -223,6 +236,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
                 )}
               </div>
               {/* on Clicking edit the change password button will be visible and onClicking it user can change his password */}
+              {errorMessage && <p className={styles.error}>{errorMessage}</p>}
               {edit ? (
                 <div className={styles.buttonContainer}>
                 <button onClick={()=>setEditPassword(true)}>Change Password</button> 

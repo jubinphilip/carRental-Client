@@ -107,8 +107,8 @@ mutation EditUSer($file: Upload,$input:EditInput!)
 {
   editUser(file: $file,input:$input)
   {
-    id
-    success
+    statuscode 
+    status
     message
   }
 }`
