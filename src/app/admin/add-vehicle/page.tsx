@@ -155,7 +155,7 @@ const AddVehicle= () => {
               </option>
             ))}
           </select>
-          <input type="text" name="description" placeholder="Enter vehicle description" onChange={handleChange} className={styles.inputbox} />
+          <input type="text" name="description" placeholder="Enter vehicle description" onChange={handleChange} className={styles.inputboxtext} />
           <select name="type" value={record.type} onChange={handleChange} className={styles.inputbox}>
             <option value="">Select Type</option>
             {/* mapping through types */}

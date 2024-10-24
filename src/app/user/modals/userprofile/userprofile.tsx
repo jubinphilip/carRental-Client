@@ -125,7 +125,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
             <h2 className={styles.title}>Hi {user.username}!</h2>
             <div className={styles.grid}>
               <div className={styles.gridItem}>
-                <p className={styles.label}>Username:</p>
+                <p className={styles.label}>Name:</p>
                 {edit ? (
                   <input 
                     type="text" 

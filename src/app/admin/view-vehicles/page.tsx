@@ -91,6 +91,15 @@ const ViewVehicles = () => {
             className={styles.image}
           />
           </div>
+          <div className={styles.secondaryImageContainer}>
+          {
+  vehicle?.secondaryImageUrls.map((image: string, index: number) => (
+    <div key={index} className={styles.secondaryImages}>
+      <img className={styles.secondaryImages} src={image} alt={`Secondary image ${index + 1}`} />
+    </div>
+  ))
+}
+</div>
           <div className={styles.content}>
             <h2 className={styles.title}>{vehicle?.Manufacturer.manufacturer} {vehicle?.Manufacturer.model}</h2>
             <p className={styles.description}>{vehicle?.description}</p>

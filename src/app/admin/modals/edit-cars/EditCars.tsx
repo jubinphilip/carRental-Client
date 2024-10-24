@@ -36,8 +36,9 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [secondaryImages, setSecondaryImages] = useState<(File | null)[]>([null, null, null]);
+  const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<(string )[]>();
   const [brand, setBrand] = useState('');
-
   const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });//Getting all manufacturers
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });//Getting the details of the particular car
   const [editVehicle] = useMutation(EDIT_VEHICLE, { client });//Mutaion for editing vehicle data
@@ -115,6 +116,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
       });
       setImagePreview(carData.fileurl);
       setBrand(carData.Manufacturer.manufacturer || '');
+      setSecondaryImagePreviews(carData.secondaryImageUrls)
     }
   }, [data, queryData, carid]);
 
@@ -217,7 +219,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
               <option key={seats} value={seats.toString()}>{seats}</option>
             ))}
           </select>
-          
+          <p>Edit Primary Image</p>
           <input 
             type="file" 
             onChange={handleFileChange} 
@@ -231,6 +233,31 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
             <img src={imagePreview} alt="Preview" />
           </div>
         )}
+
+        <div>
+        <p>Edit Secondary Images</p>
+        <div className={styles.secondaryImagesWrapper}>
+
+        {secondaryImagePreviews && secondaryImagePreviews.map((image,index)=>(
+            <div key={index} className={styles.secondaryImageContainer}>
+                <img src={image} className={styles.secondaryImage}/>
+       
+               <div key={index} className={styles.secondaryImageInputWrapper}>
+               <label htmlFor={`uploadFile${index}`}>
+                 <img src="/assets/imageadd.png" className={styles.secondaryImageAdd} alt="" />
+               </label>
+               <input
+                 type="file"
+                 id={`uploadFile${index}`}
+                 accept=".jpg, .jpeg, .png, .webp, .avif"
+                 className={styles.secondaryImageInput} 
+               />
+               </div>
+              </div>
+        ))}
+
+        </div>
+        </div>
       </div>
     </div>
   );
