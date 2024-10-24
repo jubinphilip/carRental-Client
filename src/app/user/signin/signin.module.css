@@ -48,7 +48,8 @@
     color: rgb(117, 114, 109);
     background-color: transparent;
     border: none;
-    font-size: medium;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .adminLogin:hover {
@@ -60,6 +61,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
     align-items: center;
     color: rgb(117, 114, 109);
 }

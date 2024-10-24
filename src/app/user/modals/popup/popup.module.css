@@ -1,18 +1,145 @@
+.popupContainer {
+  position: fixed;
+  z-index: 1000;
+  padding: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop positioning - bottom right */
+@media (min-width: 768px) {
+  .popupContainer {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+/* Mobile positioning - center */
+@media (max-width: 767px) {
+  .popupContainer {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.15);
+  width: 280px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  border: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+@media (min-width: 768px) {
+  .popup {
+    width: 320px;
   }
-  
-  .popupContent {
-    background-color: red;
-    color: whitesmoke;
-    padding: 20px;
-    border-radius: 10px;
+}
+
+.header {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  padding: 0.75rem 1rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  color: white;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.closeButton {
+  padding: 0.25rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.content {
+  padding: 1rem;
+  background: linear-gradient(to bottom, #fee2e2, #ffffff);
+}
+
+.section {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0.375rem;
+  border: 1px solid rgba(220, 38, 38, 0.08);
+  transition: all 0.2s ease;
+}
+
+.section:hover {
+  transform: translateX(3px);
+  background: white;
+  border-color: rgba(220, 38, 38, 0.15);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #991b1b;
+  margin: 0 0 0.25rem 0;
+}
+
+.sectionText {
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.4;
+  font-size: 0.8125rem;
+}
+
+/* Animation states */
+.open .popup {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closed .popup {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Mobile animation */
+@media (max-width: 767px) {
+  .closed .popup {
+    transform: scale(0.95);
   }
-  
+}

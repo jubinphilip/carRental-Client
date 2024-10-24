@@ -1,46 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import styles from './popup.module.css'; // Assuming you have some CSS for the popup
+import { X, AlertCircle } from 'lucide-react';
+import styles from './popup.module.css';
 
-function TimelyPopup() {
-  const [showPopup, setShowPopup] = useState(false);
+const Guidelines = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
 
   useEffect(() => {
-    // Function to show the popup for a certain duration (e.g., 3 seconds)
-    const togglePopup = () => {
-      setShowPopup(true);
-      setTimeout(() => {
-        setShowPopup(false);
-      }, 3000); // Hide popup after 3 seconds
-    };
+    // Show popup after 2.5 seconds of page load
+    const timeoutId = setTimeout(() => {
+      setIsVisible(true);
+    }, 2500);
 
-    // Set an interval to show the popup every 5 seconds
-    const intervalId = setInterval(() => {
-      togglePopup();
-    }, 5000); // Show popup every 5 seconds
-
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    return () => clearTimeout(timeoutId);
   }, []);
 
+  const handleClose = () => {
+    setIsClosed(true);
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 300);
+  };
+
+
+  if (!isVisible) return null;
+
   return (
-    <div>
-      {showPopup && (
-        <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <h2>Disclaimer for Vehicle Pickup</h2>
-<h5>Valid ID Requirement:</h5>
-<p>Drivers are required to present a valid government-issued ID (such as a passport or national ID card) when arriving to pick up the vehicle.</p>
+    <div className={`${styles.popupContainer} ${isClosed ? styles.closed : styles.open}`}>
+      <div className={styles.popup}>
+        <div className={styles.header}>
+          <div className={styles.headerContent}>
+            <AlertCircle className={styles.icon} />
+            <h2 className={styles.title}>Pickup Guidelines</h2>
+          </div>
+          <button 
+            onClick={handleClose}
+            className={styles.closeButton}
+            aria-label="Close popup"
+          >
+            <X size={18} />
+          </button>
+        </div>
 
-<h5>Driver's License:</h5>
-<p>A valid driver’s license is mandatory. The driver must possess an active, up-to-date license to legally operate the vehicle.</p>
+        <div className={styles.content}>
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>ID Required</h3>
+            <p className={styles.sectionText}>
+              Valid government-issued ID needed at pickup.
+            </p>
+          </div>
 
-<h5>Age Requirement:</h5>
-<p>Drivers must be at least 18 years of age to rent and operate the vehicle.</p>
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>License</h3>
+            <p className={styles.sectionText}>
+              Current driver's license mandatory for vehicle operation.
+            </p>
+          </div>
+
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Age</h3>
+            <p className={styles.sectionText}>
+              Minimum age requirement: 18 years.
+            </p>
+          </div>
+
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Insurance</h3>
+            <p className={styles.sectionText}>
+              Valid insurance proof required. Additional coverage available.
+            </p>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
-}
+};
 
-export default TimelyPopup;
+export default Guidelines;

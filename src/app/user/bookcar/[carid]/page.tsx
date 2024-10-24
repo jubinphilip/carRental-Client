@@ -12,6 +12,7 @@ import Reviews from '../../components/Reviews/Reviews';
 import { useRouter, useParams } from 'next/navigation';
 import getCookie from '@/utils/get-token';
 import Loader from '@/components/Preloader/PreLoader';
+import Guidelines from '../../modals/popup/popup';
 interface RazorpayWindow extends Window {
   Razorpay: any;
 }
@@ -230,6 +231,8 @@ function BookCar() {
     <div>
     <div className={styles.mainContainer}>
       <ToastContainer />
+    {/* this is a component which displays the guideline for picking up the vehicle */}
+    <Guidelines/>
       <div className={styles.container}>
         <div className={styles.imageContainer}>
           <div className={styles.mainImageContainer}>
