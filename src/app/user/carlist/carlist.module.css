@@ -102,11 +102,11 @@ height: 100%;
 
 .carsContainer{
     width: 90%;
-    justify-content: space-between;
+ 
     display: flex;
-    gap: 2px;
+    gap: 5px;
     flex-wrap: wrap;
-    align-items: center;
+ 
     margin: 2rem;
 }
 
@@ -126,7 +126,7 @@ height: 100%;
 {
 
         transform: scale(1.05); 
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+        box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2); 
         cursor: pointer;
 }
 .carImageContainer{
@@ -216,6 +216,8 @@ height: 100%;
         flex-direction: column;
         width: 100%;
         gap: 10px;
+        justify-content: center;
+        align-items: center;
     }
     .searchbox
         {
