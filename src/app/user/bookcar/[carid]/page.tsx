@@ -45,12 +45,15 @@ function BookCar() {
   const locations = ['Kakkanad', 'Edappally', 'Kaloor', 'Palarivattom', 'Aluva'];
   const { carid } = useParams();//carid is retrived from params
   const carIdString = Array.isArray(carid) ? carid[0] : carid;
+  //Query for retriving the car information
   const { loading, error, data } = useQuery(GET_CAR_INFO, { variables: { id: carid }, client });
-
+//mutation for booking
   const [bookCar] = useMutation(ADD_BOOKING, { client });
+  //mutation for creating an order in razorpay
   const [createOrder] = useMutation(CREATE_ORDER, { client });
+  //mutation for verifying the payment
   const [verifyPayment] = useMutation(VERIFY_PAYMENT, { client });
-  const userid = sessionStorage.getItem('userid');
+  const userid = sessionStorage.getItem('userid');//getting userid from session storage
   const [mainImage, setMainImage] = useState<string | undefined>();
   const [totalCost, setTotalCost] = useState<number | null>(null);
   const [bookingId, setBookingId] = useState<string | null>(null);
@@ -118,6 +121,7 @@ function BookCar() {
       }, 1000);
       return;
     }
+    //Function for checking errors related to dates
     const currentDate = new Date();
     const startDate = new Date(record.startdate);
     const endDate = new Date(record.enddate);
@@ -300,6 +304,7 @@ function BookCar() {
             </div>
             
             <div>
+              {/* if date range is already selected then its displayed or else a datepicker is shown */}
       {dateRange[0]!= null ? (
         <>
           <p>You Booked For</p>

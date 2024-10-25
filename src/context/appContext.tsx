@@ -69,6 +69,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     }, [carData]);
 
     return (
+         /* setting the app context provider with states */
         <AppContext.Provider value={{ user, setUser, carData, setCarData, dateRange, setDateRange }}>
             {children}
         </AppContext.Provider>

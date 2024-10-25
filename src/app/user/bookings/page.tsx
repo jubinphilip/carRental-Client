@@ -54,7 +54,9 @@ interface GetBookingsData {
   getUserBookings: Booking[];
 }
 function MyBookings() {
+  //Query for  fetting the bookings of a user
   const [bookingsData, setBookingsData] = useState<Booking[]>([]);
+  //Mutation for adding a review for a car
   const [addReview] = useMutation(ADD_REVIEW, { client });
   const { user } = useAppContext();
   const [ratings, setRatings] = useState<{ [key: string]: number }>({}); // Store ratings per car ID

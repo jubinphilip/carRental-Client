@@ -22,6 +22,7 @@ const AddRent: React.FC<AddRentProps> = ({ carid, addstate }) => {
     addstate(false);
   };
 
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRecord((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };

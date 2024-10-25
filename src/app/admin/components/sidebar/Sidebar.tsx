@@ -9,8 +9,8 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight, FaHome } from "react-icons/fa";
 
 const Sidebar = ({ sideBar, setSidebar }:any) => {
   const router = useRouter();
-
-  const handleNavigation = (path:any) => {
+  //Function for managing navigation of admin
+  const handleNavigation = (path:string) => {
     router.push(path);
   };
 

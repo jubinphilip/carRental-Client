@@ -12,6 +12,7 @@ interface OtpVerifyProps {
 
 const OtpVerify: React.FC<OtpVerifyProps> = ({ onClose, phone,verified}) => {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
+  //Mutation for verifying otp
   const [verifyOtp, { loading, error }] = useMutation(VERIFY_OTP, { client });
   const inputRefs = useRef<React.RefObject<HTMLInputElement>[]>(
     Array(6).fill(null).map(() => React.createRef<HTMLInputElement>())
@@ -41,7 +42,7 @@ const OtpVerify: React.FC<OtpVerifyProps> = ({ onClose, phone,verified}) => {
       inputRefs.current[index - 1].current?.focus();
     }
   };
-
+//Function for submittting otp along with phone number for verification
   const handleSubmit =async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     const otpString = otp.join('');

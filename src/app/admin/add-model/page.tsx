@@ -33,6 +33,7 @@ function Addmodel() {
   const[showModels,setShowModels]=useState(false)
   const [excelSheet, setExcelSheet] = useState<File | null>(null);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  //State for managing errror 
   const [errorMessage,setErrorMessage]=useState('')
   const[showError,setShowError]=useState(false)
   const router=useRouter()
@@ -81,10 +82,10 @@ function Addmodel() {
   if(loading)return<Loader/>
   if(error) return<p>Error{error.message}</p>
 
-  //Adding manufacturer data
+  //Function for adding manufacturer data manually
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   const token=await getCookie('token')
-  if(!token)
+  if(!token)//Checks whether admin is loginned or not
   {
     toast.error('Please login to proceed')
     router.push('/user/signin') 
@@ -112,6 +113,8 @@ function Addmodel() {
       toast.error("Error adding user");
     }
   }
+
+  //Function for deleting a manufacturer from list
   const handleDelete=async (id:string)=>
   {
     const token=await getCookie('token')
@@ -127,7 +130,7 @@ function Addmodel() {
     if(response.deleteManufacturer.status===true)
     {
       toast.success(response.deleteManufacturer.message)
-      refetch()
+      refetch()//refetching data after deleting
     }
     else
     {
@@ -140,7 +143,6 @@ function Addmodel() {
   }
   
   }     
-
   return (
     <div className={styles.mainContainer}>
       <ToastContainer/>

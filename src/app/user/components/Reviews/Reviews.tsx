@@ -1,4 +1,4 @@
-// Reviews.tsx
+
 import React, { useState, useEffect } from 'react';
 import { GET_REVIEW } from '../../queries/user-queries';
 import { useQuery } from '@apollo/client';
@@ -22,6 +22,7 @@ interface Review {
 
 const Reviews: React.FC<ReviewsProps> = ({ carid }) => {
     const [reviews, setReviews] = useState<Review[]>([]);
+    //Mutation for getting reviews from the  database
     const { data: reviewdata, loading, error: reviewError } = useQuery(GET_REVIEW, {
         variables: { carId: carid },
         client
@@ -38,7 +39,7 @@ const Reviews: React.FC<ReviewsProps> = ({ carid }) => {
         }
     }, [reviewdata]);
     
-
+    
     const validRating = Math.max(0, Math.min(rating, 5));
     const fullStars = Math.floor(validRating);
     const hasHalfStar = validRating % 1 !== 0;

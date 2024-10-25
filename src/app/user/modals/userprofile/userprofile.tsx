@@ -64,6 +64,7 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
     }
   };
 
+  //Function for uploadin profile image
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setImage(file);

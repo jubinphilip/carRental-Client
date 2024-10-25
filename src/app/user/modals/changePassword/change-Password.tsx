@@ -15,7 +15,7 @@ interface UserProps {
 }
 
 const ChangePassWord: React.FC<UserProps> = ({ userid, modalstate }) => {
-
+//mutation for editing the password of a  user
   const [editUserPassword] = useMutation(EDIT_PASSWORD, { client });
   const [record, setRecord] = useState({ id: userid, currentPswd: '', newPswd: '' });
   const [error,setError]=useState('')

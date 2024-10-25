@@ -17,9 +17,12 @@ import { PiSeatFill } from "react-icons/pi";
 
 
 const ViewVehicles = () => {
-  const { loading: queryLoading, error: queryError, data: queryData, refetch } = useQuery(GET_VEHICLES, { client });//Query for retrieving all vehicles
-  const [deleteVehicle, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(DELETE_VEHICLE, { client });//Mutation for deleting vehicles
-  const [showEdit,setShowedit]=useState(false)//state for managing the editcar modal
+  //Query for retrieving all vehicles
+  const { loading: queryLoading, error: queryError, data: queryData, refetch } = useQuery(GET_VEHICLES, { client });
+  //Mutation for deleting vehicles
+  const [deleteVehicle, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(DELETE_VEHICLE, { client });
+  //state for managing the editcar modal
+  const [showEdit,setShowedit]=useState(false)
   const[showAdd,setShowAdd]=useState(false)
   const[id,setId]=useState('')
 

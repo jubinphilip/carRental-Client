@@ -1,4 +1,4 @@
-// global.d.ts
+// Razorpay 
 interface RazorpayOptions {
     key: string;
     amount: number;

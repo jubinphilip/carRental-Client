@@ -22,6 +22,7 @@ interface Car {
 
 function CarList() {
   const { dateRange } = useAppContext();
+  //Query for getting  all Rented vehicles from database
   const { data, error, loading: graphQLLoading } = useQuery(GET_RENT_VEHICLES, {
     variables: { dateRange: dateRange ? dateRange : undefined },
     client,
@@ -49,6 +50,7 @@ function CarList() {
   useEffect(() => {
     if (data && data.rentVehicles) {
       console.log(data.rentVehicles);
+      
       const validIds = data.rentVehicles.map((rental: any) => rental.id);
       handleSearch(validIds);
     }
@@ -61,9 +63,9 @@ function CarList() {
         q: searchQuery,
         query_by: 'manufacturer,model,year,type',
         per_page: 100,
-        filter_by: `id:=[${validIds.join(',')}]`,
+        filter_by: `id:=[${validIds.join(',')}]`,//searching with  ids from database
       };
-
+//filtering with type
       if (selectedType) {
         searchParams.filter_by += ` && type:=${selectedType}`;
       }
@@ -108,7 +110,7 @@ function CarList() {
     setPriceRange((prev) => (checked ? [...prev, numericValue] : prev.filter((range) => range !== numericValue)));
   };
 
-  // Function for filtering cars with all filter options
+  // Function for filtering cars with price
   const filterCars = () => {
     return cars.filter((car) => {
       const priceNumber = parseFloat(car.price); // Parse price to number
@@ -117,15 +119,15 @@ function CarList() {
       return priceRange.some((range) => {
         switch (range) {
           case '1000-2000':
-            return priceNumber >= 1000 && priceNumber < 2000; // Filter for 1000-2000
+            return priceNumber >= 1000 && priceNumber < 2000; 
           case '2000-3000':
-            return priceNumber >= 2000 && priceNumber < 3000; // Filter for 2000-3000
+            return priceNumber >= 2000 && priceNumber < 3000; 
           case '3000-5000':
-            return priceNumber >= 3000 && priceNumber < 5000; // Filter for 3000-5000
+            return priceNumber >= 3000 && priceNumber < 5000; 
           case '5000+':
-            return priceNumber >= 5000; // Filter for 5000+
+            return priceNumber >= 5000; 
           default:
-            return false; // If range doesn't match, exclude car
+            return false; 
         }
       });
     });

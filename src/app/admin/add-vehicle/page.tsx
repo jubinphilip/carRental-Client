@@ -89,8 +89,8 @@ const AddVehicle= () => {
       updatedPreviews[index] = null; 
     }
 
-    setSecondaryImages(updatedImages);
-    setSecondaryImagePreviews(updatedPreviews);
+    setSecondaryImages(updatedImages);//state for showing images
+    setSecondaryImagePreviews(updatedPreviews);//state for showing  image previews
   };
 //Function for submitting the record to database
   const handleSubmit = async (e: React.FormEvent) => {

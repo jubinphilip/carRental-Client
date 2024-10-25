@@ -19,8 +19,10 @@ function RegisterUser() {
     const[error,setError]=useState(false)
     const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
     const[isVerified,setIsVerified]=useState(false)
-    const [addUser] = useMutation(Add_User, { client });//Mutation for adding user
-    const[requestOtp]=useMutation(REQUEST_OTP,{client})//Mutation for sending otp for verification after sending otp the otpverify modal is displayed
+    //Mutation for adding user
+    const [addUser] = useMutation(Add_User, { client });
+    //Mutation for sending otp for verification after sending otp the otpverify modal is displayed
+    const[requestOtp]=useMutation(REQUEST_OTP,{client})
     const router=useRouter()
 
     //Function handle FileChange

@@ -13,6 +13,7 @@ function Signin() {
     const{setUser}=useAppContext()
     const [record,setRecord]=useState({email: '', password: '' })
     const[errorMessage,setErrorMessage]=useState('')
+    //State for showing error if any error is generated
     const[showerror,setShowError]=useState(false)
     const[loginUser,{data,loading,error}]=useMutation(LOGIN_USER,{client})
     const router=useRouter()

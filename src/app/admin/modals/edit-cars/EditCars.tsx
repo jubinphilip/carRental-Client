@@ -39,9 +39,12 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
   const [secondaryImages, setSecondaryImages] = useState<(File | null)[]>([null, null, null]);
   const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<(string )[]>();
   const [brand, setBrand] = useState('');
-  const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });//Getting all manufacturers
-  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });//Getting the details of the particular car
-  const [editVehicle] = useMutation(EDIT_VEHICLE, { client });//Mutaion for editing vehicle data
+  //Getting all manufacturers
+  const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });
+  //Getting the details of the particular car
+  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });
+  //Mutaion for editing vehicle data
+  const [editVehicle] = useMutation(EDIT_VEHICLE, { client });
 
   //Arrays of types fuel ransmission and seatoptions
   const types = ['HatchBack', 'Sedan', 'MUV', 'Compact SUV', 'SUV', 'Luxury'];

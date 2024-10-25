@@ -12,6 +12,7 @@ function Signin() {
     const [record,setRecord]=useState({ username: '', password: '' })
     const [error,setError]=useState('')
     const[showError,setShowError]=useState(false)
+    //Mutation for admin login
     const[adminLogin]=useMutation(Admin_Login,{client})
     const router=useRouter()
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
