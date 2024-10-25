@@ -115,9 +115,9 @@ export const GET_CAR_DATA = gql`
 `;
 
 export const EDIT_VEHICLE = gql`
-  mutation EditVehicle($file: Upload!, $input: Vehicledata!) {
+  mutation EditVehicle($file: Upload, $input: Vehicledata!) {
     editVehicle(file: $file, input: $input) {
-    
+      statuscode
       status 
       message
     }
