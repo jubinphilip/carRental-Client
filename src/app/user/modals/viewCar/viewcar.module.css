@@ -52,19 +52,20 @@
     gap: 10px;
     margin-bottom: 20px;
 }
-
-
 .subImage {
     width: 100%;
     height: 80px; 
     object-fit: cover;
     border-radius: 4px; 
 }
-
 .firstContainer
 {
   display: flex;
   justify-content: space-between;
+}
+.description
+{
+  text-align: center;
 }
 .secondContainer
 {

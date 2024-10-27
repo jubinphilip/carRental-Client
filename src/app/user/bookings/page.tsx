@@ -1,9 +1,8 @@
 'use client'
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery,useMutation } from '@apollo/client';
 import { GET_USER_BOOKINGS, ADD_REVIEW } from '../queries/user-queries';
 import client from '@/services/apollo-client';
-import { useMutation } from '@apollo/client';
 import { useAppContext } from '@/context/appContext';
 import styles from './my-bookings.module.css';
 import { FaRegStar, FaStar, FaPenAlt } from "react-icons/fa";
@@ -144,7 +143,7 @@ function MyBookings() {
         ) : (
           <div className={styles.bookingCards}>
             {bookingsData.map((booking) => {
-              const isDisabled = booking.payment_status === 'pending';
+              const isDisabled = booking.payment_status === 'pending' || booking.payment_status==='Booking Failed';
 
               const createdAtTimestamp = booking.createdAt;
               const createdAt = new Date(Number(createdAtTimestamp));

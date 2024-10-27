@@ -150,7 +150,6 @@ export const CREATE_ORDER = gql`
 export const VERIFY_PAYMENT = gql`
   mutation verifyPayment($paymentId: String!, $orderId: String!,$razorpay_signature:String!,$bookingId:String!) {
     verifyPayment(paymentId: $paymentId, orderId: $orderId,razorpay_signature:$razorpay_signature,bookingId:$bookingId) {
-      signature
       status
       statuscode
       message

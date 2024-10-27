@@ -159,6 +159,15 @@ function CarList() {
           />
         </div>
         <div className={styles.priceFilter}>
+        {dateRange[0]!= null && (
+        <>
+          <p>You Booked For</p>
+          <p>
+            {dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : 'Start date not selected'} to{' '}
+            {dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : 'End date not selected'}
+          </p>
+        </>
+      )}
           <h3 className={styles.pricefilterhead}>Filter by Price</h3>
           <div className={styles.priceSelectors}>
             {['1000-2000', '2000-3000', '3000-5000', '5000+'].map((range) => (

@@ -139,8 +139,10 @@ export const GET_BOOKINGS = gql`
     getBookings {
       id
       startdate
+      createdAt
       amount
       enddate
+      payment_status
       startlocation
       droplocation
       status

@@ -73,7 +73,7 @@ interface ViewCarProps
           <p> <PiSeat className={styles.icons}/> {vehicle.seats}</p>
           <p> <GiGearStick className={styles.icons}/>{vehicle.transmission}</p>
           </div>
-          <p><strong>Description:</strong> {vehicle.description}</p>
+          <p className={styles.description}><strong>Description:</strong> {vehicle.description}</p>
         </div>
         
         <button className={styles.bookButton} onClick={handleBook}>

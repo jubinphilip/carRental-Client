@@ -58,11 +58,13 @@ function BookCar() {
   const [totalCost, setTotalCost] = useState<number | null>(null);
   const [bookingId, setBookingId] = useState<string | null>(null);
   const[dateError,setDateError]=useState('')
+
   const [token, setToken] = useState<string | null>('');
   const { user } = useAppContext();
   const{dateRange}=useAppContext()
   const router = useRouter();
   const quantity = data?.getCarInfo?.quantity;
+
   const [record, setRecord] = useState({
     userid: userid,
     carid: carid,
@@ -77,6 +79,13 @@ function BookCar() {
  
   useEffect(() => {
     console.log(dateRange?dateRange:'')
+    if (dateRange && dateRange.length === 2) {
+      setRecord(prevRecord => ({
+        ...prevRecord,
+        startdate: dateRange[0] ? dateRange[0].format('YYYY-MM-DD') : '', 
+        enddate: dateRange[1] ? dateRange[1].format('YYYY-MM-DD') : ''     
+      }));
+    }
     setToken(getCookie('usertoken'));
     if (data && data.getCarInfo?.Vehicle?.fileurl) {
       setMainImage(data.getCarInfo.Vehicle.fileurl);
@@ -112,7 +121,7 @@ function BookCar() {
   };
 //Function for submitting the data
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
-    console.log("Clicked")
+  
     e.preventDefault();
     if (!token) {
       toast.error("You have to Login");
@@ -125,6 +134,7 @@ function BookCar() {
     const currentDate = new Date();
     const startDate = new Date(record.startdate);
     const endDate = new Date(record.enddate);
+
     if (!record.startdate || !record.enddate) {
       setDateError("Choose start date and End date")
       console.log("error")
@@ -251,7 +261,7 @@ function BookCar() {
                 onClick={() => setMainImage(data?.getCarInfo?.Vehicle?.fileurl)}
               />
             </div>
-            {/* MApping through the images */}
+            {/* Mapping through the images */}
             {Array.isArray(data?.getCarInfo?.Vehicle?.secondaryImageUrls) &&
             data.getCarInfo.Vehicle.secondaryImageUrls.length > 0 ? (
               data.getCarInfo.Vehicle.secondaryImageUrls.map((url: string, index: number) => (

@@ -49,7 +49,8 @@ interface Booking {
   amount: number;
   startlocation: string;
   droplocation: string;
-  status:String;
+  payment_status:string;
+  status:string;
   User: User;
   RentedVehicle: RentedVehicle;
 }
@@ -59,19 +60,27 @@ interface GetBookingsData {
 }
 
 function ViewBookings() {
-  const { loading, error, data } = useQuery<GetBookingsData>(GET_BOOKINGS, { client });//Query for Getting Booking Records from Database
-  const [updateReturnVehicle, { data: updateData}] = useMutation(UPDATE_RETURN_STATUS, { client });//Updates Return status of each vehicle
+  //Query for Getting Booking Records from Database
+  const { loading, error, data } = useQuery<GetBookingsData>(GET_BOOKINGS, { client });
+  //Updates Return status of each vehicle
+  const [updateReturnVehicle, { data: updateData}] = useMutation(UPDATE_RETURN_STATUS, { client });
   const [bookingsData, setBookingsData] = useState<Booking[]>([]);
   const [date, setDate] = useState<Moment | null>(null);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
     if (data && data.getBookings) {
-      setBookingsData(data.getBookings);
-      setFilteredBookings(data.getBookings); 
-      console.log(data)
+      // Filter bookings with status "completed"
+      const completedBookings = data.getBookings.filter(
+        (booking) => booking.payment_status === "Completed"
+      );
+  
+      setBookingsData(completedBookings);
+      setFilteredBookings(completedBookings);
+      console.log("Completed bookings:", completedBookings);
     }
   }, [data]);
+  
 
 //Filters the bookings with date
   useEffect(() => {
@@ -274,7 +283,8 @@ function ViewBookings() {
           ))}
         </tbody>
       </table>
-   <a href="/admin/sales"><button className={styles.salesButton}>Show Sales</button></a> 
+   <a href="/admin/sales" className={styles.sales}><button className={styles.salesButton}>Show Sales</button></a> 
+   <a href="/admin/failed-bookings" className={styles.sales}><button className={styles.salesButton}>Failed Bookings</button></a> 
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import './globals.css'
 import Navbar from "./user/components/navbar/navbar";
-import Footer from "../components/Footer/Footer";
+import Footer from "./user/components/Footer/Footer";
 import {AppContextProvider } from "@/context/appContext";
 export default function RootLayout({
   children,
