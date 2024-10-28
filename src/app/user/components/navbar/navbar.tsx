@@ -11,12 +11,13 @@ import { useAppContext } from '@/context/appContext';
 import { GiHamburgerMenu } from "react-icons/gi";
 import UserProfile from '../../modals/userprofile/userprofile'
 
+
 function Navbar() {
     const [isAuthorized, setIsAuthorized] = useState(false) // Tracks authorization state
     const [user, setUser] = useState('') // Stores user information from session storage
     const [showProfile, setShowProfile] = useState(false) // Toggles user profile modal visibility
     const [menu, setMenu] = useState(false) // Toggles mobile menu visibility
-    const { user: contextUser } = useAppContext(); // Accessing context user data
+    const { user: contextUser,clearContext } = useAppContext(); // Accessing context user data
     const router = useRouter()
     const fileurl = contextUser?.fileurl;
 
@@ -41,6 +42,7 @@ function Navbar() {
         sessionStorage.removeItem('userid')
         setIsAuthorized(false) // Update authorization state
         setUser('')
+        clearContext();//clearing the context
         router.push('/') // Redirect to home page
     }
 

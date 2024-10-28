@@ -32,6 +32,7 @@ interface AppContextProps {
     setCarData: Dispatch<SetStateAction<CarDataType | null>>;
     dateRange: [Dayjs | null, Dayjs | null];
     setDateRange: Dispatch<SetStateAction<[Dayjs | null, Dayjs | null]>>; 
+    clearContext: () => void; 
 }
 
 
@@ -67,10 +68,16 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
             localStorage.removeItem('carData');
         }
     }, [carData]);
+    const clearContext = () => {
+        setUser(null);
+        setCarData(null);
+        setDateRange([null, null]);
+        localStorage.clear(); // or selectively clear specific keys
+    };
 
     return (
          /* setting the app context provider with states */
-        <AppContext.Provider value={{ user, setUser, carData, setCarData, dateRange, setDateRange }}>
+        <AppContext.Provider value={{ user, setUser, carData, setCarData, dateRange, setDateRange,clearContext}}>
             {children}
         </AppContext.Provider>
     );
