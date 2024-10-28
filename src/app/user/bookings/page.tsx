@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery,useMutation } from '@apollo/client';
 import { GET_USER_BOOKINGS, ADD_REVIEW } from '../queries/user-queries';
 import client from '@/services/apollo-client';
@@ -9,6 +9,7 @@ import { FaRegStar, FaStar, FaPenAlt } from "react-icons/fa";
 import { Modal, Button, Input } from 'antd';
 import Loader from '@/components/Preloader/PreLoader';
 import { toast,ToastContainer } from 'react-toastify';
+import getCookie from '@/utils/get-token';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
 interface Manufacturer {
@@ -55,6 +56,7 @@ interface GetBookingsData {
 function MyBookings() {
   //Query for  fetting the bookings of a user
   const [bookingsData, setBookingsData] = useState<Booking[]>([]);
+  const [token, setToken] = useState<string | null>(null);
   //Mutation for adding a review for a car
   const [addReview] = useMutation(ADD_REVIEW, { client });
   const { user } = useAppContext();
@@ -77,7 +79,14 @@ function MyBookings() {
       console.log('Fetched bookings:', fetchedData.getUserBookings);
     }
   });
-
+  useEffect(()=>
+  {
+    setToken(getCookie('usertoken'));
+    if(!token)
+    {
+      router.push('/user/signin')
+    }
+  })
   const handleRatingClick = (star: number, carid: string) => {
     setRatings((prev) => ({
       ...prev,
