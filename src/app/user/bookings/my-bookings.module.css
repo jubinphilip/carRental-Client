@@ -27,6 +27,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    border-radius: 10px;
     align-items: center;
     height: 15%;
     width: 90%;
@@ -58,7 +59,10 @@
     margin-left: 10px;
     border-radius: 10%;
   }
-  
+  .bookingsHead{
+   color: rgb(117, 114, 109) ;
+   margin-bottom: 5px;
+  }
   .detailsContainer {
     margin-right: 10px;
   }
