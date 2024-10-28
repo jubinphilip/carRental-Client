@@ -97,7 +97,16 @@
   .secondaryImage{
   width: 100%;
   }
-
+  .imageAdd
+  {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+  }
+  .primaryImageInput
+  {
+      display: none;
+  }
   .imagePreview {
     margin-top: 20px;
     text-align: center;

@@ -228,11 +228,13 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
             ))}
           </select>
           <p>Edit Primary Image</p>
-          <input 
-            type="file" 
-            onChange={handleFileChange} 
-          />
 
+          <div className={styles.imageInputWrapper}>
+            <label htmlFor="upload">
+              <img src="/assets/imageadd.png" className={styles.imageAdd} alt="" />
+            </label>
+            <input type="file" id='upload' accept=".jpg, .jpeg, .png, .webp, .avif" className={styles.primaryImageInput}  onChange={handleFileChange}  />
+          </div>
           <button type="submit" className={styles.submitButton}>Submit</button>
         </form>
         {imagePreview && (

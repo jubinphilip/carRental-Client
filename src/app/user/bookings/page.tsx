@@ -12,6 +12,7 @@ import { toast,ToastContainer } from 'react-toastify';
 import getCookie from '@/utils/get-token';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
+
 interface Manufacturer {
   model: string;
   manufacturer: string;
@@ -79,14 +80,14 @@ function MyBookings() {
       console.log('Fetched bookings:', fetchedData.getUserBookings);
     }
   });
-  useEffect(()=>
-  {
-    setToken(getCookie('usertoken'));
-    if(!token)
-    {
-      router.push('/user/signin')
+  useEffect(() => {
+    const fetchedToken = getCookie('usertoken'); // Fetch token from cookies
+    setToken(fetchedToken); 
+    // Redirect if no token is found
+    if (!fetchedToken) {
+      router.push('/user/signin');
     }
-  })
+  }, []); 
   const handleRatingClick = (star: number, carid: string) => {
     setRatings((prev) => ({
       ...prev,
