@@ -8,7 +8,6 @@ import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './editcars.module.css';
 import Loader from '@/components/Preloader/PreLoader';
-
 //The vehicle details such as primary image and basic information can be ddited form this modal
 interface EditCarsProps {
   carid: string | null;
@@ -35,18 +34,19 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
   
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | undefined>(undefined);
   const [secondaryImages, setSecondaryImages] = useState<(File | null)[]>([null, null, null]);
-  const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<(string )[]>();
+  const [secondaryImagePreviews, setSecondaryImagePreviews] = useState<(string | undefined)[]>([undefined, undefined, undefined]);
   const [brand, setBrand] = useState('');
-  //Getting all manufacturers
+   //Getting all manufacturers
   const { loading, error, data } = useQuery(GET_MANUFACTURERS, { client });
-  //Getting the details of the particular car
+    //Getting the details of the particular car
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(GET_CAR_DATA, { variables: { id: carid }, client });
-  //Mutaion for editing vehicle data
+   //Mutaion for editing vehicle data
   const [editVehicle] = useMutation(EDIT_VEHICLE, { client });
 
-  //Arrays of types fuel ransmission and seatoptions
+
+  //Arrays of types,fuel,transmission and seatoptions  
   const types = ['HatchBack', 'Sedan', 'MUV', 'Compact SUV', 'SUV', 'Luxury'];
   const fuel = ['Diesel', 'Petrol', 'Electric'];
   const transmission = ['Manual', 'Automatic'];
@@ -60,7 +60,7 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
       setRecord((prevRecord) => ({ ...prevRecord, [name]: value }));
     }
   };
-//Function for handling the vehicle image edit
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setImage(file);
@@ -68,13 +68,16 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
     } else {
-      setImagePreview(null);
+      setImagePreview(undefined);
     }
   };
-//Submitting the changed Record
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Record Data: ", record, image);
+    
+    // Filter out null values from secondaryImages
+    const validSecondaryImages = secondaryImages.filter((img): img is File => img !== null);
+    
     try {
       const { data: response } = await editVehicle({
         variables: {
@@ -82,21 +85,18 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
           input: record 
         }
       });
-      if(response.editVehicle.status===true)
-      {
-        toast.success(response.editVehicle.message)
-        setTimeout(()=>
-        {
-          handleClose()
-        },1000)
-     
-      }
-      else
-      {
-        toast.error(response.editVehicle.message)
+      
+      if(response.editVehicle.status === true) {
+        toast.success(response.editVehicle.message);
+        setTimeout(() => {
+          handleClose();
+        }, 1000);
+      } else {
+        toast.error(response.editVehicle.message);
       }
     } catch (error) {
       console.log("Error", error);
+      toast.error("Failed to update vehicle");
     }
   };
 
@@ -107,7 +107,6 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
 
     if (queryData?.getCarData) {
       const carData = queryData.getCarData;
-      console.log(queryData)
       setRecord({
         id: carid,
         description: carData.description || '',
@@ -117,9 +116,12 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
         fuel: carData.fuel || '',
         seats: carData.seats || ''
       });
-      setImagePreview(carData.fileurl);
+      // Convert null to undefined for image previews
+      setImagePreview(carData.fileurl || undefined);
       setBrand(carData.Manufacturer.manufacturer || '');
-      setSecondaryImagePreviews(carData.secondaryImageUrls)
+      // Convert null values to undefined in the array
+      const convertedPreviews = carData.secondaryImageUrls.map((url: string | null) => url || undefined);
+      setSecondaryImagePreviews(convertedPreviews);
     }
   }, [data, queryData, carid]);
 
@@ -133,10 +135,23 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
     editstate(false);
   };
 
-  const handleSecondaryImagesChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => 
-    {
-    console.log(index )
-  }
+  const handleSecondaryImagesChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    const updatedImages = [...secondaryImages];
+    const updatedPreviews = [...secondaryImagePreviews];
+
+    if (files && files[0]) {
+      const file = files[0]; 
+      updatedImages[index] = file; 
+      updatedPreviews[index] = URL.createObjectURL(file);
+    } else {
+      updatedImages[index] = null;
+      updatedPreviews[index] = undefined; // Change null to undefined
+    }
+
+    setSecondaryImages(updatedImages);
+    setSecondaryImagePreviews(updatedPreviews);
+  };
 
   return (
     <div className={styles.overlay}>
@@ -186,7 +201,8 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
               <option key={type} value={type}>{type}</option>
             ))}
           </select>
-<p className={styles.text}>Select Transmission</p>
+
+          <p className={styles.text}>Select Transmission</p>
           <div className={styles.radioGroup}>
             {transmission.map((trans) => (
               <label key={trans} className={styles.radioLabel}>
@@ -201,7 +217,8 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
               </label>
             ))}
           </div>
-<p className={styles.text}>Fuel Type</p>
+
+          <p className={styles.text}>Fuel Type</p>
           <div className={styles.radioGroup}>
             {fuel.map((fuelType) => (
               <label key={fuelType} className={styles.radioLabel}>
@@ -227,16 +244,18 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
               <option key={seats} value={seats.toString()}>{seats}</option>
             ))}
           </select>
-          <p>Edit Primary Image</p>
 
+          <p>Edit Primary Image</p>
           <div className={styles.imageInputWrapper}>
             <label htmlFor="upload">
               <img src="/assets/imageadd.png" className={styles.imageAdd} alt="" />
             </label>
-            <input type="file" id='upload' accept=".jpg, .jpeg, .png, .webp, .avif" className={styles.primaryImageInput}  onChange={handleFileChange}  />
+            <input type="file" id='upload' accept=".jpg, .jpeg, .png, .webp, .avif" className={styles.primaryImageInput} onChange={handleFileChange} />
           </div>
+
           <button type="submit" className={styles.submitButton}>Submit</button>
         </form>
+
         {imagePreview && (
           <div className={styles.imagePreview}>
             <h3>Image Preview:</h3>
@@ -245,29 +264,26 @@ const EditCars: React.FC<EditCarsProps> = ({ carid, editstate }) => {
         )}
 
         <div>
-        <p>Edit Secondary Images</p>
-        <div className={styles.secondaryImagesWrapper}>
-
-        {secondaryImagePreviews && secondaryImagePreviews.map((image,index)=>(
-            <div key={index} className={styles.secondaryImageContainer}>
-                <img src={image} className={styles.secondaryImage}/>
-       
-               <div key={index} className={styles.secondaryImageInputWrapper}>
-               <label htmlFor={`uploadFile${index}`}>
-                 <img src="/assets/imageadd.png" className={styles.secondaryImageAdd} alt="" />
-               </label>
-               <input
-                 type="file"
-                 id={`uploadFile${index}`}
-                 accept=".jpg, .jpeg, .png, .webp, .avif"
-                 className={styles.secondaryImageInput} 
-                 onChange={handleSecondaryImagesChange(index)}
-               />
-               </div>
+          <p>Edit Secondary Images</p>
+          <div className={styles.secondaryImagesWrapper}>
+            {secondaryImagePreviews && secondaryImagePreviews.map((image, index) => (
+              <div key={index} className={styles.secondaryImageContainer}>
+                {image && <img src={image} className={styles.secondaryImage} alt={`Secondary image ${index + 1}`} />}
+                <div className={styles.secondaryImageInputWrapper}>
+                  <label htmlFor={`uploadFile${index}`}>
+                    <img src="/assets/imageadd.png" className={styles.secondaryImageAdd} alt="" />
+                  </label>
+                  <input
+                    type="file"
+                    id={`uploadFile${index}`}
+                    accept=".jpg, .jpeg, .png, .webp, .avif"
+                    className={styles.secondaryImageInput} 
+                    onChange={handleSecondaryImagesChange(index)}
+                  />
+                </div>
               </div>
-        ))}
-
-        </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

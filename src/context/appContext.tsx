@@ -1,9 +1,7 @@
 'use client';
 import { createContext, useContext, Dispatch, SetStateAction, useState, ReactNode, useEffect } from "react";
-import dayjs, { Dayjs } from 'dayjs';
-//creating a context for storing the user information
+import { Dayjs } from 'dayjs';
 
-//UserType describes the type of user
 type UserType = {
     userid: string;  
     email: string;
@@ -12,18 +10,10 @@ type UserType = {
     fileurl: string;
 };
 
-//CarDatatype stores the carid and uerid
 type CarDataType = {
     carId: string;
     userId: string;
 };
-
-//For storing date selected by a user
-interface DateRangeContextType {
-    dateRange: [Dayjs | null, Dayjs | null];
-    setDateRange: (dates: [Dayjs | null, Dayjs | null]) => void;
-}
-
 
 interface AppContextProps {
     user: UserType | null; 
@@ -35,49 +25,58 @@ interface AppContextProps {
     clearContext: () => void; 
 }
 
-
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
-    // Initialize state from localStorage or set to null
     const [user, setUser] = useState<UserType | null>(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
+        if (typeof window !== 'undefined') {
+            const storedUser = localStorage.getItem('user');
+            return storedUser ? JSON.parse(storedUser) : null;
+        }
+        return null;
     });
     
     const [carData, setCarData] = useState<CarDataType | null>(() => {
-        const storedCarData = localStorage.getItem('carData');
-        return storedCarData ? JSON.parse(storedCarData) : null;
+        if (typeof window !== 'undefined') {
+            const storedCarData = localStorage.getItem('carData');
+            return storedCarData ? JSON.parse(storedCarData) : null;
+        }
+        return null;
     });
 
     const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null]);
-    // Save user to localStorage when it changes
+
     useEffect(() => {
-        if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
-        } else {
-            localStorage.removeItem('user');
+        if (typeof window !== 'undefined') {
+            if (user) {
+                localStorage.setItem('user', JSON.stringify(user));
+            } else {
+                localStorage.removeItem('user');
+            }
         }
     }, [user]);
 
-    // Save carData to localStorage when it changes
     useEffect(() => {
-        if (carData) {
-            localStorage.setItem('carData', JSON.stringify(carData));
-        } else {
-            localStorage.removeItem('carData');
+        if (typeof window !== 'undefined') {
+            if (carData) {
+                localStorage.setItem('carData', JSON.stringify(carData));
+            } else {
+                localStorage.removeItem('carData');
+            }
         }
     }, [carData]);
+
     const clearContext = () => {
         setUser(null);
         setCarData(null);
         setDateRange([null, null]);
-        localStorage.clear(); // or selectively clear specific keys
+        if (typeof window !== 'undefined') {
+            localStorage.clear();
+        }
     };
 
     return (
-         /* setting the app context provider with states */
-        <AppContext.Provider value={{ user, setUser, carData, setCarData, dateRange, setDateRange,clearContext}}>
+        <AppContext.Provider value={{ user, setUser, carData, setCarData, dateRange, setDateRange, clearContext }}>
             {children}
         </AppContext.Provider>
     );

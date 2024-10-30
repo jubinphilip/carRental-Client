@@ -114,6 +114,11 @@
     align-items: center;
     justify-content: center;
   }
+  .button:hover{
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
   .imageInputWrapper{ 
     position: relative;
     display: flex;

@@ -274,11 +274,11 @@ const UserProfile: React.FC<UserProps> = ({ modalstate }) => {
               {errorMessage && <p className={styles.error}>{errorMessage}</p>}
               {edit ? (
                 <div className={styles.buttonContainer}>
-                  <button onClick={() => setEditPassword(true)}>Change Password</button>
-                  <button onClick={handleSubmit}>Submit</button>
+                  <button onClick={() => setEditPassword(true)}  className={styles.button}>Change Password</button>
+                  <button onClick={handleSubmit} className={styles.button}>Submit</button>
                 </div>
               ) : (
-                <button onClick={handleEditClick}>Edit</button>
+                <button onClick={handleEditClick} className={styles.button}>Edit</button>
               )}
             </div>
           </div>
