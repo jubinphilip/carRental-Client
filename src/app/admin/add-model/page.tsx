@@ -1,7 +1,7 @@
 'use client';
 import React, { useState,useEffect } from 'react';
 import styles from './addmodel.module.css';
-import { ADD_MANUFACTURER,UPLOAD_EXCEL,GET_MANUFACTURERS,DELETE_MANUFACTURER } from '../queries/admin-queries';
+import { ADD_MANUFACTURER,UPLOAD_EXCEL,GET_MANUFACTURERS,DELETE_MANUFACTURER ,ADD_MODEL} from '../queries/admin-queries';
 import { useMutation,useQuery } from '@apollo/client';
 import {toast,ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,6 +11,7 @@ import { AiTwotoneDelete } from "react-icons/ai";
 import getCookie from '@/utils/get-token';
 import Loader from '@/components/Preloader/PreLoader';
 interface RecordType {
+  id:string,
   manufacturer: string;
   model: string;
   year:string;
@@ -26,8 +27,10 @@ function Addmodel() {
   const { loading, error, data ,refetch} = useQuery(GET_MANUFACTURERS, { client });
   //Mutation for adding manufacturer
   const[addManufacturer]=useMutation(ADD_MANUFACTURER,{client});
+  //mutation for adding new model
   const[ deleteManufacturer]=useMutation(DELETE_MANUFACTURER,{client})
   //Mutation for adding excel data
+  const[addModel]=useMutation(ADD_MODEL,{client})
   const [uploadExcel] = useMutation(UPLOAD_EXCEL, { client });
   const [fileName, setFileName] = useState('No file chosen');
   const[showModels,setShowModels]=useState(false)
@@ -45,7 +48,7 @@ function Addmodel() {
     }
   }, [data]);
 
-  const [record, setRecord] = useState<RecordType>({manufacturer: '',model: '',year:''});
+  const [record, setRecord] = useState<RecordType>({id:'',manufacturer: '',model: '',year:''});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setRecord((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setShowError(false)
@@ -82,9 +85,9 @@ function Addmodel() {
   if(loading)return<Loader/>
   if(error) return<p>Error{error.message}</p>
 
-  //Function for adding manufacturer data manually
+  //Function for adding vehicle data
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  const token=await getCookie('token')
+   const token=await getCookie('token')
   if(!token)//Checks whether admin is loginned or not
   {
     toast.error('Please login to proceed')
@@ -94,30 +97,36 @@ function Addmodel() {
     e.preventDefault();
     console.log(record)
     try{
-      const {data:response}=await addManufacturer({variables:{input:record}})//passing the records as  input
-      console.log(response.addManufacturer)
-      if(response.addManufacturer.status===true)
+      const modelData={
+        id:record.id,
+        model:record.model,
+        year:record.year
+      }
+      const {data:response}=await addModel({variables:{input:modelData}})//passing the records as  input
+      console.log(response.addModel)
+      if(response.addModel.status===true)
       {
-        toast.success(response.addManufacturer.message)
+        toast.success(response.addModel.message)
         refetch()
        setShowModels(true)
       }
       else
       {
-        setErrorMessage(response.addManufacturer.message)
+        setErrorMessage(response.addModel.message)
         setShowError(true)
       }
       
     }catch(error)
     {
-      toast.error("Error adding user");
-    }
+      toast.error("Error adding Car");
+    } 
   }
 
   //Function for deleting a manufacturer from list
   const handleDelete=async (id:string)=>
   {
-    const token=await getCookie('token')
+    const token=await getCookie('token')  
+
     if(!token)
     {
       toast.error('Please login to proceed')
@@ -141,8 +150,27 @@ function Addmodel() {
     console.log("Error generated",error)
     toast.error("Some error occured")
   }
+  }
   
-  }     
+  //Function for adding a manufacurer
+  const handleManufacturerAdd=async(e: React.MouseEvent<HTMLButtonElement>)=>
+    {
+      e.preventDefault()
+        try
+        {
+          const manufacturer={manufacturer:record.manufacturer}
+          const{data}= await addManufacturer({variables:{input:manufacturer}})
+          console.log(data)
+          if(data.addManufacturer.status===true)
+          {
+            toast.success(data.addManufacturer.message)
+            refetch()
+          }
+        }catch(error)
+        {
+          console.log(error)
+        }
+    }
   return (
     <div className={styles.mainContainer}>
       <ToastContainer/>
@@ -153,10 +181,18 @@ function Addmodel() {
             type="text"
             placeholder="Enter the Manufacturer"
             name="manufacturer"
-            value={record.manufacturer}
             onChange={handleChange}
             className={styles.inputbox}
           />
+          <button onClick={handleManufacturerAdd}>Add</button>
+          <select className={styles.inputbox} name="id" onChange={handleChange}>
+            <option value="">Select Manufacturer</option>
+            {manufacturers.map((manufacturer) => (
+              <option key={manufacturer.id} value={manufacturer.id}>
+                {manufacturer.manufacturer}
+              </option>
+            ))}
+          </select>
           <input
             type="text"
             placeholder="Enter the Model"

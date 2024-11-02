@@ -21,6 +21,18 @@ export const ADD_MANUFACTURER = gql`
   }
 `;
 
+export const ADD_MODEL=gql`
+mutation AddModel($input:AddModel!)
+{
+  addModel(input:$input)
+  {
+    status
+    statuscode
+    message
+  }
+}
+`
+
 export const DELETE_MANUFACTURER=gql`
   mutation DeleteManufacturer($id:ID!){
   deleteManufacturer(id:$id)

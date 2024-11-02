@@ -22,7 +22,10 @@
     font-weight: 600;
     color: rgb(117, 114, 109);
 }
-
+.inputerror
+{
+    border-color: red;
+}
 .form {
     min-width: 300px;
     overflow-x: auto;

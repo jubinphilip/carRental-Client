@@ -6,6 +6,7 @@ import { Admin_Login } from '../../queries/admin-queries'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
 import { Button,Input } from 'antd'
+import validateAdmin from '../../requests/validate'
 import styles from './signin.module.css'
 
 function Signin() {
@@ -14,6 +15,7 @@ function Signin() {
     const[showError,setShowError]=useState(false)
     //Mutation for admin login
     const[adminLogin]=useMutation(Admin_Login,{client})
+    const[validationError,setValidationError]=useState({username:'',password:''})
     const router=useRouter()
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
             setRecord((prev)=>({...prev,[e.target.name]:e.target.value}))
@@ -22,6 +24,12 @@ function Signin() {
         
         e.preventDefault()
         console.log(record)
+        const error=validateAdmin(record)
+        setValidationError(error) 
+        if(record.username=='' || record.password=='')
+            {
+                return
+            }       
         try
         {
         const response=await adminLogin({
@@ -57,8 +65,10 @@ function Signin() {
 <div className={styles.container}>
         <form className={styles.form} onSubmit={handleSubmit}>
             <h1 className={styles.loginHead}>Login As Admin</h1>
-        <Input type="text" name="username" placeholder='Enter admin name' onChange={handleChange} id="" />
-        <Input type="password" name="password" placeholder='Enter password' onChange={handleChange} id="" />
+        <Input type="text" name="username" className={validationError.username?styles.inputerror:''} placeholder='Enter admin name' onChange={handleChange} id="" />
+        {validationError.username && <span className={styles.error}>{validationError.username}</span>}
+        <Input type="password" className={validationError.password?styles.inputerror:''} name="password" placeholder='Enter password' onChange={handleChange} id="" />
+        {validationError.password && <span className={styles.error}>{validationError.password}</span>}
         {showError && <span className={styles.error}>{error}</span>}
         <Button type="primary" htmlType='submit' >Signin</Button>
         </form>

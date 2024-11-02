@@ -7,6 +7,7 @@ import { useAppContext} from '@/context/appContext'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
 import styles from './signin.module.css'
+import { validateUser } from '../requests/validate'
 import { Input,Button } from 'antd';
 function Signin() {
     
@@ -15,6 +16,7 @@ function Signin() {
     const[errorMessage,setErrorMessage]=useState('')
     //State for showing error if any error is generated
     const[showerror,setShowError]=useState(false)
+    const [validateErrors,setValidateErrors]=useState({email: '', password: '' })
     const[loginUser,{data,loading,error}]=useMutation(LOGIN_USER,{client})
     const router=useRouter()
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -25,7 +27,12 @@ function Signin() {
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         console.log(record);
-        
+        const errors=validateUser(record)
+        setValidateErrors(errors)
+        if(record.email=='' || record.password=='')
+            {
+                return
+            }      
         try {
             const response = await loginUser({
                 variables: {
@@ -76,8 +83,10 @@ function Signin() {
         <div className={styles.container}>
         <form  className={styles.form} onSubmit={handleSubmit}>
         <h1 className={styles.loginHead}>Login Here</h1>
-        <Input type="text" name="email" placeholder='Enter your email' onChange={handleChange}  />
-        <Input type="password" name="password" placeholder='enter your Password' onChange={handleChange}  />
+        <Input type="text" name="email" placeholder='Enter your email' className={validateErrors.email?styles.inputError:''} onChange={handleChange}  />
+        {validateErrors.email &&  <span className={styles.error}>{validateErrors.email}</span>}
+        <Input type="password" name="password" className={validateErrors.password?styles.inputError:''} placeholder='enter your Password' onChange={handleChange}  />
+        {validateErrors.password &&  <span className={styles.error}>{validateErrors.password}</span>}
        {showerror &&  <span className={styles.error}>{errorMessage}</span>}
         <Button type="primary" htmlType='submit' >Signin</Button>
         <p className={styles.registerLink}>Don't have an Account?<a href="/user/register" className={styles.link}>Register</a></p>

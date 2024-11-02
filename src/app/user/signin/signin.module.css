@@ -56,7 +56,10 @@
     cursor: pointer;
     color: rgb(59, 57, 53);
 }
-
+.inputError
+{
+    border-color: red;
+}
 .oroption {
     width: 100%;
     display: flex;
